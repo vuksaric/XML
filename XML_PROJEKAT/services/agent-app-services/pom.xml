@@ -14,7 +14,8 @@
 	<name>agent-app-services</name>
 	<description>XML-project-agent-app-service</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
+		<appName>agent-app-services</appName>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -67,6 +68,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>${appName}</finalName>
 	</build>
 
 </project>

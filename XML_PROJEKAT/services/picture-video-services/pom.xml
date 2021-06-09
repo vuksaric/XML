@@ -14,7 +14,7 @@
 	<name>picture-video-services</name>
 	<description>XML-project-picture-video-service</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

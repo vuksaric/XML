@@ -1,4 +1,4 @@
-FROM maven:3.8.1-ibmjava-8-alpine AS appBuild
+FROM maven:3.6.3-ibmjava-8-alpine AS appBuild
 
 WORKDIR /usr/src/picture-video_services
 COPY . .
