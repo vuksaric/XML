@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   base_url: 'http://localhost:8080',
-  auth_url: 'http://localhost:8080/auth',
+  auth_url: 'http://localhost:8090/auth',
   login_url: 'http://localhost:8080/login',
   
 };

@@ -1,9 +1,9 @@
+import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { differenceInCalendarDays } from 'date-fns';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-registration',
@@ -49,12 +49,12 @@ export class RegistrationComponent implements OnInit {
       email : this.email,
       password : this.password,
       phone : this.selectedValuePhonePrefix + this.phone,
-      dateOfBirth: this.dateOfBirth,
+      birthday: this.dateOfBirth,
       gender: this.selectedValueGender,   
       //userType: "User" //moze biti i systemAdmin
     }
     if(this.validateForm.valid){
-      this.loginService.registration(body).subscribe(data => { console.log(data) 
+      this.authService.registration(body).subscribe(data => { console.log(data) 
         if(data == true){
           this.toastr.success("You have successfully registered!!!");
           this.router.navigate(['login']);
@@ -84,7 +84,7 @@ export class RegistrationComponent implements OnInit {
     return {};
   };
 
-  constructor(private fb: FormBuilder,private loginService: LoginService, private toastr: ToastrService, private router: Router) { }
+  constructor(private fb: FormBuilder,private authService : AuthService, private toastr: ToastrService, private router: Router) { }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({

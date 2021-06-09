@@ -17,6 +17,6 @@ public class SystemAdmin {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private UserInfo userInfo;
+    //@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //private UserInfo userInfo;
 }

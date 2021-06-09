@@ -33,8 +33,8 @@ public class Profile {
     @CollectionTable(name="Profile_Stories", joinColumns=@JoinColumn(name="Profile_ID"))
     @Column(name="story")
     private List<Integer> storyIds;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private UserInfo userInfo;
+    //@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private int userInfoId;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "Profile_Following",
             joinColumns = { @JoinColumn(name = "Profile_ID") },

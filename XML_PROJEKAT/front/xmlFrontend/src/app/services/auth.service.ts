@@ -13,7 +13,7 @@ const auth_url = environment.auth_url;
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient, private router: Router,private toastr: ToastrService) { }
+  constructor(private http: HttpClient) { }
 
 
   public login(body: any) : Observable<any>{ 
@@ -27,7 +27,7 @@ export class AuthService {
   
   public getDataFromToken() : any
   {
-    let token : any;
+    /*let token : any;
     let decoded_token : any;
     let result : any;
     token = localStorage.getItem("token");
@@ -37,15 +37,15 @@ export class AuthService {
       id : decoded_token.user_id, 
       type : decoded_token.user_type
     }
-    return result
+    return result*/
   }
 
   getDecodedAccessToken(token: string): any {
-    try {
+    /*try {
       return jwt_decode(token);
     }
     catch (Error) {
       return null;
-    }
+    }*/
   }
 }

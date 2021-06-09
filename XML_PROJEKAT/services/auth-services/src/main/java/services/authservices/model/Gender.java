@@ -1,4 +1,4 @@
-package services.profileservices.model;
+package services.authservices.model;
 
 public enum Gender {
     Male,
