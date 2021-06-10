@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import services.authservices.model.dto.RegistrationDTO;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Locale;
 
 @Entity
@@ -15,7 +18,7 @@ import java.util.Locale;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserInfo {
+public class UserInfo implements UserDetails {
 
     @Id
     @Column(name = "id")
@@ -44,5 +47,30 @@ public class UserInfo {
             this.gender = Gender.Female;
         else
             this.gender = Gender.NonBinary;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

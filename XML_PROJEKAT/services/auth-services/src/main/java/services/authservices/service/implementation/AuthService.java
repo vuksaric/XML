@@ -8,6 +8,7 @@ import services.authservices.model.dto.AuthDTO;
 import services.authservices.model.dto.RegistrationDTO;
 import services.authservices.model.dto.UserResponseDTO;
 import services.authservices.repository.AuthRepository;
+import services.authservices.security.TokenUtils;
 import services.authservices.service.IAuthService;
 
 @Service
@@ -15,9 +16,9 @@ public class AuthService implements IAuthService {
 
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
-    private final Token token;
+    private final TokenUtils token;
 
-    public AuthService(AuthRepository authRepository, PasswordEncoder passwordEncoder, Token token) {
+    public AuthService(AuthRepository authRepository, PasswordEncoder passwordEncoder, TokenUtils token) {
         this.authRepository = authRepository;
         this.passwordEncoder = passwordEncoder;
         this.token = token;
@@ -30,7 +31,7 @@ public class AuthService implements IAuthService {
         if (user == null) {
             return null;
         }
-        String jwt = token.generateToken(authDTO.getUsername());
+        String jwt = token.generateToken(user);
         int expiresIn = token.getEXPIRES_IN();
 
         UserResponseDTO userResponse = new UserResponseDTO(user,jwt);
