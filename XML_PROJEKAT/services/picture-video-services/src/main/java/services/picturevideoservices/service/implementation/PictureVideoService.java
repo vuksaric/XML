@@ -1,11 +1,12 @@
 package services.picturevideoservices.service.implementation;
 
+import org.springframework.stereotype.Service;
 import services.picturevideoservices.model.PictureVideo;
 import services.picturevideoservices.repository.PictureVideoRepository;
 import services.picturevideoservices.service.IPictureVideoService;
 
 import java.util.List;
-
+@Service
 public class PictureVideoService implements IPictureVideoService {
 
     private final PictureVideoRepository pictureVideoRepository;

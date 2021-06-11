@@ -9,6 +9,7 @@ export const environment = {
   login_url: 'http://localhost:8080/login',
   attack_url: 'http://localhost:8090/attack',
   profile_url: 'http://localhost:8140/profile',
+  image_url: 'http://localhost:8120/image',
   
 };
 
