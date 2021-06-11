@@ -24,6 +24,10 @@ export class AuthService {
     return this.http.post(auth_url + `/registration`, body);
   }
 
+  public getId(username: string): Observable<any>{
+    return this.http.get(auth_url+`/getUserInfoId/${username}`);
+  }
+
   
   public getDataFromToken() : any
   {

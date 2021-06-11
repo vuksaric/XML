@@ -15,6 +15,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DemoNgZorroAntdModule } from './ng-zorro-antd.module';
 import { ToastrModule } from 'ngx-toastr';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { HomepageComponent } from './pages/homepage/homepage.component';
+import { ProfileComponent } from './pages/homepage/profile/profile.component';
+import { SearchComponent } from './pages/homepage/search/search.component';
+import { FeedComponent } from './pages/homepage/feed/feed.component';
+import { SearchPipe } from './pages/homepage/search/search.pipe';
+import { NewPostComponent } from './pages/homepage/new-post/new-post.component';
+import { NewStoryComponent } from './pages/homepage/new-story/new-story.component';
 
 registerLocaleData(en);
 
@@ -22,7 +29,14 @@ registerLocaleData(en);
   declarations: [
     AppComponent,
     RegistrationComponent,
-    LoginComponent
+    LoginComponent,
+    HomepageComponent,
+    ProfileComponent,
+    SearchComponent,
+    FeedComponent,
+    SearchPipe,
+    NewPostComponent,
+    NewStoryComponent,
   ],
   imports: [
     BrowserModule,

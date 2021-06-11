@@ -10,6 +10,8 @@ import services.authservices.model.dto.RegistrationDTO;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -41,6 +43,10 @@ public class UserInfo implements UserDetails {
         this.surname = registrationDTO.getSurname();
         this.email = registrationDTO.getEmail();
         this.phone = registrationDTO.getPhone();
+        String[] array = registrationDTO.getBirthday().split("T");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateTime = LocalDate.parse(array[0],formatter);
+        this.dateOfBirth = dateTime;
         if(registrationDTO.getGender().toLowerCase().equals(Gender.Male.toString().toLowerCase(Locale.ROOT)))
             this.gender = Gender.Male;
         else if(registrationDTO.getGender().toLowerCase().equals(Gender.Female.toString().toLowerCase(Locale.ROOT)))

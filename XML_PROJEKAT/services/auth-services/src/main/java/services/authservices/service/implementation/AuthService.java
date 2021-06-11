@@ -1,8 +1,11 @@
 package services.authservices.service.implementation;
 
+import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import services.authservices.Token;
+import services.authservices.client.ProfileClient;
 import services.authservices.model.UserInfo;
 import services.authservices.model.dto.AuthDTO;
 import services.authservices.model.dto.RegistrationDTO;
@@ -17,11 +20,14 @@ public class AuthService implements IAuthService {
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenUtils token;
+    private final ProfileClient profileClient;
 
-    public AuthService(AuthRepository authRepository, PasswordEncoder passwordEncoder, TokenUtils token) {
+    @Autowired
+    public AuthService(AuthRepository authRepository, PasswordEncoder passwordEncoder, TokenUtils token, ProfileClient profileClient) {
         this.authRepository = authRepository;
         this.passwordEncoder = passwordEncoder;
         this.token = token;
+        this.profileClient = profileClient;
     }
 
     @Override
@@ -49,6 +55,14 @@ public class AuthService implements IAuthService {
         registrationDTO.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
         UserInfo userInfo = new UserInfo(registrationDTO);
         authRepository.save(userInfo);
+        UserInfo ui = authRepository.findOneByUsername(userInfo.getUsername());
+        profileClient.createProfile(ui.getId());
         return true;
+    }
+
+    @Override
+    public int getByUsername(String username) {
+        UserInfo ui = authRepository.findOneByUsername(username);
+        return ui.getId();
     }
 }

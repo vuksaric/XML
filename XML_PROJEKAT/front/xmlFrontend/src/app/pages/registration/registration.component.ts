@@ -84,7 +84,7 @@ export class RegistrationComponent implements OnInit {
                     if(!this.phoneBool)
                       this.createMessagePhone();
                     
-                    if(this.emailBool && this.nameBool && this.lastNameBool && this.passwordBool && this.phoneBool)
+                    if(this.emailBool && this.nameBool && this.lastNameBool && this.passwordBool /*&& this.phoneBool*/)
                     {
                       const body = {
                         username: this.username,
@@ -101,6 +101,10 @@ export class RegistrationComponent implements OnInit {
                       if(this.validateForm.valid){
                         this.authService.registration(body).subscribe(data => { console.log(data) 
                           if(data == true){
+                            //ovo prepraviti posle
+                            //this.authService.getId(this.username).subscribe(data => {
+                              //console.log(data);
+                            //})
                             this.toastr.success("You have successfully registered!!!");
                             this.router.navigate(['login']);
                           }

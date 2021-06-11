@@ -8,4 +8,5 @@ public interface IAuthService {
 
     UserResponseDTO login(AuthDTO authDTO);
     boolean registration(RegistrationDTO registrationDTO);
+    int getByUsername(String username);
 }

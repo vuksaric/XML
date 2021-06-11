@@ -2,10 +2,8 @@ package services.authservices.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import services.authservices.model.UserInfo;
 import services.authservices.model.dto.AuthDTO;
 import services.authservices.model.dto.RegistrationDTO;
 import services.authservices.model.dto.UserResponseDTO;
@@ -34,6 +32,15 @@ public class AuthController {
     public ResponseEntity login(@RequestBody AuthDTO authDTO){
         try{
             return new ResponseEntity(authService.login(authDTO), HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping("/getUserInfoId/{username}")
+    public ResponseEntity getByUsername(@PathVariable String username){
+        try{
+            return new ResponseEntity(authService.getByUsername(username), HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
