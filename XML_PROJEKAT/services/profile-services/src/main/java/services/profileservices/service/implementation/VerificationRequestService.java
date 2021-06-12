@@ -10,6 +10,7 @@ import services.profileservices.repository.VerificationRequestRepository;
 import services.profileservices.service.IVerificationRequestService;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class VerificationRequestService implements IVerificationRequestService {
@@ -26,5 +27,10 @@ public class VerificationRequestService implements IVerificationRequestService {
         int officialDocument = pictureVideoClient.uploadImage(new ImageDTO(multipartFile.getOriginalFilename(),multipartFile.getBytes()));
         VerificationRequest verificationRequest = new VerificationRequest(name, surname, category, officialDocument);
         return verificationRequestRepository.save(verificationRequest).getId();
+    }
+
+    @Override
+    public List<VerificationRequest> getAll() {
+        return verificationRequestRepository.findAll();
     }
 }

@@ -15,4 +15,8 @@ export class VerificationRequestServiceService {
   public newVerificationRequest(body: any) : Observable<any>{
     return this.http.post(verificationRequest_url+'/create', body);
   }
+
+  public viewVerificationRequests() : Observable<any>{
+    return this.http.get(verificationRequest_url+'/getAll');
+  }
 }

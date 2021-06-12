@@ -1,12 +1,12 @@
 package services.profileservices.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import services.profileservices.model.ProfileCategory;
+import services.profileservices.model.VerificationRequest;
 import services.profileservices.service.IVerificationRequestService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/verificationRequest")
@@ -18,7 +18,12 @@ public class VerificationRequestController {
     }
 
     @PostMapping("/create")
-    public Integer createPost(@RequestParam("file") MultipartFile multipartFile, @RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("category") String category) throws Exception{
+    public Integer createVerification(@RequestParam("file") MultipartFile multipartFile, @RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("category") String category) throws Exception{
         return verificationRequestService.save(multipartFile, name, surname, ProfileCategory.valueOf(category));
+    }
+
+    @GetMapping("/getAll")
+    public List<VerificationRequest> getAll(){
+        return verificationRequestService.getAll();
     }
 }

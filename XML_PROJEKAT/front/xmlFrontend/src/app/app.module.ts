@@ -23,6 +23,8 @@ import { SearchPipe } from './pages/homepage/search/search.pipe';
 import { NewPostComponent } from './pages/homepage/new-post/new-post.component';
 import { NewStoryComponent } from './pages/homepage/new-story/new-story.component';
 import { NewVerificationRequestComponent } from './pages/homepage/new-verification-request/new-verification-request.component';
+import { AdminHomepageComponent } from './pages/admin-homepage/admin-homepage.component';
+import { ViewVerificationReqComponent } from './pages/admin-homepage/view-verification-req/view-verification-req.component';
 
 registerLocaleData(en);
 
@@ -39,6 +41,8 @@ registerLocaleData(en);
     NewPostComponent,
     NewStoryComponent,
     NewVerificationRequestComponent,
+    AdminHomepageComponent,
+    ViewVerificationReqComponent,
   ],
   imports: [
     BrowserModule,
