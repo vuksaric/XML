@@ -41,6 +41,9 @@ export class HomepageComponent implements OnInit {
   NewStory(){
     this.router.navigate(['homepage/new-story']);
   }
+  NewVerificationRequest(){
+    this.router.navigate(['homepage/new-verification-request']);
+  }
 
 
 }

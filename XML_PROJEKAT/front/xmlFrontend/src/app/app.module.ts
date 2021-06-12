@@ -22,6 +22,7 @@ import { FeedComponent } from './pages/homepage/feed/feed.component';
 import { SearchPipe } from './pages/homepage/search/search.pipe';
 import { NewPostComponent } from './pages/homepage/new-post/new-post.component';
 import { NewStoryComponent } from './pages/homepage/new-story/new-story.component';
+import { NewVerificationRequestComponent } from './pages/homepage/new-verification-request/new-verification-request.component';
 
 registerLocaleData(en);
 
@@ -37,6 +38,7 @@ registerLocaleData(en);
     SearchPipe,
     NewPostComponent,
     NewStoryComponent,
+    NewVerificationRequestComponent,
   ],
   imports: [
     BrowserModule,

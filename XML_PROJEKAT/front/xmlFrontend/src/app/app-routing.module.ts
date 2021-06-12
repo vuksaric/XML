@@ -4,6 +4,7 @@ import { FeedComponent } from './pages/homepage/feed/feed.component';
 import { HomepageComponent } from './pages/homepage/homepage.component';
 import { NewPostComponent } from './pages/homepage/new-post/new-post.component';
 import { NewStoryComponent } from './pages/homepage/new-story/new-story.component';
+import { NewVerificationRequestComponent } from './pages/homepage/new-verification-request/new-verification-request.component';
 import { ProfileComponent } from './pages/homepage/profile/profile.component';
 import { SearchComponent } from './pages/homepage/search/search.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -18,7 +19,8 @@ const routes: Routes = [
     { path: 'search',component:SearchComponent},
     { path: 'feed',component:FeedComponent},
     { path: 'new-story',component:NewStoryComponent},
-    { path: 'new-post',component:NewPostComponent}
+    { path: 'new-post',component:NewPostComponent},
+    { path: 'new-verification-request',component:NewVerificationRequestComponent}
   ]}, 
 
 ];
