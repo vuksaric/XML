@@ -42,6 +42,7 @@ export class NewStoryComponent implements OnInit {
       let body = new FormData();
       // Add file content to prepare the request
       body.append("file", this.file);
+      console.log(this.file)
       // Launch post request
       this.http.post('http://localhost:8120/image/upload', body)
       .subscribe(

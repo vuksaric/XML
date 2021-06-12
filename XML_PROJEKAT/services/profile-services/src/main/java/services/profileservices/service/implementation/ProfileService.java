@@ -7,6 +7,7 @@ import services.profileservices.repository.ProfileRepository;
 import services.profileservices.service.IProfileService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ProfileService implements IProfileService {
@@ -33,5 +34,18 @@ public class ProfileService implements IProfileService {
         if(savedProfile != null){
             return true;
         }else return false;
+    }
+
+    @Override
+    public Boolean addPost(int postId, int userInfoId) {
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        List<Integer> ids = profile.getPostIds();
+        int old_ids_len = ids.size();
+        ids.add(postId);
+        profile.setPostIds(ids);
+        int new_ids_len = profileRepository.save(profile).getPostIds().size();
+        if(new_ids_len > old_ids_len)
+            return true;
+        else return false;
     }
 }

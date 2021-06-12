@@ -15,4 +15,9 @@ public class ProfileController {
     public Boolean createProfile(@PathVariable int userInfoId){
         return profileService.createProfile(userInfoId);
     }
+
+    @PutMapping("/addPost/{postId}/{userInfoId}")
+    public Boolean addPost(@PathVariable int postId, @PathVariable int userInfoId){
+        return profileService.addPost(postId,userInfoId);
+    }
 }

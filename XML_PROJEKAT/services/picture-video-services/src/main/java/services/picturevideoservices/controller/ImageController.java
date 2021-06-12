@@ -1,10 +1,14 @@
 package services.picturevideoservices.controller;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import services.picturevideoservices.dto.ImageDTO;
 import services.picturevideoservices.model.Image;
 import services.picturevideoservices.repository.ImageDbRepository;
 import services.picturevideoservices.service.implementation.FileLocationService;
+
+import java.io.File;
 
 @RestController
 @RequestMapping("/image")
@@ -15,11 +19,10 @@ public class ImageController {
     public ImageController(FileLocationService fileLocationService){this.fileLocationService = fileLocationService;}
 
     @PostMapping("/upload")
-    Integer uploadImage(@RequestParam("file") MultipartFile multipartImage) throws Exception {
-        Image dbImage = new Image();
-        dbImage.setName(multipartImage.getName());
-        dbImage.setContent(multipartImage.getBytes());
+    //Integer uploadImage(@RequestParam("file") MultipartFile multipartImage) throws Exception {
+    Integer uploadImage(@RequestBody ImageDTO imageDTO) throws Exception {
+        //return fileLocationService.save(multipartImage.getBytes(),multipartImage.getOriginalFilename());
 
-        return fileLocationService.save(multipartImage.getBytes(),multipartImage.getOriginalFilename());
+        return fileLocationService.save(imageDTO.getContent(),imageDTO.getName());
     }
 }

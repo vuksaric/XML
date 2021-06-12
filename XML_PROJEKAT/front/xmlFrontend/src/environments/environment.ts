@@ -10,7 +10,8 @@ export const environment = {
   attack_url: 'http://localhost:8090/attack',
   profile_url: 'http://localhost:8140/profile',
   image_url: 'http://localhost:8120/image',
-  
+  post_url: 'http://localhost:8130/post',
+  story_url: 'http://localhost:8130/story',
 };
 
 /*
