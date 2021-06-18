@@ -9,6 +9,7 @@ import services.picturevideoservices.repository.ImageDbRepository;
 import services.picturevideoservices.service.implementation.FileLocationService;
 
 import java.io.File;
+import java.util.List;
 
 @RestController
 @RequestMapping("/image")
@@ -24,5 +25,10 @@ public class ImageController {
         //return fileLocationService.save(multipartImage.getBytes(),multipartImage.getOriginalFilename());
 
         return fileLocationService.save(imageDTO.getContent(),imageDTO.getName());
+    }
+
+    @PostMapping("/getById")
+    public String getLocationById(@RequestBody int id){
+        return fileLocationService.getLocationById(id);
     }
 }

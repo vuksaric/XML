@@ -15,4 +15,8 @@ export class ProfileService {
   public newProfile(body: any): Observable<any>{
     return this.http.post(profile_url+`/newProfile`, body);
   }
+
+  public getProfile(body:number): Observable<any>{
+    return this.http.get(profile_url+`/get/${body}`);
+  }
 }

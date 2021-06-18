@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import services.postservices.client.PictureVideoClient;
 import services.postservices.client.ProfileClient;
 import services.postservices.dto.ImageDTO;
+import services.postservices.dto.ProfilePostRequest;
 import services.postservices.model.Post;
 import services.postservices.model.PostInfo;
 import services.postservices.repository.PostRepository;
@@ -46,5 +47,15 @@ public class PostService implements IPostService {
         int userId = Integer.parseInt(userInfoId);
         profileClient.addPost(new_post.getId(), userId);
         return new_post.getId();
+    }
+
+    @Override
+    public List<Post> getPostsByPostIds(ProfilePostRequest profilePostRequest) {
+        List<Post> postList = new ArrayList<>();
+        for(int id : profilePostRequest.getPostIds()){
+            Post post = postRepository.findOneById(id);
+            postList.add(post);
+        }
+        return postList;
     }
 }

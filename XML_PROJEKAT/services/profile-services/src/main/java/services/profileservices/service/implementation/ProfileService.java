@@ -48,4 +48,9 @@ public class ProfileService implements IProfileService {
             return true;
         else return false;
     }
+
+    @Override
+    public Profile getByUserInfoId(int userInfoId) {
+        return profileRepository.findOneByUserInfoId(userInfoId);
+    }
 }

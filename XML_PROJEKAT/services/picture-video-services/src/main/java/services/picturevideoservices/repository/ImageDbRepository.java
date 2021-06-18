@@ -5,4 +5,5 @@ import services.picturevideoservices.model.Image;
 
 public interface ImageDbRepository extends JpaRepository<Image,Integer> {
     Image save(Image image);
+    Image findOneById(int id);
 }

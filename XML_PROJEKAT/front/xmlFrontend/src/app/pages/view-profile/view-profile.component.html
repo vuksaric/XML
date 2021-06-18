@@ -1,0 +1,18 @@
+<div class="center">
+    <p></p>
+    <nz-table #basicTable nzBordered nzTitle="List of posts" [nzData]="listOfData">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data">
+            <td>{{data.postInfo.date}}</td>
+            <td>{{data.postInfo.caption}}</td>
+            <td>{{data.postInfo.location}}</td>
+            <div *ngFor="let pictureId of data.postInfo.pictureIds"></div>
+              <td><img src ={{getSrc(pictureId)}}></td>
+          </tr>
+        </tbody>
+    </nz-table>
+    </div>

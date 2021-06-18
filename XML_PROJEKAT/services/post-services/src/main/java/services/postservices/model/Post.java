@@ -1,5 +1,6 @@
 package services.postservices.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,13 +22,14 @@ public class Post {
     private int id;
     @ElementCollection
     @CollectionTable(name="Post_Likes", joinColumns=@JoinColumn(name="Post_ID"))
-    @Column(name="like")
+    @Column(name="likeId")
     private List<Integer> likeIds;
     @ElementCollection
     @CollectionTable(name="Post_Dislikes", joinColumns=@JoinColumn(name="Post_ID"))
-    @Column(name="dislike")
+    @Column(name="dislikeId")
     private List<Integer> dislikeIds;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private PostInfo postInfo;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "Post_ID")

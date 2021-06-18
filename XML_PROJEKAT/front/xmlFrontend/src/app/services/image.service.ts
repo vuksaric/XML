@@ -23,6 +23,10 @@ export class ImageService {
     return this.http.post(image_url+'/upload', image);
   }
 
+  public getImage(id: number): Observable<any>{
+    return this.http.post(image_url+`/getById`,id);
+  }
+
   /*onFileSelected(event) {
 
     const file:File = event.target.files[0];

@@ -16,4 +16,8 @@ export class PostStoryService {
   public createPostStory(body: FormData): Observable<any>{
     return this.http.post(post_url+'/create',body);
   }
+
+  public getPosts(body: any): Observable<any>{
+    return this.http.post(post_url+`/getPosts`,body);
+  }
 }

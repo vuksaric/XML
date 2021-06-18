@@ -1,6 +1,7 @@
 package services.profileservices.controller;
 
 import org.springframework.web.bind.annotation.*;
+import services.profileservices.model.Profile;
 import services.profileservices.service.IProfileService;
 import services.profileservices.service.implementation.ProfileService;
 
@@ -19,5 +20,10 @@ public class ProfileController {
     @PutMapping("/addPost/{postId}/{userInfoId}")
     public Boolean addPost(@PathVariable int postId, @PathVariable int userInfoId){
         return profileService.addPost(postId,userInfoId);
+    }
+
+    @GetMapping("/get/{userInfoId}")
+    public Profile get(@PathVariable int userInfoId){
+        return profileService.getByUserInfoId(userInfoId);
     }
 }

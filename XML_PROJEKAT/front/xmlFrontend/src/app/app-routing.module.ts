@@ -11,6 +11,7 @@ import { ProfileComponent } from './pages/homepage/profile/profile.component';
 import { SearchComponent } from './pages/homepage/search/search.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
+import { ViewProfileComponent } from './pages/view-profile/view-profile.component';
 
 const routes: Routes = [
   { path: '', pathMatch:'full', redirectTo:'login'},
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'admin', component:AdminHomepageComponent, children:[
     { path: 'viewVerifReq', component:ViewVerificationReqComponent}
   ]},
+  { path: 'view-profile', component: ViewProfileComponent},
 
 ];
 

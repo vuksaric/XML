@@ -1,12 +1,13 @@
 package services.postservices.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import services.postservices.dto.ProfilePostRequest;
+import services.postservices.model.Post;
 import services.postservices.service.IPostService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/post")
@@ -17,5 +18,10 @@ public class PostController {
     @PostMapping("/create")
     public Integer createPost(@RequestParam("file") MultipartFile multipartFile, @RequestParam("location") String location, @RequestParam("caption") String caption, @RequestParam("userInfoId") String userInfoId) throws Exception{
         return postService.save(multipartFile, location, caption, userInfoId);
+    }
+
+    @PostMapping("/getPosts")
+    public List<Post> getPostsByPostIds(@RequestBody ProfilePostRequest profilePostRequest){
+        return postService.getPostsByPostIds(profilePostRequest);
     }
 }

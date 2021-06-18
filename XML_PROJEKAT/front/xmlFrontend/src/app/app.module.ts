@@ -25,6 +25,7 @@ import { NewStoryComponent } from './pages/homepage/new-story/new-story.componen
 import { NewVerificationRequestComponent } from './pages/homepage/new-verification-request/new-verification-request.component';
 import { AdminHomepageComponent } from './pages/admin-homepage/admin-homepage.component';
 import { ViewVerificationReqComponent } from './pages/admin-homepage/view-verification-req/view-verification-req.component';
+import { ViewProfileComponent } from './pages/view-profile/view-profile.component';
 
 registerLocaleData(en);
 
@@ -43,6 +44,7 @@ registerLocaleData(en);
     NewVerificationRequestComponent,
     AdminHomepageComponent,
     ViewVerificationReqComponent,
+    ViewProfileComponent,
   ],
   imports: [
     BrowserModule,
