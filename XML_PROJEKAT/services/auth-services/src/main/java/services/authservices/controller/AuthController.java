@@ -45,4 +45,14 @@ public class AuthController {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @GetMapping("/getById/{id}")
+    public ResponseEntity getById(@PathVariable String id){
+        try{
+            int intId = Integer.parseInt(id);
+            return new ResponseEntity(authService.getById(intId), HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }

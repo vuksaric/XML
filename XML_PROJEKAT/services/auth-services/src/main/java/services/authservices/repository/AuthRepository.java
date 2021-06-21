@@ -5,5 +5,6 @@ import services.authservices.model.UserInfo;
 
 public interface AuthRepository extends JpaRepository<UserInfo,Integer> {
     UserInfo findOneByUsername(String username);
+    UserInfo findOneById(int id);
 
 }

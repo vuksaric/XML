@@ -11,4 +11,6 @@ import services.postservices.dto.ImageDTO;
 public interface PictureVideoClient {
     @PostMapping("image/upload")
     Integer uploadImage(@RequestBody ImageDTO imageDTO);
+    @PostMapping("image/getById")
+    String getLocationById(@RequestBody int id);
 }

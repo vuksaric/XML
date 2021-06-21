@@ -53,4 +53,19 @@ public class ProfileService implements IProfileService {
     public Profile getByUserInfoId(int userInfoId) {
         return profileRepository.findOneByUserInfoId(userInfoId);
     }
+
+    @Override
+    public boolean checkFollowing(int loggedIn, int current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(current);
+
+        for(Profile profile : loggedInProfile.getFollowing())
+        {
+            if(profile.getId() == currentProfile.getId())
+                return true;
+        }
+        return false;
+    }
+
+
 }

@@ -26,4 +26,10 @@ public class ProfileController {
     public Profile get(@PathVariable int userInfoId){
         return profileService.getByUserInfoId(userInfoId);
     }
+
+    @GetMapping("/checkFollowing/{loggedInId}/{currentId}")
+    public Boolean checkFollowing(@PathVariable int loggedInId, @PathVariable int currentId)
+    {
+        return profileService.checkFollowing(loggedInId, currentId);
+    }
 }

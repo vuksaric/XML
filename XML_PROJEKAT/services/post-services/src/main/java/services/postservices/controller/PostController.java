@@ -3,6 +3,7 @@ package services.postservices.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import services.postservices.dto.PostResponse;
 import services.postservices.dto.ProfilePostRequest;
 import services.postservices.model.Post;
 import services.postservices.service.IPostService;
@@ -21,7 +22,7 @@ public class PostController {
     }
 
     @PostMapping("/getPosts")
-    public List<Post> getPostsByPostIds(@RequestBody ProfilePostRequest profilePostRequest){
+    public List<PostResponse> getPostsByPostIds(@RequestBody ProfilePostRequest profilePostRequest){
         return postService.getPostsByPostIds(profilePostRequest);
     }
 }

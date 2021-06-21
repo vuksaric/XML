@@ -19,4 +19,9 @@ export class ProfileService {
   public getProfile(body:number): Observable<any>{
     return this.http.get(profile_url+`/get/${body}`);
   }
+
+  public checkFollowing(loggendIn : number, current : number): Observable<any>{
+    return this.http.get(profile_url+`/checkFollowing/${loggendIn}/${current}`);
+  }
+
 }

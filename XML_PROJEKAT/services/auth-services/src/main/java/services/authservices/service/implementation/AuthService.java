@@ -65,4 +65,10 @@ public class AuthService implements IAuthService {
         UserInfo ui = authRepository.findOneByUsername(username);
         return ui.getId();
     }
+
+    @Override
+    public UserInfo getById(int id) {
+        UserInfo ui = authRepository.findOneById(id);
+        return ui;
+    }
 }

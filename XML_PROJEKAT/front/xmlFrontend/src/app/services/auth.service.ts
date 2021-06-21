@@ -28,6 +28,10 @@ export class AuthService {
     return this.http.get(auth_url+`/getUserInfoId/${username}`);
   }
 
+  public getById(id: string): Observable<any>{
+    return this.http.get(auth_url+`/getById/${id}`);
+  }
+
   
   public getDataFromToken() : any
   {
