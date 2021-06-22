@@ -34,6 +34,33 @@ public class ProfileController {
         return profileService.checkFollowing(loggedInId, currentId);
     }
 
+    @GetMapping("/checkBlocked/{loggedInId}/{currentId}")
+    public Boolean checkBlocked(@PathVariable int loggedInId, @PathVariable int currentId)
+    {
+        return profileService.checkBlocked(loggedInId, currentId);
+    }
+
+    @GetMapping("/checkMuted/{loggedInId}/{currentId}")
+    public Boolean checkMuted(@PathVariable int loggedInId, @PathVariable int currentId)
+    {
+        return profileService.checkMuted(loggedInId, currentId);
+    }
+
+    @PutMapping("/block/{loggedInId}/{currentId}")
+    public void block(@PathVariable int loggedInId, @PathVariable int currentId){
+        profileService.blockProfile(loggedInId, currentId);
+    }
+
+    @PutMapping("/mute/{loggedInId}/{currentId}")
+    public void mute(@PathVariable int loggedInId, @PathVariable int currentId){
+        profileService.muteProfile(loggedInId, currentId);
+    }
+
+    @PutMapping("/unmute/{loggedInId}/{currentId}")
+    public void unmute(@PathVariable int loggedInId, @PathVariable int currentId){
+        profileService.unmuteProfile(loggedInId, currentId);
+    }
+
     @GetMapping("/getProfile/{userInfoId}")
     public ProfileDTO getProfile(@PathVariable int userInfoId){
         return profileService.getProfile(userInfoId);

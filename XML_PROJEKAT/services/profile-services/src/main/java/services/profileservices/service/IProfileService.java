@@ -11,6 +11,11 @@ public interface IProfileService {
     Boolean addPost(int postId, int userInfoId);
     Profile getByUserInfoId(int userInfoId);
     boolean checkFollowing(int loggedIn, int current);
+    boolean checkBlocked(int loggedIn, int current);
+    void blockProfile(int loggedIn, int current);
+    boolean checkMuted(int loggedIn, int current);
+    void muteProfile(int loggedIn, int current);
+    void unmuteProfile(int loggedIn, int current);
     ProfileDTO getProfile(int userInfoId);
     Boolean editProfile(ProfileDTO profileDTO);
     void followProfile(int loggedIn, int current);

@@ -33,6 +33,11 @@ public class ProfileService implements IProfileService {
         profile.setIsPrivate(false);
         profile.setCanBeMessaged(true);
         profile.setCanBeTagged(true);
+        profile.setCanBeMessagedPrivate(true);
+        profile.setNotifyProfileActivity(true);
+        profile.setNotifyComment(true);
+        profile.setNotifyPost(true);
+        profile.setNotifyStory(true);
         profile.setPostIds(new ArrayList<>());
         profile.setStoryIds(new ArrayList<>());
         profile.setFollowing(new ArrayList<>());
@@ -78,6 +83,68 @@ public class ProfileService implements IProfileService {
     }
 
     @Override
+    public boolean checkBlocked(int loggedIn, int current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(current);
+
+        for(Integer profile : loggedInProfile.getBlocked())
+        {
+            if(profile == currentProfile.getId())
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void blockProfile(int loggedIn, int current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(current);
+
+        loggedInProfile.getBlocked().add(currentProfile.getId());
+        unfollowProfile(loggedIn, current);
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public boolean checkMuted(int loggedIn, int current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(current);
+
+        for(Integer profile : loggedInProfile.getMuted())
+        {
+            if(profile == currentProfile.getId())
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void muteProfile(int loggedIn, int current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(current);
+
+        loggedInProfile.getMuted().add(currentProfile.getId());
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public void unmuteProfile(int loggedIn, int current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(current);
+
+        for(int i= 0; i < loggedInProfile.getMuted().size(); i++)
+        {
+            if(loggedInProfile.getMuted().get(i) == currentProfile.getId())
+            {
+                loggedInProfile.getMuted().remove(i);
+                break;
+            }
+        }
+
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
     public ProfileDTO getProfile(int userInfoId) {
         ProfileDTO profileDTO = authClient.getUserInfo(userInfoId);
         Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
@@ -86,6 +153,11 @@ public class ProfileService implements IProfileService {
         profileDTO.setCanBeMessaged(profile.getCanBeMessaged());
         profileDTO.setCanBeTagged(profile.getCanBeTagged());
         profileDTO.setIsPrivate(profile.getIsPrivate());
+        profileDTO.setCanBeMessagedPrivate(profile.getCanBeMessagedPrivate());
+        profileDTO.setNotifyProfileActivity(profile.getNotifyProfileActivity());
+        profileDTO.setNotifyComment(profile.getNotifyComment());
+        profileDTO.setNotifyPost(profile.getNotifyPost());
+        profileDTO.setNotifyStory(profile.getNotifyStory());
         return profileDTO;
     }
 
@@ -99,6 +171,12 @@ public class ProfileService implements IProfileService {
             profile.setCanBeTagged(profileDTO.getCanBeTagged());
             profile.setIsPrivate(profileDTO.getIsPrivate());
             profile.setWebsite(profileDTO.getWebsite());
+            profile.setCanBeMessagedPrivate(profileDTO.getCanBeMessagedPrivate());
+            profile.setNotifyProfileActivity(profileDTO.getNotifyProfileActivity());
+            profile.setNotifyComment(profileDTO.getNotifyComment());
+            profile.setNotifyPost(profileDTO.getNotifyPost());
+            profile.setNotifyStory(profileDTO.getNotifyStory());
+
             profileRepository.save(profile);
             return true;
         } else {
@@ -110,6 +188,11 @@ public class ProfileService implements IProfileService {
                 profile.setCanBeTagged(profileDTO.getCanBeTagged());
                 profile.setIsPrivate(profileDTO.getIsPrivate());
                 profile.setWebsite(profileDTO.getWebsite());
+                profile.setCanBeMessagedPrivate(profileDTO.getCanBeMessagedPrivate());
+                profile.setNotifyProfileActivity(profileDTO.getNotifyProfileActivity());
+                profile.setNotifyComment(profileDTO.getNotifyComment());
+                profile.setNotifyPost(profileDTO.getNotifyPost());
+                profile.setNotifyStory(profileDTO.getNotifyStory());
                 profileRepository.save(profile);
                 return true;
             } else {

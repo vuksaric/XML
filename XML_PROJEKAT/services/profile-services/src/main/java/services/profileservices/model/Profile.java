@@ -25,6 +25,13 @@ public class Profile {
     private ProfileCategory category;
     private Boolean canBeTagged;
     private Boolean canBeMessaged;
+
+    private Boolean notifyProfileActivity;
+    private Boolean canBeMessagedPrivate;
+    private Boolean notifyPost;
+    private Boolean notifyStory;
+    private Boolean notifyComment;
+
     @ElementCollection
     @CollectionTable(name="Profile_Posts", joinColumns=@JoinColumn(name="Profile_ID"))
     @Column(name="post")
@@ -53,8 +60,10 @@ public class Profile {
     @Column(name="Blocked_ID")
     private List<Integer> blocked;
     @ElementCollection
-    @CollectionTable(name="Profile_Muted", joinColumns=@JoinColumn(name="Muted_ID"))
-    @Column(name="Blocked_ID")
+    @CollectionTable(name="Profile_Muted", joinColumns=@JoinColumn(name="Profile_ID"))
+    @Column(name="Muted_ID")
     private List<Integer> muted;
+
+
 
 }

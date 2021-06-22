@@ -25,6 +25,8 @@ export class ViewProfileComponent implements OnInit {
   profile : any;
   userInfo : any;
   checkFollowing : any;
+  checkMuted : any;
+  checkBlocked : any;
   checkRequest : any;
   listOfColumn = [
     {
@@ -51,13 +53,22 @@ export class ViewProfileComponent implements OnInit {
   ngOnInit(): void {
     this.profileService.getProfile(3).subscribe(data => {
       //this.listOfData = data;
-      this.authService.getById("1").subscribe(data => {
+      this.authService.getById("3").subscribe(data => {
         this.userInfo = data;
         console.log(this.userInfo);
       });
       this.profileService.checkFollowing(1,3).subscribe(data =>{
         this.checkFollowing = data;
       });
+
+      this.profileService.checkMuted(1,3).subscribe(data =>{
+        this.checkMuted = data;
+      });
+
+      this.profileService.checkBlocked(1,3).subscribe(data =>{
+        this.checkBlocked = data;
+      });
+
 
       this.followRequestService.checkRequest(1,3).subscribe(data=>{
         this.checkRequest = data;
@@ -77,6 +88,8 @@ export class ViewProfileComponent implements OnInit {
       });
 
       console.log(this.profile);
+
+
     });
 
 
@@ -124,6 +137,31 @@ export class ViewProfileComponent implements OnInit {
   {
     this.profileService.unfollowProfile(1,3).subscribe(data =>{
       location.reload();
+    });
+  }
+
+  mute() : void
+  {
+    this.profileService.muteProfile(1,3).subscribe(data =>{
+      location.reload();
+    });
+  }
+
+  unmute() : void
+  {
+    this.profileService.unmuteProfile(1,3).subscribe(data =>{
+      location.reload();
+    });
+  }
+
+  block() : void
+  {
+    this.profileService.blockProfile(1,3).subscribe(data =>{
+      this.profileService.checkFollowing(1,3).subscribe(data =>{
+        this.checkFollowing = data;
+      });
+      location.reload();
+      console.log(this.checkFollowing);
     });
   }
 

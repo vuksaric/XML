@@ -24,6 +24,14 @@ export class ProfileService {
     return this.http.get(profile_url+`/checkFollowing/${loggendIn}/${current}`);
   }
 
+  public checkMuted(loggendIn : number, current : number): Observable<any>{
+    return this.http.get(profile_url+`/checkMuted/${loggendIn}/${current}`);
+  }
+
+  public checkBlocked(loggendIn : number, current : number): Observable<any>{
+    return this.http.get(profile_url+`/checkBlocked/${loggendIn}/${current}`);
+  }
+
   public getProfile2(body:number): Observable<any>{
     return this.http.get(profile_url+`/getProfile/${body}`);
   }
@@ -37,6 +45,18 @@ export class ProfileService {
 
   public unfollowProfile(loggendIn : number, current : number): Observable<any>{
     return this.http.put(profile_url+`/unfollow/${loggendIn}/${current}`,null);
+  }
+
+  public muteProfile(loggendIn : number, current : number): Observable<any>{
+    return this.http.put(profile_url+`/mute/${loggendIn}/${current}`,null);
+  }
+
+  public unmuteProfile(loggendIn : number, current : number): Observable<any>{
+    return this.http.put(profile_url+`/unmute/${loggendIn}/${current}`,null);
+  }
+
+  public blockProfile(loggendIn : number, current : number): Observable<any>{
+    return this.http.put(profile_url+`/block/${loggendIn}/${current}`,null);
   }
 
   public acceptFollowRequest(to : number, from : number): Observable<any>{
