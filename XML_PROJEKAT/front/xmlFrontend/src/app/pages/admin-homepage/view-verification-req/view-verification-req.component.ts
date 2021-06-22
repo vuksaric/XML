@@ -30,9 +30,16 @@ export class ViewVerificationReqComponent implements OnInit {
       title: 'Profile category',
       compare: (a: VerificationRequest, b: VerificationRequest) => a.category.localeCompare(b.surname),
       priority: 2
+    },
+    {
+      title: 'Confirm',
     }
   ];
   constructor(private verificationService: VerificationRequestServiceService) { }
+
+  confirm(): void{
+
+  }
 
   ngOnInit(): void {
     this.verificationService.viewVerificationRequests().subscribe(data => {
