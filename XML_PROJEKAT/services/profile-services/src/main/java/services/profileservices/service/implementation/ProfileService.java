@@ -3,6 +3,7 @@ package services.profileservices.service.implementation;
 import org.springframework.stereotype.Service;
 import services.profileservices.client.AuthClient;
 import services.profileservices.dto.ProfileDTO;
+import services.profileservices.client.NotificationClient;
 import services.profileservices.model.Profile;
 import services.profileservices.repository.ProfileRepository;
 import services.profileservices.service.IProfileService;
@@ -15,9 +16,14 @@ public class ProfileService implements IProfileService {
 
     private final ProfileRepository profileRepository;
     private final AuthClient authClient;
+    private final NotificationClient notificationClient;
 
-    public ProfileService(ProfileRepository profileRepository, AuthClient authClient){this.profileRepository = profileRepository;
+    public ProfileService(ProfileRepository profileRepository, AuthClient authClient, NotificationClient notificationClient)
+    {
+        this.profileRepository = profileRepository;
         this.authClient = authClient;
+        this.notificationClient = notificationClient;
+
     }
 
     @Override
@@ -63,9 +69,9 @@ public class ProfileService implements IProfileService {
         Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
         Profile currentProfile = profileRepository.findOneByUserInfoId(current);
 
-        for(Profile profile : loggedInProfile.getFollowing())
+        for(Integer profile : loggedInProfile.getFollowing())
         {
-            if(profile.getId() == currentProfile.getId())
+            if(profile == currentProfile.getId())
                 return true;
         }
         return false;
@@ -85,7 +91,7 @@ public class ProfileService implements IProfileService {
 
     @Override
     public Boolean editProfile(ProfileDTO profileDTO) {
-        if(!profileDTO.getUsernameChanged()) {
+        if (!profileDTO.getUsernameChanged()) {
             authClient.edit(profileDTO);
             Profile profile = profileRepository.findOneByUserInfoId(profileDTO.getId());
             profile.setBiography(profileDTO.getBiography());
@@ -95,9 +101,8 @@ public class ProfileService implements IProfileService {
             profile.setWebsite(profileDTO.getWebsite());
             profileRepository.save(profile);
             return true;
-        }
-        else {
-            if(authClient.checkUsername(profileDTO.getUsername())) {
+        } else {
+            if (authClient.checkUsername(profileDTO.getUsername())) {
                 authClient.edit(profileDTO);
                 Profile profile = profileRepository.findOneByUserInfoId(profileDTO.getId());
                 profile.setBiography(profileDTO.getBiography());
@@ -107,11 +112,68 @@ public class ProfileService implements IProfileService {
                 profile.setWebsite(profileDTO.getWebsite());
                 profileRepository.save(profile);
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
         }
+    }
+
+    public void followProfile(int loggedIn, int current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(current);
+
+        loggedInProfile.getFollowing().add(currentProfile.getId());
+        currentProfile.getFollowers().add(loggedInProfile.getId());
+        profileRepository.save(loggedInProfile);
+        profileRepository.save(currentProfile);
+
+    }
+
+    @Override
+    public void unfollowProfile(int loggedIn, int current) {
+
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(current);
+
+        for(int i= 0; i < loggedInProfile.getFollowing().size(); i++)
+        {
+            if(loggedInProfile.getFollowing().get(i) == currentProfile.getId())
+            {
+                loggedInProfile.getFollowing().remove(i);
+                break;
+            }
+        }
+        for(int i= 0; i < currentProfile.getFollowers().size(); i++)
+        {
+            if(currentProfile.getFollowers().get(i) == loggedInProfile.getId())
+            {
+                currentProfile.getFollowers().remove(i);
+                break;
+            }
+        }
+        profileRepository.save(loggedInProfile);
+        profileRepository.save(currentProfile);
+
+    }
+
+    @Override
+    public void acceptFollowRequest(int to, int from) {
+        Profile toProfile = profileRepository.findOneByUserInfoId(to);
+        Profile fromProfile = profileRepository.findOneByUserInfoId(from);
+
+        fromProfile.getFollowing().add(toProfile.getId());
+        toProfile.getFollowers().add(fromProfile.getId());
+        fromProfile.getFollowers().add(toProfile.getId());
+        toProfile.getFollowing().add(fromProfile.getId());
+        profileRepository.save(toProfile);
+        profileRepository.save(fromProfile);
+        notificationClient.delete(to,from);
+
+    }
+
+    @Override
+    public void denyFollowRequest(int to, int from) {
+        notificationClient.delete(to,from);
     }
 
 

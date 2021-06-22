@@ -67,11 +67,16 @@ public class AuthController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity edit(@RequestBody UserInfo userInfo){
-        try{
+    public ResponseEntity edit(@RequestBody UserInfo userInfo) {
+        try {
             return new ResponseEntity(authService.edit(userInfo), HttpStatus.OK);
-        }catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/getUsername/{id}")
+    public String getUsername(@PathVariable int id){
+        return authService.getUsername(id);
     }
 }

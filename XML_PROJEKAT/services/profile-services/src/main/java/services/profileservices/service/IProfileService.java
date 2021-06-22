@@ -13,4 +13,9 @@ public interface IProfileService {
     boolean checkFollowing(int loggedIn, int current);
     ProfileDTO getProfile(int userInfoId);
     Boolean editProfile(ProfileDTO profileDTO);
+    void followProfile(int loggedIn, int current);
+    void unfollowProfile(int loggedIn, int current);
+    void acceptFollowRequest(int to, int from);
+    void denyFollowRequest(int to, int from);
+
 }

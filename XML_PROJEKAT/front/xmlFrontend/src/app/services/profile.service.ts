@@ -31,4 +31,20 @@ export class ProfileService {
   public editProfile(body: any): Observable<any>{
     return this.http.put(profile_url+`/editProfile`, body);
   }
+  public followProfile(loggendIn : number, current : number): Observable<any>{
+    return this.http.put(profile_url+`/follow/${loggendIn}/${current}`,null);
+  }
+
+  public unfollowProfile(loggendIn : number, current : number): Observable<any>{
+    return this.http.put(profile_url+`/unfollow/${loggendIn}/${current}`,null);
+  }
+
+  public acceptFollowRequest(to : number, from : number): Observable<any>{
+    return this.http.put(profile_url+`/acceptFollowRequest/${to}/${from}`,null);
+  }
+
+  public denyFollowRequest(to : number, from : number): Observable<any>{
+    return this.http.put(profile_url+`/denyFollowRequest/${to}/${from}`,null);
+  }
+
 }

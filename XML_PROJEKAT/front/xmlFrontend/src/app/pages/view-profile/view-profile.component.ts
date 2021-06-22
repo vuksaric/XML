@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { AuthService } from 'src/app/services/auth.service';
+import { FollowRequestService } from 'src/app/services/follow-request.service';
 import { ImageService } from 'src/app/services/image.service';
 import { PostStoryService } from 'src/app/services/post-story.service';
 import { ProfileService } from 'src/app/services/profile.service';
@@ -24,13 +25,14 @@ export class ViewProfileComponent implements OnInit {
   profile : any;
   userInfo : any;
   checkFollowing : any;
+  checkRequest : any;
   listOfColumn = [
     {
       title: '',
     }
   ];
   constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private imageService: ImageService, 
-    private sanitizer: DomSanitizer, private authService : AuthService) { }
+    private sanitizer: DomSanitizer, private authService : AuthService, private followRequestService : FollowRequestService) { }
 
   getSrc(pictureId: any) : String{
     this.imageService.getImage(pictureId).subscribe(dat => {
@@ -47,7 +49,7 @@ export class ViewProfileComponent implements OnInit {
 }
 
   ngOnInit(): void {
-    this.profileService.getProfile(1).subscribe(data => {
+    this.profileService.getProfile(3).subscribe(data => {
       //this.listOfData = data;
       this.authService.getById("1").subscribe(data => {
         this.userInfo = data;
@@ -56,6 +58,11 @@ export class ViewProfileComponent implements OnInit {
       this.profileService.checkFollowing(1,3).subscribe(data =>{
         this.checkFollowing = data;
       });
+
+      this.followRequestService.checkRequest(1,3).subscribe(data=>{
+        this.checkRequest = data;
+      });
+
       this.profile = data;
       this.postIds = data.postIds;
       console.log(data.postIds);
@@ -90,4 +97,47 @@ export class ViewProfileComponent implements OnInit {
   {
     return this.profile.postIds.length;
   }
+
+  countLikes(data : any) : number
+  {
+    return data.likeIds.length;
+  }
+
+  countDislikes(data : any) : number
+  {
+    return data.dislikeIds.length;
+  }
+
+  countComments(data : any) : number
+  {
+    return data.comments.length;
+  }
+
+  follow() : void
+  {
+    this.profileService.followProfile(1,3).subscribe(data =>{
+        location.reload();
+    });
+  }
+
+  unfollow() : void
+  {
+    this.profileService.unfollowProfile(1,3).subscribe(data =>{
+      location.reload();
+    });
+  }
+
+  sendRequest() : void
+  {
+    const body = {
+      accepted : false,
+      fromProfileId : 1,
+      toProfileId : 3
+    }
+    this.followRequestService.newRequest(body).subscribe(data =>{
+      location.reload();
+    })
+  }
+
+
 }

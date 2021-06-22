@@ -13,4 +13,5 @@ public interface IAuthService {
     UserInfo getById(int id);
     boolean checkUsername(String username);
     boolean edit(UserInfo userInfo);
+    String getUsername(int id);
 }

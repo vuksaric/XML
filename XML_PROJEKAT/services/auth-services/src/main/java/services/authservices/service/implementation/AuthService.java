@@ -92,9 +92,14 @@ public class AuthService implements IAuthService {
         oldUserInfo.setName(userInfo.getName());
         oldUserInfo.setUsername(userInfo.getUsername());
 
-        if(authRepository.save(oldUserInfo)!=null)
+        if (authRepository.save(oldUserInfo) != null)
             return true;
         else
             return false;
+    }
+    public String getUsername(int id) {
+        UserInfo ui = authRepository.findOneById(id);
+        return ui.getUsername();
+
     }
 }

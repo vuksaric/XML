@@ -26,6 +26,7 @@ import { NewVerificationRequestComponent } from './pages/homepage/new-verificati
 import { AdminHomepageComponent } from './pages/admin-homepage/admin-homepage.component';
 import { ViewVerificationReqComponent } from './pages/admin-homepage/view-verification-req/view-verification-req.component';
 import { ViewProfileComponent } from './pages/view-profile/view-profile.component';
+import { FollowRequestsComponent } from './pages/homepage/follow-requests/follow-requests.component';
 
 registerLocaleData(en);
 
@@ -45,6 +46,7 @@ registerLocaleData(en);
     AdminHomepageComponent,
     ViewVerificationReqComponent,
     ViewProfileComponent,
+    FollowRequestsComponent,
   ],
   imports: [
     BrowserModule,

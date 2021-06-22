@@ -1,0 +1,16 @@
+<nz-table #basicTable [nzData]="listOfData">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Accept</th>
+        <th>Deny</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.username }}</td>
+        <td> <button nz-button  (click)="accept(data.id)" [nzType]="'primary'">Accept</button></td>
+        <td><button nz-button  (click)="deny(data.id)" [nzType]="'primary'">Deny</button></td>
+      </tr>
+    </tbody>
+  </nz-table>

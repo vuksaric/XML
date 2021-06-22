@@ -33,6 +33,7 @@ public class ProfileController {
     {
         return profileService.checkFollowing(loggedInId, currentId);
     }
+
     @GetMapping("/getProfile/{userInfoId}")
     public ProfileDTO getProfile(@PathVariable int userInfoId){
         return profileService.getProfile(userInfoId);
@@ -40,6 +41,27 @@ public class ProfileController {
     @PutMapping("/editProfile")
     public Boolean editProfile(@RequestBody ProfileDTO profileDTO){
         return profileService.editProfile(profileDTO);
+    }
+
+
+    @PutMapping("/follow/{loggedInId}/{currentId}")
+    public void follow(@PathVariable int loggedInId, @PathVariable int currentId){
+         profileService.followProfile(loggedInId, currentId);
+    }
+
+    @PutMapping("/unfollow/{loggedInId}/{currentId}")
+    public void unfollow(@PathVariable int loggedInId, @PathVariable int currentId){
+        profileService.unfollowProfile(loggedInId, currentId);
+    }
+
+    @PutMapping("/acceptFollowRequest/{to}/{from}")
+    public void acceptFollowRequest(@PathVariable int to, @PathVariable int from){
+        profileService.acceptFollowRequest(to, from);
+    }
+
+    @PutMapping("/denyFollowRequest/{to}/{from}")
+    public void denyFollowRequest(@PathVariable int to, @PathVariable int from){
+        profileService.denyFollowRequest(to, from);
     }
 
 }
