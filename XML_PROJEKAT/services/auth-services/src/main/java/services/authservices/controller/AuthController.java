@@ -1,5 +1,6 @@
 package services.authservices.controller;
 
+import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +54,24 @@ public class AuthController {
             return new ResponseEntity(authService.getById(intId), HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping("/checkUsername/{username}")
+    public ResponseEntity checkUsername(@PathVariable String username){
+        try{
+            return new ResponseEntity(authService.checkUsername(username), HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity edit(@RequestBody UserInfo userInfo){
+        try{
+            return new ResponseEntity(authService.edit(userInfo), HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
