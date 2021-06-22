@@ -55,4 +55,9 @@ public class AuthController {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @GetMapping("/getUsername/{id}")
+    public String getUsername(@PathVariable int id){
+        return authService.getUsername(id);
+    }
 }

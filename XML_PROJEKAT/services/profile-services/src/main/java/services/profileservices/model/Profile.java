@@ -35,30 +35,26 @@ public class Profile {
     private List<Integer> storyIds;
     //@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private int userInfoId;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "Profile_Following",
-            joinColumns = { @JoinColumn(name = "Profile_ID") },
-            inverseJoinColumns = { @JoinColumn(name = "Following_ID") })
-    private List<Profile> following;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "Profile_Followers",
-            joinColumns = { @JoinColumn(name = "Profile_ID") },
-            inverseJoinColumns = { @JoinColumn(name = "Followers_ID") })
-    private List<Profile> followers;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "Profile_Friends",
-            joinColumns = { @JoinColumn(name = "Profile_ID") },
-            inverseJoinColumns = { @JoinColumn(name = "Friends_ID") })
-    private List<Profile> friends;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "Profile_Blocked",
-            joinColumns = { @JoinColumn(name = "Profile_ID") },
-            inverseJoinColumns = { @JoinColumn(name = "Blocked_ID") })
-    private List<Profile> blocked;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "Profile_Muted",
-            joinColumns = { @JoinColumn(name = "Profile_ID") },
-            inverseJoinColumns = { @JoinColumn(name = "Muted_ID") })
-    private List<Profile> muted;
+
+    @ElementCollection
+    @CollectionTable(name="Profile_Following", joinColumns=@JoinColumn(name="Profile_ID"))
+    @Column(name="Following_ID")
+    private List<Integer> following;
+    @ElementCollection
+    @CollectionTable(name="Profile_Followers", joinColumns=@JoinColumn(name="Profile_ID"))
+    @Column(name="Followers_ID")
+    private List<Integer> followers;
+    @ElementCollection
+    @CollectionTable(name="Profile_Friends", joinColumns=@JoinColumn(name="Profile_ID"))
+    @Column(name="Friends_ID")
+    private List<Integer> friends;
+    @ElementCollection
+    @CollectionTable(name="Profile_Blocked", joinColumns=@JoinColumn(name="Profile_ID"))
+    @Column(name="Blocked_ID")
+    private List<Integer> blocked;
+    @ElementCollection
+    @CollectionTable(name="Profile_Muted", joinColumns=@JoinColumn(name="Muted_ID"))
+    @Column(name="Blocked_ID")
+    private List<Integer> muted;
 
 }

@@ -10,5 +10,8 @@ public interface IProfileService {
     Boolean addPost(int postId, int userInfoId);
     Profile getByUserInfoId(int userInfoId);
     boolean checkFollowing(int loggedIn, int current);
-
+    void followProfile(int loggedIn, int current);
+    void unfollowProfile(int loggedIn, int current);
+    void acceptFollowRequest(int to, int from);
+    void denyFollowRequest(int to, int from);
 }
