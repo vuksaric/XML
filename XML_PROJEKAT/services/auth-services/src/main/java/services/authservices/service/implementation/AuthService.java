@@ -71,4 +71,30 @@ public class AuthService implements IAuthService {
         UserInfo ui = authRepository.findOneById(id);
         return ui;
     }
+
+    @Override
+    public boolean checkUsername(String username) {
+        UserInfo userInfo = authRepository.findOneByUsername(username);
+        if(userInfo==null)
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public boolean edit(UserInfo userInfo) {
+        UserInfo oldUserInfo = authRepository.findOneById(userInfo.getId());
+        oldUserInfo.setEmail(userInfo.getEmail());
+        oldUserInfo.setGender(userInfo.getGender());
+        oldUserInfo.setDateOfBirth(userInfo.getDateOfBirth());
+        oldUserInfo.setPhone(userInfo.getPhone());
+        oldUserInfo.setSurname(userInfo.getSurname());
+        oldUserInfo.setName(userInfo.getName());
+        oldUserInfo.setUsername(userInfo.getUsername());
+
+        if(authRepository.save(oldUserInfo)!=null)
+            return true;
+        else
+            return false;
+    }
 }

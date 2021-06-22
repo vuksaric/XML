@@ -1,8 +1,9 @@
 package services.profileservices.service.implementation;
 
 import org.springframework.stereotype.Service;
+import services.profileservices.client.AuthClient;
+import services.profileservices.dto.ProfileDTO;
 import services.profileservices.model.Profile;
-import services.profileservices.model.ProfileCategory;
 import services.profileservices.repository.ProfileRepository;
 import services.profileservices.service.IProfileService;
 
@@ -13,8 +14,11 @@ import java.util.List;
 public class ProfileService implements IProfileService {
 
     private final ProfileRepository profileRepository;
+    private final AuthClient authClient;
 
-    public ProfileService(ProfileRepository profileRepository){this.profileRepository = profileRepository;}
+    public ProfileService(ProfileRepository profileRepository, AuthClient authClient){this.profileRepository = profileRepository;
+        this.authClient = authClient;
+    }
 
     @Override
     public Boolean createProfile(int userInfoId) {
@@ -65,6 +69,49 @@ public class ProfileService implements IProfileService {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public ProfileDTO getProfile(int userInfoId) {
+        ProfileDTO profileDTO = authClient.getUserInfo(userInfoId);
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        profileDTO.setBiography(profile.getBiography());
+        profileDTO.setWebsite(profile.getWebsite());
+        profileDTO.setCanBeMessaged(profile.getCanBeMessaged());
+        profileDTO.setCanBeTagged(profile.getCanBeTagged());
+        profileDTO.setIsPrivate(profile.getIsPrivate());
+        return profileDTO;
+    }
+
+    @Override
+    public Boolean editProfile(ProfileDTO profileDTO) {
+        if(!profileDTO.getUsernameChanged()) {
+            authClient.edit(profileDTO);
+            Profile profile = profileRepository.findOneByUserInfoId(profileDTO.getId());
+            profile.setBiography(profileDTO.getBiography());
+            profile.setCanBeMessaged(profileDTO.getCanBeMessaged());
+            profile.setCanBeTagged(profileDTO.getCanBeTagged());
+            profile.setIsPrivate(profileDTO.getIsPrivate());
+            profile.setWebsite(profileDTO.getWebsite());
+            profileRepository.save(profile);
+            return true;
+        }
+        else {
+            if(authClient.checkUsername(profileDTO.getUsername())) {
+                authClient.edit(profileDTO);
+                Profile profile = profileRepository.findOneByUserInfoId(profileDTO.getId());
+                profile.setBiography(profileDTO.getBiography());
+                profile.setCanBeMessaged(profileDTO.getCanBeMessaged());
+                profile.setCanBeTagged(profileDTO.getCanBeTagged());
+                profile.setIsPrivate(profileDTO.getIsPrivate());
+                profile.setWebsite(profileDTO.getWebsite());
+                profileRepository.save(profile);
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
     }
 
 

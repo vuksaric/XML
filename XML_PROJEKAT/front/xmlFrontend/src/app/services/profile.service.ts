@@ -24,4 +24,11 @@ export class ProfileService {
     return this.http.get(profile_url+`/checkFollowing/${loggendIn}/${current}`);
   }
 
+  public getProfile2(body:number): Observable<any>{
+    return this.http.get(profile_url+`/getProfile/${body}`);
+  }
+
+  public editProfile(body: any): Observable<any>{
+    return this.http.put(profile_url+`/editProfile`, body);
+  }
 }

@@ -51,6 +51,21 @@
         <nz-date-picker formControlName="date" [nzDisabledDate]="disabledDate"></nz-date-picker>
       </nz-form-control>
     </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phone" nzRequired>Phone Number</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24"
+        nzErrorTip="Please input your phone number!">
+        <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
+          <ng-template #addOnBeforeTemplate>
+            <nz-select formControlName="phoneNumberPrefix" class="phone-select" >
+              <nz-option nzLabel="+381" nzValue="+381"></nz-option>
+              <nz-option nzLabel="+387" nzValue="+387"></nz-option>
+            </nz-select>
+          </ng-template>
+          <input formControlName="phone" id="'phone'" nz-input />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
 
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="website" nzRequired>
