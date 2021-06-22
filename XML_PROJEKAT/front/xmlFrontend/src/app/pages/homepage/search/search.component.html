@@ -1,8 +1,47 @@
-<div class="search">
-    <nz-input-group [nzSuffix]="suffixIconSearch" >
-      <input type="text" nz-input placeholder="input profile name, tag or location" [(ngModel)]="searchValue"/>
-    </nz-input-group>
-    <ng-template #suffixIconSearch>
-      <i nz-icon nzType="search"></i>
-    </ng-template>
-</div>
+
+<nz-tabset>
+  <nz-tab nzTitle="Search profile">
+    <div class="search">
+      <nz-input-group [nzSuffix]="suffixIconSearch" >
+        <input type="text" nz-input placeholder="input profile name(username)" [(ngModel)]="searchValueProfile"/>
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+  </div>
+  </nz-tab>
+  <nz-tab nzTitle="Search location">
+    <div class="search">
+      <nz-input-group [nzSuffix]="suffixIconSearch" >
+        <input type="text" nz-input placeholder="input location" [(ngModel)]="searchValueProfile"/>
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+  </div>
+  <nz-table #basicTable nzBordered nzTitle="List of posts" [nzData]="listOfData">
+    <thead>
+      <tr>
+        
+        <th *ngFor="let column of listOfColumn">{{ column.title }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{data.postInfo.location}}</td>
+        <td>{{data.postInfo.caption}}</td>
+      </tr>
+    </tbody>
+</nz-table>
+  </nz-tab>
+  <nz-tab nzTitle="Search tags">
+    <div class="search">
+      <nz-input-group [nzSuffix]="suffixIconSearch" >
+        <input type="text" nz-input placeholder="input tag" [(ngModel)]="searchValueProfile"/>
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+  </div>
+  </nz-tab>
+</nz-tabset>

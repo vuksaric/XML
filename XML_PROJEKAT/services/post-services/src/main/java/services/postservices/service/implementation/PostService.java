@@ -65,4 +65,10 @@ public class PostService implements IPostService {
         }
         return postList;
     }
+
+    @Override
+    public List<Post> getALlPublic() {
+        //ovde dodati komunikaciju sa profile mikroservisom, samo public mozemo da prikazujemo
+        return postRepository.findAll();
+    }
 }

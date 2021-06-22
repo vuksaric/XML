@@ -46,8 +46,6 @@ export class ViewVerificationReqComponent implements OnInit {
       console.log(profileId);
       this.toastr.success("Successfully confirmed!!!");
       this.ngOnInit();
-      
-
     })
     
   }

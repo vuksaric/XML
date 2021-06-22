@@ -25,4 +25,9 @@ public class PostController {
     public List<PostResponse> getPostsByPostIds(@RequestBody ProfilePostRequest profilePostRequest){
         return postService.getPostsByPostIds(profilePostRequest);
     }
+
+    @GetMapping("/getAllPublic")
+    public List<Post> getAllPublic(){
+        return  postService.getALlPublic();
+    }
 }
