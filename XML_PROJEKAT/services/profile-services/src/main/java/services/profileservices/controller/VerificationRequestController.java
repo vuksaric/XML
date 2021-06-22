@@ -18,12 +18,17 @@ public class VerificationRequestController {
     }
 
     @PostMapping("/create")
-    public Integer createVerification(@RequestParam("file") MultipartFile multipartFile, @RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("category") String category) throws Exception{
-        return verificationRequestService.save(multipartFile, name, surname, ProfileCategory.valueOf(category));
+    public Integer createVerification(@RequestParam("file") MultipartFile multipartFile, @RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("category") String category, @RequestParam("profileId") String profileId) throws Exception{
+        return verificationRequestService.save(multipartFile, name, surname, ProfileCategory.valueOf(category), profileId);
     }
 
     @GetMapping("/getAll")
     public List<VerificationRequest> getAll(){
         return verificationRequestService.getAll();
+    }
+
+    @GetMapping("/edit/{profileId}")
+    public VerificationRequest edit(@PathVariable int profileId){
+        return verificationRequestService.edit(profileId);
     }
 }

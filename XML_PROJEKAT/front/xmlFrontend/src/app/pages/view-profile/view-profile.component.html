@@ -18,7 +18,7 @@
 			<button *ngIf = "checkFollowing" class="btn profile-edit-btn" (click)="unfollow()" >Unfollow</button>
 			<button *ngIf = "!checkFollowing && !profile.isPrivate && !checkBlocked" class="btn profile-edit-btn" (click)="follow()">Follow</button>
 			<button *ngIf = "profile.isPrivate && checkRequest" class="btn profile-edit-btn" disabled>Sent request</button>
-			<button *ngIf = "profile.isPrivate && !checkRequest && !checkFollowing && !checkBlocked" class="btn profile-edit-btn" (click)="sendRequest()">Followdrh</button>
+			<button *ngIf = "profile.isPrivate && !checkRequest && !checkFollowing && !checkBlocked" class="btn profile-edit-btn" (click)="sendRequest()">Follow</button>
 			<button *ngIf = "checkFollowing && !checkMuted && !checkBlocked" class="btn profile-edit-btn" (click)="mute()" >Mute</button>
 			<button *ngIf = "checkFollowing && checkMuted && !checkBlocked" class="btn profile-edit-btn" (click)="unmute()" >Unmute</button>
 			<button *ngIf = "checkFollowing && !checkBlocked" class="btn profile-edit-btn" (click)="block()" >Block</button>

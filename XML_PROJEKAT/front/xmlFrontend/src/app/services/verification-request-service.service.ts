@@ -19,4 +19,8 @@ export class VerificationRequestServiceService {
   public viewVerificationRequests() : Observable<any>{
     return this.http.get(verificationRequest_url+'/getAll');
   }
+
+  public edit(profileId: any): Observable<any>{
+    return this.http.get(verificationRequest_url+`/edit/${profileId}`);
+  }
 }

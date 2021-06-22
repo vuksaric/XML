@@ -11,4 +11,5 @@ import java.util.List;
 public interface IPostService {
     int save(MultipartFile multipartFile, String location, String caption, String userInfoId) throws IOException;
     List<PostResponse> getPostsByPostIds(ProfilePostRequest profilePostRequest);
+    List<Post> getALlPublic();
 }

@@ -2,6 +2,7 @@ package services.profileservices.service;
 
 import services.profileservices.dto.ProfileDTO;
 import services.profileservices.model.Profile;
+import services.profileservices.model.ProfileCategory;
 import services.profileservices.model.VerificationRequest;
 
 import java.util.List;
@@ -22,5 +23,5 @@ public interface IProfileService {
     void unfollowProfile(int loggedIn, int current);
     void acceptFollowRequest(int to, int from);
     void denyFollowRequest(int to, int from);
-
+    Profile editCategory(int profileId, ProfileCategory profileCategory);
 }

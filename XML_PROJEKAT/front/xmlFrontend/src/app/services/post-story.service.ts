@@ -20,4 +20,8 @@ export class PostStoryService {
   public getPosts(body: any): Observable<any>{
     return this.http.post(post_url+`/getPosts`,body);
   }
+
+  public getAllPublic(): Observable<any>{
+    return this.http.get(post_url+`/getAllPublic`);
+  }
 }

@@ -5,6 +5,7 @@ import services.profileservices.client.AuthClient;
 import services.profileservices.dto.ProfileDTO;
 import services.profileservices.client.NotificationClient;
 import services.profileservices.model.Profile;
+import services.profileservices.model.ProfileCategory;
 import services.profileservices.repository.ProfileRepository;
 import services.profileservices.service.IProfileService;
 
@@ -200,7 +201,6 @@ public class ProfileService implements IProfileService {
             }
         }
     }
-
     public void followProfile(int loggedIn, int current) {
         Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
         Profile currentProfile = profileRepository.findOneByUserInfoId(current);
@@ -256,7 +256,14 @@ public class ProfileService implements IProfileService {
 
     @Override
     public void denyFollowRequest(int to, int from) {
-        notificationClient.delete(to,from);
+        notificationClient.delete(to, from);
+    }
+
+    @Override
+    public Profile editCategory(int profileId, ProfileCategory profileCategory) {
+        Profile profile = profileRepository.findOneById(profileId);
+        profile.setCategory(profileCategory);
+        return profileRepository.save(profile);
     }
 
 

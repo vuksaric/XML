@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IVerificationRequestService {
-    int save(MultipartFile multipartFile, String name, String surname, ProfileCategory category) throws IOException;
+    int save(MultipartFile multipartFile, String name, String surname, ProfileCategory category, String profileId) throws IOException;
     List<VerificationRequest> getAll();
+    VerificationRequest edit(int profileId);
 }
