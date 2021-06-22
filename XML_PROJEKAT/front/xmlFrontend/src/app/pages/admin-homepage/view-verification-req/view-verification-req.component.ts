@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { ProfileService } from 'src/app/services/profile.service';
 import { VerificationRequestServiceService } from 'src/app/services/verification-request-service.service';
+import { ToastrService } from 'ngx-toastr';
 
 export interface VerificationRequest{
   name: string;
   surname: string;
   category: string;
   officialDocument: File;
+  profileId: number;
+  confirmed: boolean;
 }
 
 @Component({
@@ -35,10 +39,17 @@ export class ViewVerificationReqComponent implements OnInit {
       title: 'Confirm',
     }
   ];
-  constructor(private verificationService: VerificationRequestServiceService) { }
+  constructor(private verificationService: VerificationRequestServiceService, private toastr : ToastrService) { }
 
-  confirm(): void{
+  confirm(profileId: number): void{
+    this.verificationService.edit(profileId).subscribe(data => {
+      console.log(profileId);
+      this.toastr.success("Successfully confirmed!!!");
+      this.ngOnInit();
+      
 
+    })
+    
   }
 
   ngOnInit(): void {

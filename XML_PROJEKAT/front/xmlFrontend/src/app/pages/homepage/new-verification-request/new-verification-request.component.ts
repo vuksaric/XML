@@ -14,6 +14,7 @@ export class NewVerificationRequestComponent implements OnInit {
   surname!: string;
   name!: string;
   category!: string;
+  profileId: string = "1";
 
 
   constructor(private fb: FormBuilder, private verificationRequestService : VerificationRequestServiceService) { }
@@ -55,6 +56,7 @@ export class NewVerificationRequestComponent implements OnInit {
     body.append("surname", this.surname);
     body.append("name", this.name);
     body.append("category", this.category);
+    body.append("profileId",this.profileId);
     console.log(this.validateForm.valid);
     // Launch post request
     if(this.validateForm.valid){

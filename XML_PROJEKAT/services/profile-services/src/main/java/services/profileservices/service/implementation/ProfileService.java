@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import services.profileservices.client.AuthClient;
 import services.profileservices.dto.ProfileDTO;
 import services.profileservices.model.Profile;
+import services.profileservices.model.ProfileCategory;
 import services.profileservices.repository.ProfileRepository;
 import services.profileservices.service.IProfileService;
 
@@ -112,6 +113,13 @@ public class ProfileService implements IProfileService {
                 return false;
             }
         }
+    }
+
+    @Override
+    public Profile editCategory(int profileId, ProfileCategory profileCategory) {
+        Profile profile = profileRepository.findOneById(profileId);
+        profile.setCategory(profileCategory);
+        return profileRepository.save(profile);
     }
 
 

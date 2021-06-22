@@ -2,6 +2,7 @@ package services.profileservices.service;
 
 import services.profileservices.dto.ProfileDTO;
 import services.profileservices.model.Profile;
+import services.profileservices.model.ProfileCategory;
 import services.profileservices.model.VerificationRequest;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface IProfileService {
     boolean checkFollowing(int loggedIn, int current);
     ProfileDTO getProfile(int userInfoId);
     Boolean editProfile(ProfileDTO profileDTO);
+    Profile editCategory(int profileId, ProfileCategory profileCategory);
 }

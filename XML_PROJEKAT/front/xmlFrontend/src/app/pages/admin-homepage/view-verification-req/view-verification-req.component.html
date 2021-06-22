@@ -11,7 +11,7 @@
             <td>{{data.name}}</td>
             <td>{{data.surname}}</td>
             <td>{{data.category}}</td>
-            <td><button nz-button (click)="confirm()" nzType="primary">Confirm</button></td>
+            <td><button nz-button (click)="confirm(data.profileId)" [disabled]="data.confirmed" nzType="primary">Confirm</button></td>
           </tr>
         </tbody>
     </nz-table>
