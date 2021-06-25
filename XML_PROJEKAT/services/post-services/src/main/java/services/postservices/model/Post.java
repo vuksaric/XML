@@ -25,6 +25,10 @@ public class Post {
     @Column(name="likeId")
     private List<Integer> likeIds;
     @ElementCollection
+    @CollectionTable(name="Post_Reports", joinColumns=@JoinColumn(name="Post_ID"))
+    @Column(name="reportId")
+    private List<Integer> reportIds;
+    @ElementCollection
     @CollectionTable(name="Post_Dislikes", joinColumns=@JoinColumn(name="Post_ID"))
     @Column(name="dislikeId")
     private List<Integer> dislikeIds;

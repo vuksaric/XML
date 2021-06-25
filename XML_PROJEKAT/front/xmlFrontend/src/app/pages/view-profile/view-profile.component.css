@@ -20,6 +20,7 @@ img {
   display: block;
 }
 
+
 .container {
   max-width: 93.5rem;
   margin: 0 auto;
@@ -375,4 +376,11 @@ Remove or comment-out the code block below to see how the browser will fall-back
     text-align: center;
     
   }
+
+  .icon
+  {
+    size: 22px;
+  }
+
+
 }

@@ -5,6 +5,8 @@ import { FollowRequestService } from 'src/app/services/follow-request.service';
 import { ImageService } from 'src/app/services/image.service';
 import { PostStoryService } from 'src/app/services/post-story.service';
 import { ProfileService } from 'src/app/services/profile.service';
+import { formatDistance } from 'date-fns';
+
 
 export interface Profile{
   username: string;
@@ -26,11 +28,29 @@ export class ViewProfileComponent implements OnInit {
   userInfo : any;
   checkFollowing : any;
   checkRequest : any;
+  likesCount : any;
+  dislikesCount : any;
+  commentsCount : any;
+  comments : any;
+  likes = 0;
+  currentPostId : any;
+  liked = false;
+  disliked = false;
+  submitting = false;
+  inputValue = '';
+  data: any[] = [];
+  reported = false;
+  user = {
+    author: 'Han Solo',
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+  };
   listOfColumn = [
     {
       title: '',
     }
   ];
+  isVisible = false;
+  location : any;
   constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private imageService: ImageService, 
     private sanitizer: DomSanitizer, private authService : AuthService, private followRequestService : FollowRequestService) { }
 
@@ -139,5 +159,99 @@ export class ViewProfileComponent implements OnInit {
     })
   }
 
+  showPost(data : any) : void
+  {
+      this.isVisible = true;
+      this.location = data.contentSrcs[0];
+      this.likesCount = this.countLikes(data);
+      this.dislikesCount = this.countDislikes(data);
+      this.commentsCount = this.countComments(data);
+      this.comments = data.comments;
+      this.currentPostId = data.id;
+      this.postStoryService.isItLiked(1,data.id).subscribe(data =>{
+        this.liked = data;
+      });
+      this.postStoryService.isItDisliked(1,data.id).subscribe(data=>{
+        this.disliked = data;
+      });
+      this.postStoryService.isItReported(1,data.id).subscribe(data =>{
+        this.reported = data;
+      })
+  }
+
+  handleCancel() : void
+  {
+    this.isVisible = false;
+    const body = {
+      postIds: this.postIds
+    }
+    this.postStoryService.getPosts(body).subscribe(data => {
+      console.log(data);
+      this.listOfData = data;
+  });
+  }
+
+  
+  like(): void {
+    
+    this.postStoryService.like(1,this.currentPostId).subscribe(data=>{
+      this.liked = true;
+      this.likesCount = this.likesCount + 1;
+      if(this.disliked)
+        this.dislikesCount = this.dislikesCount - 1;
+      this.disliked = false;
+            
+     
+    });
+
+
+  }
+
+  dislike(): void {
+    
+    this.postStoryService.dislike(1,this.currentPostId).subscribe(data=>{
+      this.disliked = true;
+      this.dislikesCount = this.dislikesCount + 1;
+      if(this.liked)
+        this.likesCount = this.likesCount - 1;
+      this.liked = false;
+    })
+
+  }
+
+  handleSubmit(): void {
+    this.submitting = true;
+    const content = this.inputValue;
+    this.inputValue = '';
+
+    setTimeout(() => {
+      this.submitting = false;
+    }, 800);
+
+    const body = {
+      postId : this.currentPostId,
+      username : "vuk",
+      content : content
+    }
+
+    this.postStoryService.addComment(body).subscribe(data => {
+      this.comments = data.comments;
+      this.commentsCount = this.countComments(data);
+    });
+    
+  }
+
+  report() : void
+  {
+    this.postStoryService.report(1,this.currentPostId).subscribe(data =>{
+      this.reported = true;
+    });
+    
+  }
 
 }
+
+
+
+
+

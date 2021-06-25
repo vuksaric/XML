@@ -17,5 +17,12 @@ public class Comment {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int profileId;
+    private String username;
+    private String content;
+
+    public Comment(String username, String content)
+    {
+        this.username = username;
+        this.content = content;
+    }
 }

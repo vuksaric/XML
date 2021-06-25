@@ -58,7 +58,7 @@ registerLocaleData(en);
     AppRoutingModule,
     ReactiveFormsModule,
     NzTableModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
