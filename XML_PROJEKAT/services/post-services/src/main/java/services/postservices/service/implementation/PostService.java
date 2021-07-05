@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import services.postservices.client.PictureVideoClient;
 import services.postservices.client.ProfileClient;
+import services.postservices.dto.CommentRequest;
 import services.postservices.dto.ImageDTO;
 import services.postservices.dto.PostResponse;
 import services.postservices.dto.ProfilePostRequest;
+import services.postservices.model.Comment;
 import services.postservices.model.Post;
 import services.postservices.model.PostInfo;
 import services.postservices.repository.PostRepository;
@@ -69,6 +71,123 @@ public class PostService implements IPostService {
     @Override
     public List<Post> getALlPublic() {
         //ovde dodati komunikaciju sa profile mikroservisom, samo public mozemo da prikazujemo
-        return postRepository.findAll();
+        return null;
+    }
+    public boolean isItLiked(int userId, int postId) {
+        Post post = postRepository.getById(postId);
+        for(Integer id : post.getLikeIds())
+        {
+            if(id == userId)
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isItDisliked(int userId, int postId) {
+        Post post = postRepository.getById(postId);
+        for(Integer id : post.getDislikeIds())
+        {
+            if(id == userId)
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isItReported(int userId, int postId) {
+        Post post = postRepository.getById(postId);
+        for(Integer id : post.getReportIds())
+        {
+            if(id == userId)
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void like(int userId, int postId) {
+        Post post = postRepository.getById(postId);
+        for(int i= 0; i < post.getDislikeIds().size(); i++)
+        {
+            if(post.getDislikeIds().get(i) == userId)
+                post.getDislikeIds().remove(i);
+        }
+        post.getLikeIds().add(userId);
+        postRepository.save(post);
+    }
+
+    @Override
+    public void dislike(int userId, int postId) {
+        Post post = postRepository.getById(postId);
+        for(int i= 0; i < post.getLikeIds().size(); i++)
+        {
+            if(post.getLikeIds().get(i) == userId)
+                post.getLikeIds().remove(i);
+        }
+        post.getDislikeIds().add(userId);
+        postRepository.save(post);
+    }
+
+    @Override
+    public void report(int userId, int postId) {
+        Post post = postRepository.getById(postId);
+        post.getReportIds().add(userId);
+        postRepository.save(post);
+    }
+
+    @Override
+    public PostResponse addComment(CommentRequest commentRequest) {
+        Post post = postRepository.getById(commentRequest.getPostId());
+        post.getComments().add(new Comment(commentRequest.getUsername(),commentRequest.getContent()));
+        return new PostResponse(postRepository.save(post));
+    }
+
+    @Override
+    public List<PostResponse> getLikedByProfile(int userId) {
+        List<Post> posts = postRepository.findAll();
+        List<PostResponse> result = new ArrayList<>();
+        for(Post post : posts)
+        {
+            for(Integer id : post.getLikeIds())
+            {
+                if(id == userId)
+                {
+                    PostResponse postResponse = new PostResponse(post);
+                    for(Integer idPicture : post.getPostInfo().getPictureIds())
+                    {
+                        String src = pictureVideoClient.getLocationById(idPicture);
+                        postResponse.getContentSrcs().add(src);
+                    }
+                    result.add(postResponse);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<PostResponse> getDislikedByProfile(int userId) {
+        List<Post> posts = postRepository.findAll();
+        List<PostResponse> result = new ArrayList<>();
+        for(Post post : posts)
+        {
+            for(Integer id : post.getDislikeIds())
+            {
+                if(id == userId)
+                {
+                    PostResponse postResponse = new PostResponse(post);
+                    for(Integer idPicture : post.getPostInfo().getPictureIds())
+                    {
+                        String src = pictureVideoClient.getLocationById(idPicture);
+                        postResponse.getContentSrcs().add(src);
+                    }
+                    result.add(postResponse);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }

@@ -234,6 +234,25 @@ public class ProfileService implements IProfileService {
                 break;
             }
         }
+        if(loggedInProfile.getIsPrivate() && currentProfile.getIsPrivate())
+        {
+            for(int i= 0; i < currentProfile.getFollowing().size(); i++)
+            {
+                if(currentProfile.getFollowing().get(i) == loggedInProfile.getId())
+                {
+                    currentProfile.getFollowing().remove(i);
+                    break;
+                }
+            }
+            for(int i= 0; i < loggedInProfile.getFollowers().size(); i++)
+            {
+                if(loggedInProfile.getFollowers().get(i) == currentProfile.getId())
+                {
+                    loggedInProfile.getFollowers().remove(i);
+                    break;
+                }
+            }
+        }
         profileRepository.save(loggedInProfile);
         profileRepository.save(currentProfile);
 

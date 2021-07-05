@@ -44,6 +44,9 @@ export class HomepageComponent implements OnInit {
   NewVerificationRequest(){
     this.router.navigate(['homepage/new-verification-request']);
   }
+  viewLiked(){
+    this.router.navigate(['homepage/view-liked']);
+  }
 
 
 }

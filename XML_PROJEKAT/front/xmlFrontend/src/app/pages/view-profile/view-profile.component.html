@@ -49,15 +49,15 @@
 			
 			<div *ngFor = "let data of listOfData">
 
-				<div class="gallery-item" tabindex="0">
+				<div class="gallery-item" tabindex="0" (click) = "showPost(data)">
 
-					<img src={{data.contentSrcs[0]}} class="gallery-image" alt="">
+					<img  src={{data.contentSrcs[0]}} class="gallery-image"  alt="">
 
 					<div class="gallery-item-info">
 
 						<ul>
 							<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{countLikes(data)}}</li>
-							<li class="gallery-item-dislikes"><span class="visually-hidden">Comments:</span><i class="fa fa-thumbs-down" aria-hidden="true"></i> {{countDislikes(data)}}</li>
+							<li class="gallery-item-dislikes"><span class="visually-hidden">Dislikes:</span><i class="fa fa-thumbs-down" aria-hidden="true"></i> {{countDislikes(data)}}</li>
 							<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fa fa-comment" aria-hidden="true"></i> {{countComments(data)}}</li>
 						</ul>
 
@@ -73,5 +73,138 @@
 			<p class = "private">This profile is private</p>
 		</div>
 	</div>
+
+	<nz-modal
+      [(nzVisible)]="isVisible"
+      [nzTitle]="modalTitle"
+      [nzContent]="modalContent"
+      [nzFooter]="modalFooter"
+      (nzOnCancel)="handleCancel()"
+    >
+      <ng-template #modalTitle></ng-template>
+
+      <ng-template #modalContent>
+		<p>{{postLocation}}</p>
+		<img src = {{location}} class="gallery-image">
+		<br>
+		<div style="font-size: 20px;">
+			<!--<i nz-tooltip nzTitle="Like" nz-icon nzType="like" ></i>{{likesCount}} &nbsp; &nbsp;-->
+			<i *ngIf = "liked" class="fa fa-thumbs-up fa-2x" style ="color: lightblue" ></i> 
+			<i *ngIf = "!liked" class="fa fa-thumbs-up fa-2x"  (click)="like()"></i> {{likesCount}} &nbsp; &nbsp;
+			<i *ngIf = "disliked" class="fa fa-thumbs-down fa-2x" style ="color: lightblue" aria-hidden="true"></i>
+			<i *ngIf = "!disliked" class="fa fa-thumbs-down fa-2x"  (click)="dislike()"></i>  {{dislikesCount}} &nbsp; &nbsp;
+			<i class="fa fa-comment fa-2x" aria-hidden="true"></i> {{commentsCount}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+			<i *ngIf = "!reported" class="fa fa-flag fa-2x" (click)="report()"></i>
+			<i *ngIf = "reported" class="fa fa-flag fa-2x" style ="color: lightblue"></i>
+		</div>
+		<br>
+		<p>{{caption}}</p>
+		<br>
+		<br>
+		<h4>Comments:</h4>
+		<br>
+		<div *ngFor = "let comment of comments">
+			<nz-comment nzAuthor={{comment.username}}>
+				<nz-avatar nz-comment-avatar nzIcon="user" nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+				<nz-comment-content>
+				  <p>
+					{{comment.content}}
+				  </p>
+				</nz-comment-content>
+			</nz-comment>
+		</div>
+		  <nz-comment>
+			<nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="user.avatar"></nz-avatar>
+			<nz-comment-content>
+			  <nz-form-item>
+				<textarea [(ngModel)]="inputValue" nz-input rows="4"></textarea>
+			  </nz-form-item>
+			  <nz-form-item>
+				<button nz-button nzType="primary" [nzLoading]="submitting" [disabled]="!inputValue" (click)="handleSubmit()">
+				  Add Comment
+				</button>
+			  </nz-form-item>
+			</nz-comment-content>
+		  </nz-comment>
+      </ng-template>
+
+      <ng-template #modalFooter>
+      </ng-template>
+    </nz-modal>
+
+
+
+	<nz-modal
+      [(nzVisible)]="isVisibleAlbum"
+      [nzTitle]="modalTitle1"
+      [nzContent]="modalContent1"
+      [nzFooter]="modalFooter1"
+      (nzOnCancel)="handleCancel()"
+    > 
+		<ng-template #modalTitle1></ng-template>
+		<ng-template #modalContent1>
+			<p>{{postLocation}}</p>
+			<div class="slideshow-container">
+				<div *ngFor = "let location of locations">
+					<div style.display = {{location.display}}>
+						<img src={{location.location}} style="width:100%">
+					</div>
+				</div>
+			
+				<a class="prev" (click)="plusSlides(-1)">&#10094;</a>
+				<a class="next" (click)="plusSlides(1)">&#10095;</a>
+			</div>
+			<br>
+
+			<!--<div style="text-align:center">
+				<span class="dot" (click)="currentSlide(1)"></span>
+				<span class="dot" (click)="currentSlide(2)"></span>
+				<span class="dot" (click)="currentSlide(3)"></span>
+			</div>-->
+
+			<br>
+		<div style="font-size: 20px;">
+			<!--<i nz-tooltip nzTitle="Like" nz-icon nzType="like" ></i>{{likesCount}} &nbsp; &nbsp;-->
+			<i *ngIf = "liked" class="fa fa-thumbs-up fa-2x" style ="color: lightblue" ></i> 
+			<i *ngIf = "!liked" class="fa fa-thumbs-up fa-2x"  (click)="like()"></i> {{likesCount}} &nbsp; &nbsp;
+			<i *ngIf = "disliked" class="fa fa-thumbs-down fa-2x" style ="color: lightblue" aria-hidden="true"></i>
+			<i *ngIf = "!disliked" class="fa fa-thumbs-down fa-2x"  (click)="dislike()"></i>  {{dislikesCount}} &nbsp; &nbsp;
+			<i class="fa fa-comment fa-2x" aria-hidden="true"></i> {{commentsCount}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+			<i *ngIf = "!reported" class="fa fa-flag fa-2x" (click)="report()"></i>
+			<i *ngIf = "reported" class="fa fa-flag fa-2x" style ="color: lightblue"></i>
+		</div>
+		<br>
+		<p>{{caption}}</p>
+		<br>
+		<br>
+		<h4>Comments:</h4>
+		<br>
+		<div *ngFor = "let comment of comments">
+			<nz-comment nzAuthor={{comment.username}}>
+				<nz-avatar nz-comment-avatar nzIcon="user" nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+				<nz-comment-content>
+				  <p>
+					{{comment.content}}
+				  </p>
+				</nz-comment-content>
+			</nz-comment>
+		</div>
+		  <nz-comment>
+			<nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="user.avatar"></nz-avatar>
+			<nz-comment-content>
+			  <nz-form-item>
+				<textarea [(ngModel)]="inputValue" nz-input rows="4"></textarea>
+			  </nz-form-item>
+			  <nz-form-item>
+				<button nz-button nzType="primary" [nzLoading]="submitting" [disabled]="!inputValue" (click)="handleSubmit()">
+				  Add Comment
+				</button>
+			  </nz-form-item>
+			</nz-comment-content>
+		  </nz-comment>
+		</ng-template>
+		<ng-template #modalFooter1>
+		</ng-template>
+	</nz-modal> 
     
 

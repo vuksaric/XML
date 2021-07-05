@@ -24,4 +24,40 @@ export class PostStoryService {
   public getAllPublic(): Observable<any>{
     return this.http.get(post_url+`/getAllPublic`);
   }
+  
+  public isItLiked(userId : number, postId : number): Observable<any>{
+    return this.http.put(post_url+`/isItLiked/${userId}/${postId}`,null);
+  }
+
+  public isItDisliked(userId : number, postId : number): Observable<any>{
+    return this.http.put(post_url+`/isItDisliked/${userId}/${postId}`,null);
+  }
+
+  public like(userId : number, postId : number): Observable<any>{
+    return this.http.put(post_url+`/like/${userId}/${postId}`,null);
+  }
+
+  public dislike(userId : number, postId : number): Observable<any>{
+    return this.http.put(post_url+`/dislike/${userId}/${postId}`,null);
+  }
+
+  public addComment(body: any): Observable<any>{
+    return this.http.put(post_url+`/addComment`,body);
+  }
+
+  public isItReported(userId : number, postId : number): Observable<any>{
+    return this.http.put(post_url+`/isItReported/${userId}/${postId}`,null);
+  }
+
+  public report(userId : number, postId : number): Observable<any>{
+    return this.http.put(post_url+`/report/${userId}/${postId}`,null);
+  }
+
+  public likedByProfile(userId : number): Observable<any>{
+    return this.http.get(post_url+`/likedByProfile/${userId}`);
+  }
+
+  public dislikedByProfile(userId : number): Observable<any>{
+    return this.http.get(post_url+`/dislikedByProfile/${userId}`);
+  }
 }

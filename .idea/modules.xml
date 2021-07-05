@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/XML.iml" filepath="$PROJECT_DIR$/.idea/XML.iml" />
+      <module fileurl="file://$PROJECT_DIR$/XML_PROJEKAT/XML_PROJEKAT.iml" filepath="$PROJECT_DIR$/XML_PROJEKAT/XML_PROJEKAT.iml" />
+      <module fileurl="file://$PROJECT_DIR$/XML_PROJEKAT/services/auth-services/auth-services.iml" filepath="$PROJECT_DIR$/XML_PROJEKAT/services/auth-services/auth-services.iml" />
+      <module fileurl="file://$PROJECT_DIR$/XML_PROJEKAT/services/campaign-services/campaign-services.iml" filepath="$PROJECT_DIR$/XML_PROJEKAT/services/campaign-services/campaign-services.iml" />
+      <module fileurl="file://$PROJECT_DIR$/XML_PROJEKAT/services/notification-services/notification-services.iml" filepath="$PROJECT_DIR$/XML_PROJEKAT/services/notification-services/notification-services.iml" />
+      <module fileurl="file://$PROJECT_DIR$/XML_PROJEKAT/services/picture-video-services/picture-video-services.iml" filepath="$PROJECT_DIR$/XML_PROJEKAT/services/picture-video-services/picture-video-services.iml" />
+      <module fileurl="file://$PROJECT_DIR$/XML_PROJEKAT/services/post-services/post-services.iml" filepath="$PROJECT_DIR$/XML_PROJEKAT/services/post-services/post-services.iml" />
+      <module fileurl="file://$PROJECT_DIR$/XML_PROJEKAT/services/profile-services/profile-services.iml" filepath="$PROJECT_DIR$/XML_PROJEKAT/services/profile-services/profile-services.iml" />
+    </modules>
+  </component>
+</project>

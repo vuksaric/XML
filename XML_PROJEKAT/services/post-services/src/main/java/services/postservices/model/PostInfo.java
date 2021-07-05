@@ -29,7 +29,6 @@ public class PostInfo {
     @CollectionTable(name="Post_Videos", joinColumns=@JoinColumn(name="PostInfo_ID"))
     @Column(name="video")
     private List<Integer> videoIds;
-    private int report;
     //@OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private String location;
     @ElementCollection
