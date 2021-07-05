@@ -10,6 +10,8 @@ import services.authservices.model.dto.RegistrationDTO;
 import services.authservices.model.dto.UserResponseDTO;
 import services.authservices.service.IAuthService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -56,6 +58,14 @@ public class AuthController {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
+    @GetMapping("/getUserInfoByUsername/{username}")
+    public ResponseEntity getUserInfoByUsername(@PathVariable String username){
+        try{
+            return new ResponseEntity(authService.getUserInfoByUsername(username), HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
 
     @GetMapping("/checkUsername/{username}")
     public ResponseEntity checkUsername(@PathVariable String username){
@@ -78,5 +88,10 @@ public class AuthController {
     @GetMapping("/getUsername/{id}")
     public String getUsername(@PathVariable int id){
         return authService.getUsername(id);
+    }
+
+    @PostMapping("/getUserInfoIds")
+    public List<Integer> getUserInfoIds(@RequestBody List<String> usernames){
+        return authService.getUserInfoIds(usernames);
     }
 }

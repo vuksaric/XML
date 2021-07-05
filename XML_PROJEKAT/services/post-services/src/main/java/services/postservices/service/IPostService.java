@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IPostService {
-    int save(MultipartFile multipartFile, String location, String caption, String userInfoId) throws IOException;
+    int save(MultipartFile[] multipartFile, String location, String caption, String userInfoId,List<String> tags) throws IOException;
     List<PostResponse> getPostsByPostIds(ProfilePostRequest profilePostRequest);
     List<Post> getALlPublic();
     boolean isItLiked(int userId, int postId);

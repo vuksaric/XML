@@ -20,11 +20,8 @@ public class ImageController {
     public ImageController(FileLocationService fileLocationService){this.fileLocationService = fileLocationService;}
 
     @PostMapping("/upload")
-    //Integer uploadImage(@RequestParam("file") MultipartFile multipartImage) throws Exception {
     Integer uploadImage(@RequestBody ImageDTO imageDTO) throws Exception {
-        //return fileLocationService.save(multipartImage.getBytes(),multipartImage.getOriginalFilename());
-
-        return fileLocationService.save(imageDTO.getContent(),imageDTO.getName());
+        return fileLocationService.save(imageDTO.getContent(),imageDTO.getName(), imageDTO.isImage());
     }
 
     @PostMapping("/getById")

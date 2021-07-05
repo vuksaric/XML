@@ -22,9 +22,11 @@ public class Image {
     private byte[] content;
     private String name;
     private String location;
+    private boolean image;
 
-    public Image(String imageName, String location) {
+    public Image(String imageName, String location, boolean image) {
         this.name = imageName;
         this.location = location;
+        this.image=image;
     }
 }

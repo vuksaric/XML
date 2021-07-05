@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { PostStoryService } from 'src/app/services/post-story.service';
-
-export interface Post{
-  location: string;
-  caption: string;
-}
+import { Router } from '@angular/router';
+import { ProfileService } from 'src/app/services/profile.service';
 
 @Component({
   selector: 'app-search',
@@ -14,34 +10,17 @@ export interface Post{
 })
 
 export class SearchComponent implements OnInit {
-  //valedateForm: FormGroup = new FormGroup();
-  searchValueProfile: string = "";
-  listOfData!: any[];
-  locations!: string[];
-  searchValueLocation: string = "";
-  listOfColumn = [
-    {
-      title: 'Location',
-      compare: (a: Post, b: Post) => a.location.localeCompare(b.location),
-      priority: 0
-    },
-    {
-      title: 'Caption',
-      compare: (a: Post, b: Post) => a.caption.localeCompare(b.caption),
-      priority: 0
-    }
-  ]
-  constructor(private postStoryService: PostStoryService) { }
+  searchValue: string = "";
+  listOfData: any[]=[];
 
-  search(): void{
-    //this.listOfData = this.locations.filter((item: String) => item.toLocaleLowerCase().indexOf(this.searchValueLocation.toLocaleLowerCase()) !== -1);
-  }
+  constructor(private profileService: ProfileService, private router: Router) { }
 
   ngOnInit(): void {
-    this.postStoryService.getAllPublic().subscribe(data =>{
-        console.log(data);
-        this.listOfData = data;
-    });
+    this.profileService.getPublicProfiles().subscribe(data=>{console.log(data); this.listOfData=data;})
+  }
+
+  view(item : string){
+    this.router.navigate(['view-profile/'+item]);
   }
 
 }

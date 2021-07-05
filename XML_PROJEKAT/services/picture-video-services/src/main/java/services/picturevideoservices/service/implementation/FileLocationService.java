@@ -18,10 +18,10 @@ public class FileLocationService {
 
     public FileLocationService(FileSystemRepository fileSystemRepository, ImageDbRepository imageDbRepository){this.fileSystemRepository = fileSystemRepository; this.imageDbRepository = imageDbRepository;}
 
-    public Integer save(byte[] bytes, String imageName) throws Exception {
+    public Integer save(byte[] bytes, String imageName, boolean image) throws Exception {
         String location = fileSystemRepository.save(bytes, imageName);
 
-        return imageDbRepository.save(new Image(new Date().getTime() + "-" + imageName, location)).getId();
+        return imageDbRepository.save(new Image(new Date().getTime() + "-" + imageName, location, image)).getId();
     }
 
     public String getLocationById(int id){

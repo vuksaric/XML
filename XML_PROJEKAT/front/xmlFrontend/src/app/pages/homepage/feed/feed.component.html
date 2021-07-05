@@ -1,8 +1,11 @@
-<img
-      nz-image
-      width="200px"
-      height="200px"
-      nzSrc="/assets/1.jpg"
-      alt=""
-    />
- 
+
+
+    <img src="/assets/pictures/1.jpg">
+    <div class="video">
+      <video controls (click)="toggleVideo()" #videoPlayer>
+          <source src="/assets/pictures/SampleVideo_1280x720_1mb.mp4" type="video/mp4"/>
+          Browser not supported
+      </video>
+    </div>
+   
+    

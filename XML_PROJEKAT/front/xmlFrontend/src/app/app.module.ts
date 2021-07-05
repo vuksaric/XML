@@ -28,6 +28,8 @@ import { ViewVerificationReqComponent } from './pages/admin-homepage/view-verifi
 import { ViewProfileComponent } from './pages/view-profile/view-profile.component';
 import { FollowRequestsComponent } from './pages/homepage/follow-requests/follow-requests.component';
 import { ViewLikedComponent } from './pages/homepage/view-liked/view-liked.component';
+import { NewAlbumComponent } from './pages/homepage/new-album/new-album.component';
+import { SearchFilterPipe } from './pipes/search-filter.pipe';
 
 registerLocaleData(en);
 
@@ -49,7 +51,8 @@ registerLocaleData(en);
     ViewProfileComponent,
     FollowRequestsComponent,
     ViewLikedComponent,
-    
+    NewAlbumComponent,
+    SearchFilterPipe
   ],
   imports: [
     BrowserModule,

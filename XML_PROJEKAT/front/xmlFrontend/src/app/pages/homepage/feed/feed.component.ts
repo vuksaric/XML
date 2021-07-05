@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-feed',
@@ -11,5 +11,10 @@ export class FeedComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  
+  @ViewChild('videoPlayer') 
+  videoplayer!: ElementRef;
+  toggleVideo() {
+      this.videoplayer.nativeElement.play();
+  }
 }

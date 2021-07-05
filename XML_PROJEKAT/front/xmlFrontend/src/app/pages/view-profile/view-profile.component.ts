@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { FollowRequestService } from 'src/app/services/follow-request.service';
 import { ImageService } from 'src/app/services/image.service';
@@ -65,7 +66,8 @@ export class ViewProfileComponent implements OnInit {
   slideIndex = 1;
 
   constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private imageService: ImageService, 
-    private sanitizer: DomSanitizer, private authService : AuthService, private followRequestService : FollowRequestService) { }
+    private sanitizer: DomSanitizer, private authService : AuthService,private activatedRoute: ActivatedRoute,
+     private followRequestService : FollowRequestService) { }
 
   getSrc(pictureId: any) : String{
     this.imageService.getImage(pictureId).subscribe(dat => {
@@ -83,12 +85,7 @@ export class ViewProfileComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.profileService.getProfile(1).subscribe(data => {
-      //this.listOfData = data;
-      this.authService.getById("3").subscribe(data => {
-        this.userInfo = data;
-        console.log(this.userInfo);
-      });
+    this.profileService.getProfile(this.activatedRoute.snapshot.paramMap.get('username')).subscribe(data => {
       this.profileService.checkFollowing(1,3).subscribe(data =>{
         this.checkFollowing = data;
       });

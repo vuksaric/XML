@@ -41,6 +41,9 @@ export class HomepageComponent implements OnInit {
   NewStory(){
     this.router.navigate(['homepage/new-story']);
   }
+  NewAlbum(){
+    this.router.navigate(['homepage/new-album']);
+  }
   NewVerificationRequest(){
     this.router.navigate(['homepage/new-verification-request']);
   }

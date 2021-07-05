@@ -13,8 +13,12 @@ export class PostStoryService {
 
   constructor(private http: HttpClient) { }
 
-  public createPostStory(body: FormData): Observable<any>{
+  public createPost(body: FormData): Observable<any>{
     return this.http.post(post_url+'/create',body);
+  }
+
+  public creatStory(body: FormData): Observable<any>{
+    return this.http.post(story_url+'/create',body);
   }
 
   public getPosts(body: any): Observable<any>{

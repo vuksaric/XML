@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import services.profileservices.client.AuthClient;
 import services.profileservices.dto.ProfileDTO;
 import services.profileservices.client.NotificationClient;
+import services.profileservices.dto.ViewProfileDTO;
 import services.profileservices.model.Profile;
 import services.profileservices.model.ProfileCategory;
 import services.profileservices.repository.ProfileRepository;
@@ -63,6 +64,20 @@ public class ProfileService implements IProfileService {
         if(new_ids_len > old_ids_len)
             return true;
         else return false;
+    }
+
+    @Override
+    public Boolean addStory(int storyId, int userInfoId) {
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        List<Integer> ids = profile.getStoryIds();
+        int old_ids_len = ids.size();
+        ids.add(storyId);
+        profile.setStoryIds(ids);
+        int new_ids_len = profileRepository.save(profile).getStoryIds().size();
+        if(new_ids_len > old_ids_len)
+            return true;
+        else
+            return false;
     }
 
     @Override
@@ -159,6 +174,23 @@ public class ProfileService implements IProfileService {
         profileDTO.setNotifyComment(profile.getNotifyComment());
         profileDTO.setNotifyPost(profile.getNotifyPost());
         profileDTO.setNotifyStory(profile.getNotifyStory());
+        return profileDTO;
+    }
+
+    @Override
+    public ViewProfileDTO getProfileByUsername(String username) {
+        ViewProfileDTO profileDTO = authClient.getUserInfoByUsername(username);
+        Profile profile = profileRepository.findOneByUserInfoId(profileDTO.getId());
+        profileDTO.setBiography(profile.getBiography());
+        profileDTO.setWebsite(profile.getWebsite());
+        profileDTO.setIsPrivate(profile.getIsPrivate());
+        profileDTO.setPostIds(profile.getPostIds());
+        profileDTO.setStoryIds(profile.getStoryIds());
+        profileDTO.setFollowers(profile.getFollowers());
+        profileDTO.setFollowing(profile.getFollowing());
+        profileDTO.setBlocked(profile.getBlocked());
+        profileDTO.setFriends(profile.getFriends());
+        profileDTO.setMuted(profile.getMuted());
         return profileDTO;
     }
 
@@ -283,6 +315,43 @@ public class ProfileService implements IProfileService {
         Profile profile = profileRepository.findOneById(profileId);
         profile.setCategory(profileCategory);
         return profileRepository.save(profile);
+    }
+
+    @Override
+    public List<String> getProfilesForTagging(int userInfoId) {
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        List<String> result = new ArrayList<>();
+
+        for(Integer id : profile.getFollowing()){
+            if(profileRepository.findOneById(id).getCanBeTagged())
+                result.add(authClient.getUsername(id));
+        }
+
+        for(Profile p : profileRepository.findAllPublicAndCanBeTagged()){
+            String username = authClient.getUsername(p.getUserInfoId());
+            if(!result.contains(username))
+                result.add(username);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<String> getPublicProfiles() {
+        List<String> result = new ArrayList<>();
+        for(Profile p : profileRepository.findAllPublic()){
+            result.add(authClient.getUsername(p.getUserInfoId()));
+        }
+        return result;
+    }
+
+    @Override
+    public List<Integer> findByUsername(List<String> usernames) {
+        List<Integer> result = new ArrayList<>();
+        for(Integer i : authClient.getUserInfoIds(usernames)){
+            result.add(profileRepository.findOneByUserInfoId(i).getId());
+        }
+        return result;
     }
 
 

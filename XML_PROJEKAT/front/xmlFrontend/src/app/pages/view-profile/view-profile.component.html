@@ -14,7 +14,7 @@
 	
 			<div class="profile-user-settings">
 	
-			<h1 class="profile-user-name">{{userInfo.username}}</h1>
+			<h1 class="profile-user-name">{{profile.username}}</h1>
 			<button *ngIf = "checkFollowing" class="btn profile-edit-btn" (click)="unfollow()" >Unfollow</button>
 			<button *ngIf = "!checkFollowing && !profile.isPrivate && !checkBlocked" class="btn profile-edit-btn" (click)="follow()">Follow</button>
 			<button *ngIf = "profile.isPrivate && checkRequest" class="btn profile-edit-btn" disabled>Sent request</button>
@@ -37,7 +37,7 @@
 	
 			<div class="profile-bio">
 	
-			<p ><span class="profile-real-name">{{userInfo.name}} {{userInfo.surname}}</span><br> {{profile.biography}} 📷✈️🏕️</p>
+			<p ><span class="profile-real-name">{{profile.name}} {{profile.surname}}</span><br> {{profile.biography}} 📷✈️🏕️</p>
 	
 			</div>
 	
