@@ -48,4 +48,12 @@ export class PostStoryService {
   public report(userId : number, postId : number): Observable<any>{
     return this.http.put(post_url+`/report/${userId}/${postId}`,null);
   }
+
+  public likedByProfile(userId : number): Observable<any>{
+    return this.http.get(post_url+`/likedByProfile/${userId}`);
+  }
+
+  public dislikedByProfile(userId : number): Observable<any>{
+    return this.http.get(post_url+`/dislikedByProfile/${userId}`);
+  }
 }

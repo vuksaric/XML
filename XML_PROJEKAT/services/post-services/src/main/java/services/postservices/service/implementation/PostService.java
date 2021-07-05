@@ -138,4 +138,52 @@ public class PostService implements IPostService {
         post.getComments().add(new Comment(commentRequest.getUsername(),commentRequest.getContent()));
         return new PostResponse(postRepository.save(post));
     }
+
+    @Override
+    public List<PostResponse> getLikedByProfile(int userId) {
+        List<Post> posts = postRepository.findAll();
+        List<PostResponse> result = new ArrayList<>();
+        for(Post post : posts)
+        {
+            for(Integer id : post.getLikeIds())
+            {
+                if(id == userId)
+                {
+                    PostResponse postResponse = new PostResponse(post);
+                    for(Integer idPicture : post.getPostInfo().getPictureIds())
+                    {
+                        String src = pictureVideoClient.getLocationById(idPicture);
+                        postResponse.getContentSrcs().add(src);
+                    }
+                    result.add(postResponse);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<PostResponse> getDislikedByProfile(int userId) {
+        List<Post> posts = postRepository.findAll();
+        List<PostResponse> result = new ArrayList<>();
+        for(Post post : posts)
+        {
+            for(Integer id : post.getDislikeIds())
+            {
+                if(id == userId)
+                {
+                    PostResponse postResponse = new PostResponse(post);
+                    for(Integer idPicture : post.getPostInfo().getPictureIds())
+                    {
+                        String src = pictureVideoClient.getLocationById(idPicture);
+                        postResponse.getContentSrcs().add(src);
+                    }
+                    result.add(postResponse);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
 }

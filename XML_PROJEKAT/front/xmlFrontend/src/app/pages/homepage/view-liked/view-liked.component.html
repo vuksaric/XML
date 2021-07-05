@@ -1,0 +1,33 @@
+<head>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<nz-radio-group (ngModelChange)="onChangeStatus()" [(ngModel)]="radioValue">
+    <label nz-radio-button nzValue="liked">Liked</label>
+    <label nz-radio-button nzValue="disliked">Disliked</label>
+</nz-radio-group>
+  <br>
+  <br>
+<div class="gallery">
+
+			
+    <div *ngFor = "let data of listOfData">
+
+        <div class="gallery-item" tabindex="0">
+
+            <img src={{data.contentSrcs[0]}} class="gallery-image"  alt="">
+
+            <div class="gallery-item-info">
+
+                <ul>
+                    <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{countLikes(data)}}</li>
+                    <li class="gallery-item-dislikes"><span class="visually-hidden">Dislikes:</span><i class="fa fa-thumbs-down" aria-hidden="true"></i> {{countDislikes(data)}}</li>
+                    <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fa fa-comment" aria-hidden="true"></i> {{countComments(data)}}</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { AuthService } from 'src/app/services/auth.service';
 import { FollowRequestService } from 'src/app/services/follow-request.service';
 import { ImageService } from 'src/app/services/image.service';
 import { PostStoryService } from 'src/app/services/post-story.service';
 import { ProfileService } from 'src/app/services/profile.service';
-import { formatDistance } from 'date-fns';
 
 
 export interface Profile{
   username: string;
   biography: string;
   website: string;
+}
+
+export interface Location{
+  location: string;
+  display : string
 }
 
 @Component({
@@ -37,9 +41,12 @@ export class ViewProfileComponent implements OnInit {
   liked = false;
   disliked = false;
   submitting = false;
+  caption : any;
+  postLocation : any;
   inputValue = '';
   data: any[] = [];
   reported = false;
+
   user = {
     author: 'Han Solo',
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
@@ -50,7 +57,11 @@ export class ViewProfileComponent implements OnInit {
     }
   ];
   isVisible = false;
+  isVisibleAlbum = false;
+  locations: Location[] = [];
   location : any;
+  slideIndex = 1;
+
   constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private imageService: ImageService, 
     private sanitizer: DomSanitizer, private authService : AuthService, private followRequestService : FollowRequestService) { }
 
@@ -68,8 +79,9 @@ export class ViewProfileComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
 }
 
+
   ngOnInit(): void {
-    this.profileService.getProfile(3).subscribe(data => {
+    this.profileService.getProfile(1).subscribe(data => {
       //this.listOfData = data;
       this.authService.getById("1").subscribe(data => {
         this.userInfo = data;
@@ -161,8 +173,28 @@ export class ViewProfileComponent implements OnInit {
 
   showPost(data : any) : void
   {
-      this.isVisible = true;
-      this.location = data.contentSrcs[0];
+      if(data.contentSrcs.length > 1)
+      {
+        this.isVisibleAlbum = true;
+
+        data.contentSrcs.forEach((element: any) => {
+          const newLocation = {
+            location : element,
+            display : "none"
+          }
+          this.locations.push(newLocation);
+        });;
+        this.slideIndex = 1;
+        this.showSlides(this.slideIndex);
+
+      }
+      else
+      {
+        this.isVisible = true;
+        this.location = data.contentSrcs[0];
+      }
+      this.caption = data.caption;
+      this.postLocation = data.location;
       this.likesCount = this.countLikes(data);
       this.dislikesCount = this.countDislikes(data);
       this.commentsCount = this.countComments(data);
@@ -179,9 +211,11 @@ export class ViewProfileComponent implements OnInit {
       })
   }
 
+
   handleCancel() : void
   {
     this.isVisible = false;
+    this.isVisibleAlbum = false;
     const body = {
       postIds: this.postIds
     }
@@ -247,6 +281,30 @@ export class ViewProfileComponent implements OnInit {
       this.reported = true;
     });
     
+  }
+
+   showSlides(n : any) {
+    var i; 
+    if (n > this.locations.length) {this.slideIndex = 1}
+    if (n < 1) {this.slideIndex = this.locations.length}
+    for (i = 0; i < this.locations.length; i++) {
+        this.locations[i].display = "none";
+    }
+    this.locations[this.slideIndex-1].display = "block";
+    /*for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }*/
+    //dots[this.slideIndex-1].className += " active";
+  }
+
+  // Next/previous controls
+ plusSlides(n : any) {
+  this.showSlides(this.slideIndex += n);
+  }
+
+// Thumbnail image controls
+ currentSlide(n : any) {
+  this.showSlides(this.slideIndex = n);
   }
 
 }

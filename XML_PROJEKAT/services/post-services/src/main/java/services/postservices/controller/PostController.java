@@ -61,4 +61,14 @@ public class PostController {
     public PostResponse addComment(@RequestBody CommentRequest commentRequest){
         return postService.addComment(commentRequest);
     }
+
+    @GetMapping("/likedByProfile/{userId}")
+    public List<PostResponse> likedByProfile(@PathVariable int userId){
+        return postService.getLikedByProfile(userId);
+    }
+
+    @GetMapping("/dislikedByProfile/{userId}")
+    public List<PostResponse> dislikedByProfile(@PathVariable int userId){
+        return postService.getDislikedByProfile(userId);
+    }
 }

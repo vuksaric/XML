@@ -20,4 +20,6 @@ public interface IPostService {
     void dislike(int userId, int postId);
     void report(int userId, int postId);
     PostResponse addComment(CommentRequest commentRequest);
+    List<PostResponse> getLikedByProfile(int userId);
+    List<PostResponse> getDislikedByProfile(int userId);
 }
