@@ -62,28 +62,14 @@ export class ViewProfileComponent implements OnInit {
   location : any;
   slideIndex = 1;
 
-  constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private imageService: ImageService, 
-    private sanitizer: DomSanitizer, private authService : AuthService, private followRequestService : FollowRequestService) { }
-
-  getSrc(pictureId: any) : String{
-    this.imageService.getImage(pictureId).subscribe(dat => {
-      console.log("usao");
-      console.log(dat);
-      this.pictureLocations = dat;
-      console.log(this.pictureLocations);
-    });
-    return this.pictureLocations;
-  }
-
-  sanitizeImageUrl(imageUrl: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
-}
+  constructor(private profileService: ProfileService, private postStoryService: PostStoryService,
+     private authService : AuthService, private followRequestService : FollowRequestService) { }
 
 
   ngOnInit(): void {
-    this.profileService.getProfile(1).subscribe(data => {
+    this.profileService.getProfile(2).subscribe(data => {
       //this.listOfData = data;
-      this.authService.getById("1").subscribe(data => {
+      this.authService.getById("2").subscribe(data => {
         this.userInfo = data;
         console.log(this.userInfo);
       });
@@ -183,7 +169,7 @@ export class ViewProfileComponent implements OnInit {
             display : "none"
           }
           this.locations.push(newLocation);
-        });;
+        });
         this.slideIndex = 1;
         this.showSlides(this.slideIndex);
 
@@ -209,6 +195,11 @@ export class ViewProfileComponent implements OnInit {
       this.postStoryService.isItReported(1,data.id).subscribe(data =>{
         this.reported = data;
       })
+  }
+
+  showStory()
+  {
+
   }
 
 

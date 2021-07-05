@@ -6,6 +6,8 @@ import services.profileservices.model.Profile;
 import services.profileservices.service.IProfileService;
 import services.profileservices.service.implementation.ProfileService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/profile")
 public class ProfileController {
@@ -62,6 +64,11 @@ public class ProfileController {
     @PutMapping("/denyFollowRequest/{to}/{from}")
     public void denyFollowRequest(@PathVariable int to, @PathVariable int from){
         profileService.denyFollowRequest(to, from);
+    }
+
+    @GetMapping("/getPostIdsFeed/{userInfoId}")
+    public List<Integer> getPostIdsFeed(@PathVariable int userInfoId){
+        return profileService.getPostIdsFeed(userInfoId);
     }
 
 }

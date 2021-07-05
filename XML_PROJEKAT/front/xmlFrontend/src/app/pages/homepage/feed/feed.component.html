@@ -1,8 +1,52 @@
-<img
-      nz-image
-      width="200px"
-      height="200px"
-      nzSrc="/assets/1.jpg"
-      alt=""
-    />
+<head>
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<div *ngFor = "let data of listOfData" class="card"> 
+  <p>{{data.post.location}}</p>
+  <div *ngIf = "data.post.contentSrcs.length == 1">
+    <img src = {{data.post.contentSrcs[0]}} class="gallery-image">
+  </div>
+  <div *ngIf = "data.post.contentSrcs.length > 1">
+    
+  </div>
+  <br>
+  <div style="font-size: 20px;">
+    <!--<i nz-tooltip nzTitle="Like" nz-icon nzType="like" ></i>{{likesCount}} &nbsp; &nbsp;-->
+    <i *ngIf = "data.liked" class="fa fa-thumbs-up fa-2x" style ="color: lightblue" ></i> 
+    <i *ngIf = "!data.liked" class="fa fa-thumbs-up fa-2x"  (click)="like(data.post)"></i> {{data.likes}} &nbsp; &nbsp;
+    <i *ngIf = "data.disliked" class="fa fa-thumbs-down fa-2x" style ="color: lightblue" aria-hidden="true"></i>
+    <i *ngIf = "!data.disliked" class="fa fa-thumbs-down fa-2x"  (click)="dislike(data.post)"></i>  {{data.dislikes}} &nbsp; &nbsp;
+    <i class="fa fa-comment fa-2x" aria-hidden="true"></i> {{data.comments}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+    <i *ngIf = "!data.reported"  class="fa fa-flag fa-2x" (click)="report(data.post)"></i>
+    <i *ngIf = "data.reported" class="fa fa-flag fa-2x" style ="color: lightblue"></i>
+  </div>
+  <br>
+  <p>{{data.post.caption}}</p>
+  <br>
+  <br>
+  <h4>Comments:</h4>
+  <br>
+  <div *ngFor = "let comment of data.post.comments">
+    <nz-comment nzAuthor={{comment.username}}>
+      
+      <nz-comment-content>
+        <p>
+        {{comment.content}}
+        </p>
+      </nz-comment-content>
+    </nz-comment>
+  </div>
+  <nz-comment>
+  <nz-comment-content>
+    <nz-form-item>
+    <textarea [(ngModel)]="inputValue" nz-input rows="4"></textarea>
+    </nz-form-item>
+    <nz-form-item>
+    <button nz-button nzType="primary" [nzLoading]="submitting" [disabled]="!inputValue" (click)="handleSubmit(data.post)">
+      Add Comment
+    </button>
+    </nz-form-item>
+  </nz-comment-content>
+  </nz-comment>
+</div>
  

@@ -195,5 +195,16 @@ public class ProfileService implements IProfileService {
         notificationClient.delete(to,from);
     }
 
+    @Override
+    public List<Integer> getPostIdsFeed(int userInfoId) {
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        List<Integer> result = new ArrayList<>();
+        for(Integer id : profile.getFollowing())
+        {
+            result.addAll(profileRepository.findOneByUserInfoId(id).getPostIds());
+        }
+        return result;
+    }
+
 
 }

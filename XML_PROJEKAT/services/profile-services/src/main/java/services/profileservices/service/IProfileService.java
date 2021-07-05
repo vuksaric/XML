@@ -17,5 +17,6 @@ public interface IProfileService {
     void unfollowProfile(int loggedIn, int current);
     void acceptFollowRequest(int to, int from);
     void denyFollowRequest(int to, int from);
+    List<Integer> getPostIdsFeed(int userInfoId);
 
 }

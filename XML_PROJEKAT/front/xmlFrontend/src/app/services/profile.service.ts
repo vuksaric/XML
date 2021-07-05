@@ -47,4 +47,8 @@ export class ProfileService {
     return this.http.put(profile_url+`/denyFollowRequest/${to}/${from}`,null);
   }
 
+  public getPostIdsFeed(body:number): Observable<any>{
+    return this.http.get(profile_url+`/getPostIdsFeed/${body}`);
+  }
+
 }

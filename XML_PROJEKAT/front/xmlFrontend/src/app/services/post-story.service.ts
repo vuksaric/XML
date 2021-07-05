@@ -56,4 +56,9 @@ export class PostStoryService {
   public dislikedByProfile(userId : number): Observable<any>{
     return this.http.get(post_url+`/dislikedByProfile/${userId}`);
   }
+
+  public getPostsFeed(body: any): Observable<any>{
+    return this.http.post(post_url+`/getForFeed`,body);
+  }
+
 }

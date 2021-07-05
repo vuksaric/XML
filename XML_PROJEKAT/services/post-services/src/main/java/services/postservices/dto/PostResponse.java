@@ -1,6 +1,7 @@
 package services.postservices.dto;
 
 import lombok.*;
+import org.jetbrains.annotations.NotNull;
 import services.postservices.model.Comment;
 import services.postservices.model.Post;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostResponse {
+public class PostResponse implements Comparable< PostResponse >{
 
     private int id;
     private List<Integer> likeIds;
@@ -36,6 +37,11 @@ public class PostResponse {
         this.taggedIds = post.getPostInfo().getTaggedIds();
         this.comments = post.getComments();
         this.contentSrcs = new ArrayList<>();
+    }
+
+    @Override
+    public int compareTo(@NotNull PostResponse o) {
+        return this.getDate().compareTo(o.getDate());
     }
 }
 
