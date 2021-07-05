@@ -30,4 +30,5 @@ public interface IProfileService {
     List<String> getProfilesForTagging(int userInfoId);
     List<String> getPublicProfiles();
     List<Integer> findByUsername(List<String> usernames);
+    List<Integer> getPostIdsFeed(int userInfoId);
 }

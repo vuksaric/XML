@@ -354,5 +354,16 @@ public class ProfileService implements IProfileService {
         return result;
     }
 
+    @Override
+    public List<Integer> getPostIdsFeed(int userInfoId) {
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        List<Integer> result = new ArrayList<>();
+        for(Integer id : profile.getFollowing())
+        {
+            result.addAll(profileRepository.findOneByUserInfoId(id).getPostIds());
+        }
+        return result;
+    }
+
 
 }

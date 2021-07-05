@@ -74,5 +74,8 @@ export class ProfileService {
   public getPublicProfiles() : Observable<any[]>{
     return this.http.get<any[]>(profile_url+`/getPublicProfiles`);
   }
+  public getPostIdsFeed(body:number): Observable<any>{
+    return this.http.get(profile_url+`/getPostIdsFeed/${body}`);
+  }
 
 }

@@ -69,19 +69,6 @@ export class ViewProfileComponent implements OnInit {
     private sanitizer: DomSanitizer, private authService : AuthService,private activatedRoute: ActivatedRoute,
      private followRequestService : FollowRequestService) { }
 
-  getSrc(pictureId: any) : String{
-    this.imageService.getImage(pictureId).subscribe(dat => {
-      console.log("usao");
-      console.log(dat);
-      this.pictureLocations = dat;
-      console.log(this.pictureLocations);
-    });
-    return this.pictureLocations;
-  }
-
-  sanitizeImageUrl(imageUrl: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
-}
 
 
   ngOnInit(): void {
@@ -218,7 +205,7 @@ export class ViewProfileComponent implements OnInit {
             display : "none"
           }
           this.locations.push(newLocation);
-        });;
+        });
         this.slideIndex = 1;
         this.showSlides(this.slideIndex);
 
@@ -244,6 +231,11 @@ export class ViewProfileComponent implements OnInit {
       this.postStoryService.isItReported(1,data.id).subscribe(data =>{
         this.reported = data;
       })
+  }
+
+  showStory()
+  {
+
   }
 
 

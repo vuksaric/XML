@@ -112,4 +112,8 @@ public class ProfileController {
     public List<Integer> findByUsername(@RequestBody List<String> usernames){
         return profileService.findByUsername(usernames);
     }
+    @GetMapping("/getPostIdsFeed/{userInfoId}")
+    public List<Integer> getPostIdsFeed(@PathVariable int userInfoId){
+        return profileService.getPostIdsFeed(userInfoId);
+    }
 }

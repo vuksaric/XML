@@ -23,4 +23,5 @@ public interface IPostService {
     PostResponse addComment(CommentRequest commentRequest);
     List<PostResponse> getLikedByProfile(int userId);
     List<PostResponse> getDislikedByProfile(int userId);
+    List<PostResponse> getForFeed(List<Integer> postIds);
 }

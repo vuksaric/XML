@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -199,6 +200,25 @@ public class PostService implements IPostService {
                 }
             }
         }
+        return result;
+    }
+
+    @Override
+    public List<PostResponse> getForFeed(List<Integer> postIds) {
+        List<PostResponse> result = new ArrayList<>();
+        for(Integer id : postIds)
+        {
+            Post post = postRepository.findOneById(id);
+            PostResponse postResponse = new PostResponse(post);
+            for(Integer idPicture : post.getPostInfo().getPictureIds())
+            {
+                String src = pictureVideoClient.getLocationById(idPicture);
+                postResponse.getContentSrcs().add(src);
+            }
+            result.add(postResponse);
+        }
+
+        Collections.sort(result, Collections.reverseOrder());
         return result;
     }
 }

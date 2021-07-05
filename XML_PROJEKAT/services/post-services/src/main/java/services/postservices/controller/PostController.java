@@ -77,4 +77,9 @@ public class PostController {
     public List<PostResponse> dislikedByProfile(@PathVariable int userId){
         return postService.getDislikedByProfile(userId);
     }
+
+    @PostMapping("/getForFeed")
+    public List<PostResponse> getForFeed(@RequestBody ProfilePostRequest profilePostRequest){
+        return postService.getForFeed(profilePostRequest.getPostIds());
+    }
 }
