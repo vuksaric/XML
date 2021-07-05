@@ -14,6 +14,9 @@ import services.authservices.repository.AuthRepository;
 import services.authservices.security.TokenUtils;
 import services.authservices.service.IAuthService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AuthService implements IAuthService {
 
@@ -73,6 +76,13 @@ public class AuthService implements IAuthService {
     }
 
     @Override
+    public UserInfo getUserInfoByUsername(String username) {
+        UserInfo ui = authRepository.findOneByUsername(username);
+        return ui;
+    }
+
+
+    @Override
     public boolean checkUsername(String username) {
         UserInfo userInfo = authRepository.findOneByUsername(username);
         if(userInfo==null)
@@ -101,5 +111,15 @@ public class AuthService implements IAuthService {
         UserInfo ui = authRepository.findOneById(id);
         return ui.getUsername();
 
+    }
+
+    @Override
+    public List<Integer> getUserInfoIds(List<String> usernames) {
+        List<Integer> result = new ArrayList<>();
+
+        for(String username : usernames){
+            result.add(authRepository.findOneByUsername(username).getId());
+        }
+        return result;
     }
 }

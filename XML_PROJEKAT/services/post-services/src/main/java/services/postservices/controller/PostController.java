@@ -17,8 +17,9 @@ public class PostController {
     public PostController(IPostService postService){this.postService = postService;}
 
     @PostMapping("/create")
-    public Integer createPost(@RequestParam("file") MultipartFile multipartFile, @RequestParam("location") String location, @RequestParam("caption") String caption, @RequestParam("userInfoId") String userInfoId) throws Exception{
-        return postService.save(multipartFile, location, caption, userInfoId);
+    public Integer createPost(@RequestParam("file") MultipartFile[] multipartFile, @RequestParam("location") String location, @RequestParam("caption") String caption,
+                              @RequestParam("userInfoId") String userInfoId, @RequestParam("tags") List<String> tags) throws Exception{
+        return postService.save(multipartFile, location, caption, userInfoId,  tags);
     }
 
     @PostMapping("/getPosts")

@@ -2,9 +2,12 @@ package services.profileservices.controller;
 
 import org.springframework.web.bind.annotation.*;
 import services.profileservices.dto.ProfileDTO;
+import services.profileservices.dto.ViewProfileDTO;
 import services.profileservices.model.Profile;
 import services.profileservices.service.IProfileService;
 import services.profileservices.service.implementation.ProfileService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/profile")
@@ -22,10 +25,14 @@ public class ProfileController {
     public Boolean addPost(@PathVariable int postId, @PathVariable int userInfoId){
         return profileService.addPost(postId,userInfoId);
     }
+    @PutMapping("/addStory/{storyId}/{userInfoId}")
+    public Boolean addStory(@PathVariable int storyId, @PathVariable int userInfoId){
+        return profileService.addStory(storyId,userInfoId);
+    }
 
-    @GetMapping("/get/{userInfoId}")
-    public Profile get(@PathVariable int userInfoId){
-        return profileService.getByUserInfoId(userInfoId);
+    @GetMapping("/get/{username}")
+    public ViewProfileDTO get(@PathVariable String username){
+        return profileService.getProfileByUsername(username);
     }
 
     @GetMapping("/checkFollowing/{loggedInId}/{currentId}")
@@ -65,6 +72,7 @@ public class ProfileController {
     public ProfileDTO getProfile(@PathVariable int userInfoId){
         return profileService.getProfile(userInfoId);
     }
+
     @PutMapping("/editProfile")
     public Boolean editProfile(@RequestBody ProfileDTO profileDTO){
         return profileService.editProfile(profileDTO);
@@ -91,4 +99,17 @@ public class ProfileController {
         profileService.denyFollowRequest(to, from);
     }
 
+    @GetMapping("/profilesForTagging/{userInfoId}")
+    public List<String> getProfilesForTagging(@PathVariable int userInfoId){
+        return profileService.getProfilesForTagging(userInfoId);
+    }
+    @GetMapping("/getPublicProfiles")
+    public List<String> getPublicProfiles(){
+        return profileService.getPublicProfiles();
+    }
+
+    @PostMapping("/findByUsername")
+    public List<Integer> findByUsername(@RequestBody List<String> usernames){
+        return profileService.findByUsername(usernames);
+    }
 }

@@ -27,6 +27,8 @@ import { AdminHomepageComponent } from './pages/admin-homepage/admin-homepage.co
 import { ViewVerificationReqComponent } from './pages/admin-homepage/view-verification-req/view-verification-req.component';
 import { ViewProfileComponent } from './pages/view-profile/view-profile.component';
 import { FollowRequestsComponent } from './pages/homepage/follow-requests/follow-requests.component';
+import { NewAlbumComponent } from './pages/homepage/new-album/new-album.component';
+import { SearchFilterPipe } from './pipes/search-filter.pipe';
 
 registerLocaleData(en);
 
@@ -47,6 +49,8 @@ registerLocaleData(en);
     ViewVerificationReqComponent,
     ViewProfileComponent,
     FollowRequestsComponent,
+    NewAlbumComponent,
+    SearchFilterPipe,
   ],
   imports: [
     BrowserModule,

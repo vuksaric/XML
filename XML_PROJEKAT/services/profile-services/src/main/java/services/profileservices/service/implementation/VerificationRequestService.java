@@ -24,7 +24,11 @@ public class VerificationRequestService implements IVerificationRequestService {
 
     @Override
     public int save(MultipartFile multipartFile, String name, String surname, ProfileCategory category) throws IOException {
-        int officialDocument = pictureVideoClient.uploadImage(new ImageDTO(multipartFile.getOriginalFilename(),multipartFile.getBytes()));
+        int officialDocument;
+        if(multipartFile.getContentType().contains("image"))
+            officialDocument = pictureVideoClient.uploadImage(new ImageDTO(multipartFile.getOriginalFilename(),multipartFile.getBytes(), true));
+        else
+            officialDocument = pictureVideoClient.uploadImage(new ImageDTO(multipartFile.getOriginalFilename(),multipartFile.getBytes(), false));
         VerificationRequest verificationRequest = new VerificationRequest(name, surname, category, officialDocument);
         return verificationRequestRepository.save(verificationRequest).getId();
     }

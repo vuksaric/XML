@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
+import { ToastrService } from 'ngx-toastr';
 import { ImageService } from 'src/app/services/image.service';
 import { PostStoryService } from 'src/app/services/post-story.service';
 import { environment } from 'src/environments/environment';
@@ -20,7 +21,8 @@ export class NewPostComponent implements OnInit {
   location!: string;
   caption!: string;
 
-  constructor(private postStory: PostStoryService ,private fb: FormBuilder, private http: HttpClient) { }
+  constructor(private postStory: PostStoryService ,private fb: FormBuilder, private http: HttpClient,
+    private toastr : ToastrService) { }
 
   fileChange(event: any) {
     // Instantiate an object to read the file content
@@ -51,14 +53,14 @@ export class NewPostComponent implements OnInit {
     body.append("userInfoId", "1");
     // Launch post request
     if(this.validateForm.valid){
-      this.postStory.createPostStory(body)
+      this.postStory.createPost(body)
       .subscribe(
         // Admire results
         (data) => {console.log(data)},
         // Or errors :-(
-        error => console.log(error),
+        error => {console.log(error);  this.toastr.error("Error while publishing post!");},
         // tell us if it's finished
-        () => { console.log("completed") }
+        () => { console.log("completed");  this.toastr.success("Post successfully published!"); }
       );
     }
 

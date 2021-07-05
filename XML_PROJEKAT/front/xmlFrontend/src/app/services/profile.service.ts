@@ -16,7 +16,7 @@ export class ProfileService {
     return this.http.post(profile_url+`/newProfile`, body);
   }
 
-  public getProfile(body:number): Observable<any>{
+  public getProfile(body:any): Observable<any>{
     return this.http.get(profile_url+`/get/${body}`);
   }
 
@@ -65,6 +65,14 @@ export class ProfileService {
 
   public denyFollowRequest(to : number, from : number): Observable<any>{
     return this.http.put(profile_url+`/denyFollowRequest/${to}/${from}`,null);
+  }
+
+  public getProfilesForTagging(userInfoId: number) : Observable<any[]>{
+    return this.http.get<any[]>(profile_url+`/profilesForTagging/${userInfoId}`);
+  }
+
+  public getPublicProfiles() : Observable<any[]>{
+    return this.http.get<any[]>(profile_url+`/getPublicProfiles`);
   }
 
 }

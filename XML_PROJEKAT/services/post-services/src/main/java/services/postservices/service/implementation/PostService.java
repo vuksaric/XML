@@ -33,16 +33,27 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public int save(MultipartFile multipartFile, String location, String caption, String userInfoId) throws IOException {
+    public int save(MultipartFile[] multipartFile, String location, String caption, String userInfoId, List<String> tags) throws IOException {
         Post p = new Post();
-        int contentId = pictureVideoClient.uploadImage(new ImageDTO(multipartFile.getOriginalFilename(),multipartFile.getBytes()));
-        PostInfo postInfo = new PostInfo();
         List<Integer> ids = new ArrayList<>();
-        ids.add(contentId);
+
+        for(MultipartFile file : multipartFile){
+            int contentId;
+            if(file.getContentType().contains("image"))
+                contentId = pictureVideoClient.uploadImage(new ImageDTO(file.getOriginalFilename(),file.getBytes(), true));
+            else
+                contentId = pictureVideoClient.uploadImage(new ImageDTO(file.getOriginalFilename(),file.getBytes(), false));
+            ids.add(contentId);
+        }
+
+        List<Integer> taggedIds = profileClient.findByUsername(tags);
+
+        PostInfo postInfo = new PostInfo();
         postInfo.setPictureIds(ids);
         postInfo.setCaption(caption);
         postInfo.setLocation(location);
         postInfo.setDate(LocalDate.now());
+        postInfo.setTaggedIds(taggedIds);
         p.setPostInfo(postInfo);
         Post new_post = postRepository.save(p);
         int userId = Integer.parseInt(userInfoId);

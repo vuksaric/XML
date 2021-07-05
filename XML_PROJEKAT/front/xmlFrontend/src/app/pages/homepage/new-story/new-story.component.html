@@ -1,5 +1,114 @@
-<form (ngSubmit)="upload()" [formGroup]="form">
-    <input ng-model="file_upload" name="file" type="file" (change)="fileChange($event)" #fileInput>
-    <button type="submit">Submit</button>
-</form> 
+<nz-divider nzText="Publish Story"></nz-divider>
 
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="caption" nzRequired>
+        <span>Caption</span>
+      </nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input caption!">
+        <input nz-input id="caption" formControlName="caption"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="location" nzRequired>
+        <span>Location</span>
+      </nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your location!">
+        <input nz-input id="location" formControlName="location" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item *ngFor="let control of listOfControl; let i = index">
+        <nz-form-label [nzXs]="24" [nzSm]="6" *ngIf="i == 0" [nzFor]="control.controlInstance" nzRequired>Files </nz-form-label>
+        <nz-form-control
+          [nzXs]="24"
+          [nzSm]="14"
+          [nzOffset]="i == 0 ? 0 : 6"
+          nzErrorTip="Please input file or delete this field."
+        >
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+          <input ng-model="file_upload" name="file" type="file"  class="passenger-input"
+          nz-input
+          placeholder="placeholder"
+          [attr.id]="control.id"
+          [formControlName]="control.controlInstance" id="file" (change)="fileChange($event)" #fileInput />
+        </nz-input-group>
+        <ng-template #suffixIconButton>
+          <i nz-icon nzType="minus-circle-o" class="dynamic-delete-button" (click)="removeField(control, $event)"></i>
+        </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 20, offset: 6 }">
+          <button nz-button nzType="dashed" class="add-button" (click)="addField($event)">
+            <i nz-icon nzType="plus"></i>
+            Add field
+          </button>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="" nzRequired>
+          <span>Close friends</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your answer!">
+          <nz-switch  formControlName="close_friends" [nzCheckedChildren]="checkedTemplate" [nzUnCheckedChildren]="unCheckedTemplate"></nz-switch>
+          <ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+          <ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="" nzRequired>
+          <span>Highlight</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your answer!">
+          <nz-switch  formControlName="highlight" [nzCheckedChildren]="checkedTemplate" [nzUnCheckedChildren]="unCheckedTemplate"></nz-switch>
+          <ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+          <ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="caption" >
+          <span>Tagged</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+          <nz-tag *ngFor="let tag of tags;"  nzMode="closeable" (nzOnClose)="handleClose(tag)"  >
+            {{ sliceTagName(tag) }}
+          </nz-tag>
+          
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 20, offset: 6 }">
+          <button nz-button nzType="dashed" type="button"  class="add-button" (click)="showModal()">
+            <i nz-icon nzType="plus"></i>
+              Tag user
+          </button>
+        </nz-form-control>
+      </nz-form-item>
+
+    <nz-form-item nz-row class="register-area">
+      <nz-form-control [nzSpan]="14" [nzOffset]="6">
+        <button nz-button nzType="primary" >Publish</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="Tag user" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+      <nz-input-group [nzSuffix]="suffixIconSearch">
+        <input type="text" nz-input placeholder="input search text"  [(ngModel)]="searchValue"/>
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+      <ul nz-list [nzDataSource]="usernames" nzBordered nzSize="small">
+        <li nz-list-item *ngFor="let item of usernames | searchFilter: searchValue" nzNoFlex>
+          <ul nz-list-item-actions>
+            <nz-list-item-action>
+              <a (click)="tag(item)">tag</a>
+            </nz-list-item-action>
+          </ul>
+          {{ item }}
+        </li>
+      </ul>
+    </ng-container>
+  </nz-modal>
