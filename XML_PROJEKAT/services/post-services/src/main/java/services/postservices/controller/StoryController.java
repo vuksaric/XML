@@ -1,10 +1,10 @@
 package services.postservices.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import services.postservices.dto.PostResponse;
+import services.postservices.dto.ProfilePostRequest;
+import services.postservices.dto.StoryResponse;
 import services.postservices.service.IStoryService;
 
 import java.util.List;
@@ -20,5 +20,15 @@ public class StoryController {
                                @RequestParam("close_friends") boolean closeFriends, @RequestParam("highlight") boolean highlight,
                                @RequestParam("userInfoId") String userInfoId,  @RequestParam("tags") List<String> tags) throws Exception{
         return storyService.save(multipartFile, location, caption, closeFriends,highlight, userInfoId, tags);
+    }
+
+    @PostMapping("/getStories")
+    public List<StoryResponse> getStoryByStoryIds(@RequestBody ProfilePostRequest profilePostRequest){
+        return storyService.getForProfile(profilePostRequest.getPostIds());
+    }
+
+    @PostMapping("/getHighlights")
+    public List<StoryResponse> getHighlightByStoryIds(@RequestBody ProfilePostRequest profilePostRequest){
+        return storyService.getHighlightForProfile(profilePostRequest.getPostIds());
     }
 }

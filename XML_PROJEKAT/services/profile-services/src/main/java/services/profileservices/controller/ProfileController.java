@@ -1,6 +1,7 @@
 package services.profileservices.controller;
 
 import org.springframework.web.bind.annotation.*;
+import services.profileservices.dto.FavouriteRequest;
 import services.profileservices.dto.ProfileDTO;
 import services.profileservices.dto.ViewProfileDTO;
 import services.profileservices.model.Profile;
@@ -115,5 +116,25 @@ public class ProfileController {
     @GetMapping("/getPostIdsFeed/{userInfoId}")
     public List<Integer> getPostIdsFeed(@PathVariable int userInfoId){
         return profileService.getPostIdsFeed(userInfoId);
+    }
+    @PostMapping("/getTaggedUsernames")
+    public List<String> getTaggedUsernames(@RequestBody List<Integer> taggedIds){
+        return profileService.getTaggedUsernames(taggedIds);
+    }
+
+    @GetMapping("/getCollections/{profileId}")
+    public List<String> getCollections(@PathVariable int profileId){
+        return profileService.getCollections(profileId);
+    }
+
+    @GetMapping("/checkFavourite/{userInfoId}/{postId}")
+    public Boolean checkFavourite(@PathVariable int userInfoId, @PathVariable int postId)
+    {
+        return profileService.checkFavourite(userInfoId, postId);
+    }
+
+    @PostMapping("/addFavourite")
+    public void addFavourite(@RequestBody FavouriteRequest request){
+         profileService.addFavourite(request);
     }
 }

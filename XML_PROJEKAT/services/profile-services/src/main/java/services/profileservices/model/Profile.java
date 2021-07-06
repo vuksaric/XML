@@ -37,6 +37,13 @@ public class Profile {
     @Column(name="post")
     private List<Integer> postIds;
     @ElementCollection
+    @CollectionTable(name="Profile_Favourites", joinColumns=@JoinColumn(name="Profile_ID"))
+    @Column(name="favourite")
+    private List<Integer> favouriteIds;
+    @OneToMany(fetch=FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name="Profile_ID")
+    List<FavouriteCollection> collections;
+    @ElementCollection
     @CollectionTable(name="Profile_Stories", joinColumns=@JoinColumn(name="Profile_ID"))
     @Column(name="story")
     private List<Integer> storyIds;

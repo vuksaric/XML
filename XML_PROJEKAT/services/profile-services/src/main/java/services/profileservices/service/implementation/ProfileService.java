@@ -2,9 +2,11 @@ package services.profileservices.service.implementation;
 
 import org.springframework.stereotype.Service;
 import services.profileservices.client.AuthClient;
+import services.profileservices.dto.FavouriteRequest;
 import services.profileservices.dto.ProfileDTO;
 import services.profileservices.client.NotificationClient;
 import services.profileservices.dto.ViewProfileDTO;
+import services.profileservices.model.FavouriteCollection;
 import services.profileservices.model.Profile;
 import services.profileservices.model.ProfileCategory;
 import services.profileservices.repository.ProfileRepository;
@@ -363,6 +365,68 @@ public class ProfileService implements IProfileService {
             result.addAll(profileRepository.findOneByUserInfoId(id).getPostIds());
         }
         return result;
+    }
+
+    @Override
+    public List<String> getTaggedUsernames(List<Integer> taggedIds) {
+        List<String> result = new ArrayList<>();
+        for(Integer id : taggedIds)
+        {
+            Profile profile = profileRepository.findOneById(id);
+            String username = authClient.getUsername(id);
+            result.add(username);
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getCollections(int profileId) {
+        Profile profile = profileRepository.findOneByUserInfoId(profileId);
+        List<String> result = new ArrayList<>();
+        for(FavouriteCollection collection : profile.getCollections())
+        {
+            result.add(collection.getName());
+        }
+        return result;
+    }
+
+    @Override
+    public boolean checkFavourite(int userInfoId, int postId) {
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        for(Integer id : profile.getFavouriteIds())
+        {
+            if(id == postId)
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void addFavourite(FavouriteRequest request) {
+        Profile profile = profileRepository.findOneByUserInfoId(request.getProfileId());
+        profile.getFavouriteIds().add(request.getPostId());
+        boolean exists = false;
+        if(request.isCollection())
+        {
+            for(FavouriteCollection collection : profile.getCollections())
+            {
+                if(collection.getName().equals(request.getCollectionName()))
+                {
+                    collection.getPostIds().add(request.getPostId());
+                    exists = true;
+                    break;
+                }
+            }
+            if(!exists)
+            {
+                FavouriteCollection newCollection = new FavouriteCollection();
+                newCollection.setName(request.getCollectionName());
+                newCollection.setPostIds(new ArrayList<>());
+                newCollection.getPostIds().add(request.getPostId());
+                profile.getCollections().add(newCollection);
+            }
+        }
+        profileRepository.save(profile);
     }
 
 

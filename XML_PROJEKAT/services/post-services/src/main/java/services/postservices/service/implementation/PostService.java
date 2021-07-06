@@ -74,6 +74,8 @@ public class PostService implements IPostService {
             {
                 String src = pictureVideoClient.getLocationById(idPicture);
                 postResponse.getContentSrcs().add(src);
+                List<String> taggedUsernames = profileClient.getTaggedUsernames(post.getPostInfo().getTaggedIds());
+                postResponse.setTagged(taggedUsernames);
             }
             postList.add(postResponse);
         }
@@ -170,6 +172,8 @@ public class PostService implements IPostService {
                     {
                         String src = pictureVideoClient.getLocationById(idPicture);
                         postResponse.getContentSrcs().add(src);
+                        List<String> taggedUsernames = profileClient.getTaggedUsernames(post.getPostInfo().getTaggedIds());
+                        postResponse.setTagged(taggedUsernames);
                     }
                     result.add(postResponse);
                     break;
@@ -194,6 +198,8 @@ public class PostService implements IPostService {
                     {
                         String src = pictureVideoClient.getLocationById(idPicture);
                         postResponse.getContentSrcs().add(src);
+                        List<String> taggedUsernames = profileClient.getTaggedUsernames(post.getPostInfo().getTaggedIds());
+                        postResponse.setTagged(taggedUsernames);
                     }
                     result.add(postResponse);
                     break;
@@ -215,6 +221,8 @@ public class PostService implements IPostService {
                 String src = pictureVideoClient.getLocationById(idPicture);
                 postResponse.getContentSrcs().add(src);
             }
+            List<String> taggedUsernames = profileClient.getTaggedUsernames(post.getPostInfo().getTaggedIds());
+            postResponse.setTagged(taggedUsernames);
             result.add(postResponse);
         }
 

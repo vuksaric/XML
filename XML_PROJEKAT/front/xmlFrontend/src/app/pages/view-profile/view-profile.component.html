@@ -6,7 +6,7 @@
 
 		<div class="profile">
 	
-			<div class="profile-image">
+			<div class="profile-image" >
 	
 			<img src="https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces" (click) = showStory() alt="">
 	
@@ -38,6 +38,13 @@
 			<div class="profile-bio">
 	
 			<p ><span class="profile-real-name">{{profile.name}} {{profile.surname}}</span><br> {{profile.biography}} 📷✈️🏕️</p>
+
+			<div class="profile-image" >
+	
+				<img src="https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces" (click) = showHighlights() alt="">
+		
+				</div>
+		
 	
 			</div>
 	
@@ -93,12 +100,19 @@
 			<i *ngIf = "!liked" class="fa fa-thumbs-up fa-2x"  (click)="like()"></i> {{likesCount}} &nbsp; &nbsp;
 			<i *ngIf = "disliked" class="fa fa-thumbs-down fa-2x" style ="color: lightblue" aria-hidden="true"></i>
 			<i *ngIf = "!disliked" class="fa fa-thumbs-down fa-2x"  (click)="dislike()"></i>  {{dislikesCount}} &nbsp; &nbsp;
-			<i class="fa fa-comment fa-2x" aria-hidden="true"></i> {{commentsCount}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+			<i class="fa fa-comment fa-2x" aria-hidden="true"></i> {{commentsCount}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+			<i *ngIf = "!favourite" class="fa fa-bookmark fa-2x" (click)="favouriteClick()"></i> 
+			<i *ngIf = "favourite" class="fa fa-bookmark fa-2x" style ="color: lightblue"></i> &nbsp; &nbsp; 
 			<i *ngIf = "!reported" class="fa fa-flag fa-2x" (click)="report()"></i>
 			<i *ngIf = "reported" class="fa fa-flag fa-2x" style ="color: lightblue"></i>
 		</div>
 		<br>
 		<p>{{caption}}</p>
+		<br>
+		<p>Tagged profiles</p>
+		<div *ngFor = "let tag of taggedIds">
+			<p>@{{tag}}</p>
+		</div>
 		<br>
 		<br>
 		<h4>Comments:</h4>
@@ -169,13 +183,19 @@
 			<i *ngIf = "!liked" class="fa fa-thumbs-up fa-2x"  (click)="like()"></i> {{likesCount}} &nbsp; &nbsp;
 			<i *ngIf = "disliked" class="fa fa-thumbs-down fa-2x" style ="color: lightblue" aria-hidden="true"></i>
 			<i *ngIf = "!disliked" class="fa fa-thumbs-down fa-2x"  (click)="dislike()"></i>  {{dislikesCount}} &nbsp; &nbsp;
-			<i class="fa fa-comment fa-2x" aria-hidden="true"></i> {{commentsCount}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+			<i class="fa fa-comment fa-2x" aria-hidden="true"></i> {{commentsCount}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+			<i *ngIf = "!favourite" class="fa fa-bookmark fa-2x" (click)="favouriteClick()"></i> 
+			<i *ngIf = "favourite" class="fa fa-bookmark fa-2x" style ="color: lightblue"></i> &nbsp; &nbsp; 
 			<i *ngIf = "!reported" class="fa fa-flag fa-2x" (click)="report()"></i>
 			<i *ngIf = "reported" class="fa fa-flag fa-2x" style ="color: lightblue"></i>
 		</div>
 		<br>
 		<p>{{caption}}</p>
 		<br>
+		<p>Tagged profiles</p>
+		<div *ngFor = "let tag of taggedIds">
+			<p>@{{tag}}</p>
+		</div>
 		<br>
 		<h4>Comments:</h4>
 		<br>
@@ -206,5 +226,85 @@
 		<ng-template #modalFooter1>
 		</ng-template>
 	</nz-modal> 
+
+
+	<nz-modal
+      [(nzVisible)]="isVisibleStory"
+      [nzTitle]="modalTitle2"
+      [nzContent]="modalContent2"
+      [nzFooter]="modalFooter2"
+      (nzOnCancel)="handleCancel()"
+    > 
+		<ng-template #modalTitle2></ng-template>
+		<ng-template #modalContent2>
+			<div class="slideshow-container">
+				<div *ngFor = "let data of listOfStories">
+					<div style.display = {{data.display}}>
+						<div class="numbertext">{{data.story.location}}</div>
+						<div *ngFor = "let location of data.story.contentSrcs">
+							<img src={{location}} style="width:100%">
+						</div>
+						<div class="text">{{data.story.caption}}</div>
+					</div>
+				</div>
+			</div>
+			<br>
+		</ng-template>
+			
+		<ng-template #modalFooter2>
+		</ng-template>
+	</nz-modal> 
+
+	<nz-modal
+      [(nzVisible)]="isVisibleHighlight"
+      [nzTitle]="modalTitle3"
+      [nzContent]="modalContent3"
+      [nzFooter]="modalFooter3"
+      (nzOnCancel)="handleCancel()"
+    > 
+		<ng-template #modalTitle3></ng-template>
+		<ng-template #modalContent3>
+			<div class="slideshow-container">
+				<div *ngFor = "let data of listOfHighlights">
+					<div style.display = {{data.display}}>
+						<div class="numbertext">{{data.story.location}}</div>
+						<div *ngFor = "let location of data.story.contentSrcs">
+							<img src={{location}} style="width:100%">
+						</div>
+						<div class="text">{{data.story.caption}}</div>
+					</div>
+				</div>
+			</div>
+			<br>
+		</ng-template>
+			
+		<ng-template #modalFooter3>
+		</ng-template>
+	</nz-modal> 
+
+	<nz-modal
+      [(nzVisible)]="isVisibleFavourites"
+      [nzTitle]="modalTitle4"
+      [nzContent]="modalContent4"
+      [nzFooter]="modalFooter4"
+      (nzOnCancel)="handleCancelFavourites()"
+    > 
+	<ng-template #modalTitle4></ng-template>
+	<ng-template #modalContent4>
+	<h3>Pick a collection</h3>
+	<div *ngFor = "let collection of collections">
+		<br>
+		<button nz-button nzType="default" (click)="addFavourite(collection,true)">{{collection}}</button>
+	</div>
+	<br>
+	<input type="text" nz-input placeholder="New collection name" [(ngModel)]="collectionName" />
+	<button nz-button nzType="default" (click)="addFavourite(collectionName,true)">Create collection</button>
+	<br>
+	<br>
+	<button nz-button nzType="default" (click)="addFavourite('',false)">No collections</button>
+	</ng-template>
+	<ng-template #modalFooter4>
+	</ng-template>
+	</nz-modal>
     
 

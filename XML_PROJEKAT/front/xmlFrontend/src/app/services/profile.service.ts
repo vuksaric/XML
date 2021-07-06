@@ -78,4 +78,15 @@ export class ProfileService {
     return this.http.get(profile_url+`/getPostIdsFeed/${body}`);
   }
 
+  public checkFavourite(userInfoId : number, postId : number): Observable<any>{
+    return this.http.get(profile_url+`/checkFavourite/${userInfoId}/${postId}`);
+  }
+
+  public addFavourite(body : any): Observable<any>{
+    return this.http.post(profile_url+`/addFavourite`,body);
+  }
+
+  public getCollections(userInfoId:number): Observable<any>{
+    return this.http.get(profile_url+`/getCollections/${userInfoId}`);
+  }
 }

@@ -5,6 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 import services.postservices.client.PictureVideoClient;
 import services.postservices.client.ProfileClient;
 import services.postservices.dto.ImageDTO;
+import services.postservices.dto.PostResponse;
+import services.postservices.dto.StoryResponse;
 import services.postservices.model.PostInfo;
 import services.postservices.model.Story;
 import services.postservices.repository.StoryRepository;
@@ -58,5 +60,53 @@ public class StoryService implements IStoryService {
         int userId = Integer.parseInt(userInfoId);
         profileClient.addStory(new_story.getId(), userId);
         return new_story.getId();
+    }
+
+    @Override
+    public List<StoryResponse> getForProfile(List<Integer> storyIds) {
+        List<StoryResponse> result = new ArrayList<>();
+        LocalDateTime checkTime =  LocalDateTime.now().plusDays(1);
+        for(Integer id : storyIds)
+        {
+            Story story = storyRepository.findOneById(id);
+            if(story.getTimeStamp().isBefore(checkTime))
+            {
+                StoryResponse storyResponse = new StoryResponse(story);
+                for(Integer idPicture : story.getPostInfo().getPictureIds())
+                {
+                    String src = pictureVideoClient.getLocationById(idPicture);
+                    storyResponse.getContentSrcs().add(src);
+                }
+                result.add(storyResponse);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<StoryResponse> getHighlightForProfile(List<Integer> storyIds) {
+        List<StoryResponse> result = new ArrayList<>();
+        for(Integer id : storyIds)
+        {
+            Story story = storyRepository.findOneById(id);
+            if(story.getHighlight())
+            {
+                StoryResponse storyResponse = new StoryResponse(story);
+                for(Integer idPicture : story.getPostInfo().getPictureIds())
+                {
+                    String src = pictureVideoClient.getLocationById(idPicture);
+                    storyResponse.getContentSrcs().add(src);
+                }
+                for(Integer idPicture : story.getPostInfo().getVideoIds())
+                {
+                    String src = pictureVideoClient.getLocationById(idPicture);
+                    storyResponse.getContentSrcs().add(src);
+                }
+                result.add(storyResponse);
+            }
+        }
+
+        return result;
     }
 }

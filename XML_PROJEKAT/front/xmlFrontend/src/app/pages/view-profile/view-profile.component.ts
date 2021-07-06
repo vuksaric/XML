@@ -43,22 +43,25 @@ export class ViewProfileComponent implements OnInit {
   currentPostId : any;
   liked = false;
   disliked = false;
+  favourite = false;
   submitting = false;
   caption : any;
   postLocation : any;
+  taggedIds : any;
   inputValue = '';
   data: any[] = [];
   reported = false;
-
+  listOfStories : any[] = [];
+  listOfHighlights : any[] = [];
+  isVisibleStory = false;
+  isVisibleHighlight = false;
+  isVisibleFavourites = false;
+  collections : any;
+  collectionName : any;
   user = {
     author: 'Han Solo',
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
   };
-  listOfColumn = [
-    {
-      title: '',
-    }
-  ];
   isVisible = false;
   isVisibleAlbum = false;
   locations: Location[] = [];
@@ -73,6 +76,7 @@ export class ViewProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileService.getProfile(this.activatedRoute.snapshot.paramMap.get('username')).subscribe(data => {
+      this.profile = data;
       this.profileService.checkFollowing(1,3).subscribe(data =>{
         this.checkFollowing = data;
       });
@@ -90,7 +94,41 @@ export class ViewProfileComponent implements OnInit {
         this.checkRequest = data;
       });
 
-      this.profile = data;
+      const storyBody = {
+        postIds: this.profile.storyIds
+      }
+
+      this.postStoryService.getStoriesFeed(storyBody).subscribe(data => {
+        data.forEach((element: any) => {
+
+          const newStory = {
+            story : element,
+            display : "none"
+          }
+
+          this.listOfStories.push(newStory);
+          
+        });
+        
+      });
+
+      this.postStoryService.getHighlightFeed(storyBody).subscribe(data =>{
+        data.forEach((element: any) => {
+
+          const newStory = {
+            story : element,
+            display : "none"
+          }
+
+          this.listOfHighlights.push(newStory);
+          
+        });
+      });
+
+      this.profileService.getCollections(1).subscribe(data=>{
+          this.collections = data;
+      });
+
       this.postIds = data.postIds;
       console.log(data.postIds);
       
@@ -222,6 +260,8 @@ export class ViewProfileComponent implements OnInit {
       this.commentsCount = this.countComments(data);
       this.comments = data.comments;
       this.currentPostId = data.id;
+      this.taggedIds = data.tagged;
+
       this.postStoryService.isItLiked(1,data.id).subscribe(data =>{
         this.liked = data;
       });
@@ -231,11 +271,25 @@ export class ViewProfileComponent implements OnInit {
       this.postStoryService.isItReported(1,data.id).subscribe(data =>{
         this.reported = data;
       })
+
+      this.profileService.checkFavourite(1, data.id).subscribe(data =>{
+        this.favourite = data;
+      })
   }
 
   showStory()
   {
+      this.isVisibleStory = true;
+      this.slideIndex = 1;
+      this.showSlidesStory(this.slideIndex);
 
+  }
+
+  showHighlights()
+  {
+    this.isVisibleHighlight = true;
+    this.slideIndex = 1;
+    this.showSlidesHighlight(this.slideIndex);
   }
 
 
@@ -243,6 +297,9 @@ export class ViewProfileComponent implements OnInit {
   {
     this.isVisible = false;
     this.isVisibleAlbum = false;
+    this.isVisibleStory = false;
+    this.isVisibleHighlight = false;
+    
     const body = {
       postIds: this.postIds
     }
@@ -250,6 +307,11 @@ export class ViewProfileComponent implements OnInit {
       console.log(data);
       this.listOfData = data;
   });
+  }
+
+  handleCancelFavourites() : void
+  {
+    this.isVisibleFavourites = false;
   }
 
   
@@ -325,13 +387,63 @@ export class ViewProfileComponent implements OnInit {
   }
 
   // Next/previous controls
- plusSlides(n : any) {
+  plusSlides(n : any) {
   this.showSlides(this.slideIndex += n);
   }
 
-// Thumbnail image controls
- currentSlide(n : any) {
-  this.showSlides(this.slideIndex = n);
+  showSlidesStory(n : any) {
+    var i; 
+    if (n > this.listOfStories.length) {this.slideIndex = 1}
+    if (n < 1) {this.slideIndex = this.listOfStories.length}
+    for (i = 0; i < this.listOfStories.length; i++) {
+        this.listOfStories[i].display = "none";
+    }
+    this.listOfStories[this.slideIndex-1].display = "block";
+    if(this.isVisibleStory)
+    {
+      setTimeout(()=>{                          
+        this.showSlidesStory(this.slideIndex += 1);
+      }, 4000);
+    }
+    
+  }
+
+  showSlidesHighlight(n : any)
+  {
+    var i; 
+    if (n > this.listOfHighlights.length) {this.slideIndex = 1}
+    if (n < 1) {this.slideIndex = this.listOfHighlights.length}
+    for (i = 0; i < this.listOfHighlights.length; i++) {
+        this.listOfHighlights[i].display = "none";
+    }
+    this.listOfHighlights[this.slideIndex-1].display = "block";
+    if(this.isVisibleHighlight)
+    {
+      setTimeout(()=>{                          
+        this.showSlidesHighlight(this.slideIndex += 1);
+      }, 4000);
+    }
+  }
+
+  favouriteClick()
+  {
+      this.isVisibleFavourites = true;
+  }
+
+  addFavourite(collectionName : any, collection : boolean)
+  {
+    const body = {
+      profileId : 1,
+      postId : this.currentPostId,
+      collectionName : collectionName,
+      collection : collection
+    }
+
+    this.profileService.addFavourite(body).subscribe(data =>{
+      this.favourite = true;
+      this.isVisibleFavourites = false;
+    })
+    
   }
 
 }

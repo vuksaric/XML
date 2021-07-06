@@ -69,4 +69,12 @@ export class PostStoryService {
     return this.http.post(post_url+`/getForFeed`,body);
   }
 
+  public getStoriesFeed(body: any): Observable<any>{
+    return this.http.post(story_url+`/getStories`,body);
+  }
+
+  public getHighlightFeed(body: any): Observable<any>{
+    return this.http.post(story_url+`/getHighlights`,body);
+  }
+
 }
