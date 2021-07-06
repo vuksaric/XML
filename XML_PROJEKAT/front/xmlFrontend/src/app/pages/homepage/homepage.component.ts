@@ -50,6 +50,9 @@ export class HomepageComponent implements OnInit {
   viewLiked(){
     this.router.navigate(['homepage/view-liked']);
   }
+  viewFavourites(){
+    this.router.navigate(['homepage/view-favourites']);
+  }
 
 
 }

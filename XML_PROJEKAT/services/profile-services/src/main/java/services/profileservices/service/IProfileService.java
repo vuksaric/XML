@@ -1,6 +1,7 @@
 package services.profileservices.service;
 
 import services.profileservices.dto.FavouriteRequest;
+import services.profileservices.dto.FavouriteResponse;
 import services.profileservices.dto.ProfileDTO;
 import services.profileservices.dto.ViewProfileDTO;
 import services.profileservices.model.FavouriteCollection;
@@ -37,4 +38,7 @@ public interface IProfileService {
     List<String> getCollections(int profileId);
     boolean checkFavourite(int userInfoId, int postId);
     void addFavourite(FavouriteRequest request);
+    FavouriteResponse getFavourites(int userInfoId);
+    boolean checkCloseFriends(int loggedIn, int current);
+
 }

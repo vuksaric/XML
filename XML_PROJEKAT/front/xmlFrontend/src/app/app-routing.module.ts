@@ -11,6 +11,7 @@ import { NewStoryComponent } from './pages/homepage/new-story/new-story.componen
 import { NewVerificationRequestComponent } from './pages/homepage/new-verification-request/new-verification-request.component';
 import { ProfileComponent } from './pages/homepage/profile/profile.component';
 import { SearchComponent } from './pages/homepage/search/search.component';
+import { ViewFavouritesComponent } from './pages/homepage/view-favourites/view-favourites.component';
 import { ViewLikedComponent } from './pages/homepage/view-liked/view-liked.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
@@ -29,7 +30,9 @@ const routes: Routes = [
     { path: 'new-album',component:NewAlbumComponent},
     { path: 'new-verification-request',component:NewVerificationRequestComponent},
     { path: 'follow-requests',component:FollowRequestsComponent},
-    { path: 'view-liked',component:ViewLikedComponent}
+    { path: 'view-liked',component:ViewLikedComponent},
+    { path: 'view-favourites',component:ViewFavouritesComponent}
+
   ]}, 
   { path: 'admin', component:AdminHomepageComponent, children:[
     { path: 'viewVerifReq', component:ViewVerificationReqComponent}

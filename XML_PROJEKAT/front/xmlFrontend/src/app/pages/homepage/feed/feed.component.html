@@ -23,7 +23,11 @@
   <br>
   <p>{{data.post.caption}}</p>
   <br>
-  <br>
+		<p>Tagged profiles</p>
+		<div *ngFor = "let tag of data.post.tagged">
+			<p>@{{tag}}</p>
+		</div>
+		<br>
   <h4>Comments:</h4>
   <br>
   <div *ngFor = "let comment of data.post.comments">

@@ -67,6 +67,7 @@ export class ViewProfileComponent implements OnInit {
   locations: Location[] = [];
   location : any;
   slideIndex = 1;
+  friends = false;
 
   constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private imageService: ImageService, 
     private sanitizer: DomSanitizer, private authService : AuthService,private activatedRoute: ActivatedRoute,
@@ -98,15 +99,35 @@ export class ViewProfileComponent implements OnInit {
         postIds: this.profile.storyIds
       }
 
+      this.profileService.checkCloseFriends(1,3).subscribe(data=>{
+        this.friends = data;
+      })
+     
+
       this.postStoryService.getStoriesFeed(storyBody).subscribe(data => {
         data.forEach((element: any) => {
-
-          const newStory = {
-            story : element,
-            display : "none"
+          if(element.closeFriends)
+          {
+            if(this.friends)
+            {
+              const newStory = {
+                story : element,
+                display : "none"
+              }
+    
+              this.listOfStories.push(newStory);
+            }
           }
-
-          this.listOfStories.push(newStory);
+          else
+          {
+            const newStory = {
+              story : element,
+              display : "none"
+            }
+  
+            this.listOfStories.push(newStory);
+          }
+          
           
         });
         
@@ -115,12 +136,27 @@ export class ViewProfileComponent implements OnInit {
       this.postStoryService.getHighlightFeed(storyBody).subscribe(data =>{
         data.forEach((element: any) => {
 
-          const newStory = {
-            story : element,
-            display : "none"
+          if(element.closeFriends)
+          {
+            if(this.friends)
+            {
+              const newStory = {
+                story : element,
+                display : "none"
+              }
+    
+              this.listOfHighlights.push(newStory);
+            }
           }
-
-          this.listOfHighlights.push(newStory);
+          else
+          {
+            const newStory = {
+              story : element,
+              display : "none"
+            }
+  
+            this.listOfHighlights.push(newStory);
+          }
           
         });
       });
@@ -393,7 +429,7 @@ export class ViewProfileComponent implements OnInit {
 
   showSlidesStory(n : any) {
     var i; 
-    if (n > this.listOfStories.length) {this.slideIndex = 1}
+    if (n > this.listOfStories.length) {this.isVisibleStory = false}
     if (n < 1) {this.slideIndex = this.listOfStories.length}
     for (i = 0; i < this.listOfStories.length; i++) {
         this.listOfStories[i].display = "none";
@@ -411,7 +447,7 @@ export class ViewProfileComponent implements OnInit {
   showSlidesHighlight(n : any)
   {
     var i; 
-    if (n > this.listOfHighlights.length) {this.slideIndex = 1}
+    if (n > this.listOfHighlights.length) {this.isVisibleHighlight = false}
     if (n < 1) {this.slideIndex = this.listOfHighlights.length}
     for (i = 0; i < this.listOfHighlights.length; i++) {
         this.listOfHighlights[i].display = "none";

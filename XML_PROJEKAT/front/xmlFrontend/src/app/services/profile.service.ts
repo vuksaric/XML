@@ -32,6 +32,10 @@ export class ProfileService {
     return this.http.get(profile_url+`/checkBlocked/${loggendIn}/${current}`);
   }
 
+  public checkCloseFriends(loggendIn : number, current : number): Observable<any>{
+    return this.http.get(profile_url+`/checkCloseFriends/${loggendIn}/${current}`);
+  }
+
   public getProfile2(body:number): Observable<any>{
     return this.http.get(profile_url+`/getProfile/${body}`);
   }
@@ -88,5 +92,9 @@ export class ProfileService {
 
   public getCollections(userInfoId:number): Observable<any>{
     return this.http.get(profile_url+`/getCollections/${userInfoId}`);
+  }
+
+  public getFavourites(userInfoId:number): Observable<any>{
+    return this.http.get(profile_url+`/getFavourites/${userInfoId}`);
   }
 }

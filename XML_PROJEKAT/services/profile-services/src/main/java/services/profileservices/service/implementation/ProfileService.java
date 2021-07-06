@@ -3,6 +3,7 @@ package services.profileservices.service.implementation;
 import org.springframework.stereotype.Service;
 import services.profileservices.client.AuthClient;
 import services.profileservices.dto.FavouriteRequest;
+import services.profileservices.dto.FavouriteResponse;
 import services.profileservices.dto.ProfileDTO;
 import services.profileservices.client.NotificationClient;
 import services.profileservices.dto.ViewProfileDTO;
@@ -427,6 +428,24 @@ public class ProfileService implements IProfileService {
             }
         }
         profileRepository.save(profile);
+    }
+
+    @Override
+    public FavouriteResponse getFavourites(int userInfoId) {
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        FavouriteResponse response = new FavouriteResponse(profile.getFavouriteIds(),profile.getCollections());
+        return response;
+    }
+
+    @Override
+    public boolean checkCloseFriends(int loggedIn, int current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        for(Integer id : loggedInProfile.getFriends())
+        {
+            if(id == current)
+                return true;
+        }
+       return false;
     }
 
 

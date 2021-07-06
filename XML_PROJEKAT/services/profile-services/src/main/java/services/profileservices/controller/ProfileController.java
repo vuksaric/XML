@@ -2,6 +2,7 @@ package services.profileservices.controller;
 
 import org.springframework.web.bind.annotation.*;
 import services.profileservices.dto.FavouriteRequest;
+import services.profileservices.dto.FavouriteResponse;
 import services.profileservices.dto.ProfileDTO;
 import services.profileservices.dto.ViewProfileDTO;
 import services.profileservices.model.Profile;
@@ -52,6 +53,12 @@ public class ProfileController {
     public Boolean checkMuted(@PathVariable int loggedInId, @PathVariable int currentId)
     {
         return profileService.checkMuted(loggedInId, currentId);
+    }
+
+    @GetMapping("/checkCloseFriends/{loggedInId}/{currentId}")
+    public Boolean checkCloseFriends(@PathVariable int loggedInId, @PathVariable int currentId)
+    {
+        return profileService.checkCloseFriends(loggedInId, currentId);
     }
 
     @PutMapping("/block/{loggedInId}/{currentId}")
@@ -136,5 +143,10 @@ public class ProfileController {
     @PostMapping("/addFavourite")
     public void addFavourite(@RequestBody FavouriteRequest request){
          profileService.addFavourite(request);
+    }
+
+    @GetMapping("/getFavourites/{profileId}")
+    public FavouriteResponse getFavourites(@PathVariable int profileId){
+        return profileService.getFavourites(profileId);
     }
 }
