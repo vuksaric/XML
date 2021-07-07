@@ -18,4 +18,8 @@ public interface ProfileClient {
 
     @PostMapping("/profile/getTaggedUsernames")
     List<String> getTaggedUsernames(@RequestBody List<Integer> taggedIds);
+
+    @GetMapping("profile/getAccessiblePostIds/{userInfoId}")
+   List<Integer> getAccessiblePostIds(@PathVariable int userInfoId );
+
 }

@@ -27,10 +27,23 @@ public class Profile {
     private Boolean canBeMessaged;
 
     private Boolean notifyProfileActivity;
-    private Boolean canBeMessagedPrivate;
-    private Boolean notifyPost;
-    private Boolean notifyStory;
-    private Boolean notifyComment;
+
+    @ElementCollection
+    @CollectionTable(name="Profile_MutePost", joinColumns=@JoinColumn(name="Profile_ID"))
+    @Column(name="post")
+    private List<Integer> mutedPost;
+    @ElementCollection
+    @CollectionTable(name="Profile_MuteStory", joinColumns=@JoinColumn(name="Profile_ID"))
+    @Column(name="post")
+    private List<Integer> mutedStory;
+    @ElementCollection
+    @CollectionTable(name="Profile_MuteComment", joinColumns=@JoinColumn(name="Profile_ID"))
+    @Column(name="post")
+    private List<Integer> mutedComment;
+    @ElementCollection
+    @CollectionTable(name="Profile_MuteMessage", joinColumns=@JoinColumn(name="Profile_ID"))
+    @Column(name="post")
+    private List<Integer> mutedMessage;
 
     @ElementCollection
     @CollectionTable(name="Profile_Posts", joinColumns=@JoinColumn(name="Profile_ID"))
@@ -47,7 +60,6 @@ public class Profile {
     @CollectionTable(name="Profile_Stories", joinColumns=@JoinColumn(name="Profile_ID"))
     @Column(name="story")
     private List<Integer> storyIds;
-    //@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private int userInfoId;
 
     @ElementCollection

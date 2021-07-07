@@ -78,8 +78,25 @@ public class PostController {
         return postService.getDislikedByProfile(userId);
     }
 
+
     @PostMapping("/getForFeed")
-    public List<PostResponse> getForFeed(@RequestBody ProfilePostRequest profilePostRequest){
+    public List<PostResponse> getForFeed(@RequestBody ProfilePostRequest profilePostRequest) {
         return postService.getForFeed(profilePostRequest.getPostIds());
+    }
+
+    @GetMapping("/getTagsPost/{username}")
+    public List<PostResponse> getTagsPost(@PathVariable String username){
+        return postService.getTagsPost(username);
+    }
+
+    @GetMapping("/getLocations/{userInfoId}")
+    public List<String> getLocations(@PathVariable int userInfoId){
+        return postService.getLocations(userInfoId);
+    }
+
+    @GetMapping("/getPostByLocation/{userInfoId}/{location}")
+    public List<PostResponse> getPostByLocation(@PathVariable int userInfoId, @PathVariable String location){
+        return postService.getPostsByLocation(userInfoId, location);
+
     }
 }

@@ -77,4 +77,14 @@ export class PostStoryService {
     return this.http.post(story_url+`/getHighlights`,body);
   }
 
+  public getTagsPost(username : string): Observable<any>{
+    return this.http.get(post_url+`/getTagsPost/${username}`);
+  }
+  public getLocations(userInfoId : number): Observable<any>{
+    return this.http.get(post_url+`/getLocations/${userInfoId}`);
+  }
+
+  public getPostsByLocation(userInfoId : number, location: string): Observable<any>{
+    return this.http.get(post_url+`/getPostByLocation/${userInfoId}/${location}`);
+  }
 }

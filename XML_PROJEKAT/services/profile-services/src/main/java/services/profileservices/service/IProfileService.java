@@ -3,6 +3,7 @@ package services.profileservices.service;
 import services.profileservices.dto.FavouriteRequest;
 import services.profileservices.dto.FavouriteResponse;
 import services.profileservices.dto.ProfileDTO;
+import services.profileservices.dto.ProfileSettingsDTO;
 import services.profileservices.dto.ViewProfileDTO;
 import services.profileservices.model.FavouriteCollection;
 import services.profileservices.model.Profile;
@@ -33,6 +34,7 @@ public interface IProfileService {
     List<String> getProfilesForTagging(int userInfoId);
     List<String> getPublicProfiles();
     List<Integer> findByUsername(List<String> usernames);
+
     List<Integer> getPostIdsFeed(int userInfoId);
     List<String> getTaggedUsernames(List<Integer> taggedIds);
     List<String> getCollections(int profileId);
@@ -40,5 +42,21 @@ public interface IProfileService {
     void addFavourite(FavouriteRequest request);
     FavouriteResponse getFavourites(int userInfoId);
     boolean checkCloseFriends(int loggedIn, int current);
+
+    List<String> getCloseFriends(int userInfoId);
+    List<String> getProfilesForCloseFriends(int userInfoId);
+    void addCloseFriend(int loggedIn, String closeFriend);
+    void removeCloseFriend(int loggedIn, String closeFriend);
+    List<String> getFollowingProfiles(int userInfoId);
+    List<ProfileSettingsDTO> getProfilesForSettings(int userInfoId);
+    void mutePost(int loggedIn, String current);
+    void unmutePost(int loggedIn, String current);
+    void muteStory(int loggedIn, String current);
+    void unmuteStory(int loggedIn, String current);
+    void muteComment(int loggedIn, String current);
+    void unmuteComment(int loggedIn, String current);
+    void muteMessage(int loggedIn, String current);
+    void unmuteMessage(int loggedIn, String current);
+    List<Integer> getAccessiblePostIds(int userInfoId);
 
 }

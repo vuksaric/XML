@@ -53,6 +53,12 @@ export class HomepageComponent implements OnInit {
   viewFavourites(){
     this.router.navigate(['homepage/view-favourites']);
   }
+  closeFriends(){
+    this.router.navigate(['homepage/close-friends']);
+  }
 
+  notificationSetings(){
+    this.router.navigate(['homepage/notification-settings']);
+  }
 
 }

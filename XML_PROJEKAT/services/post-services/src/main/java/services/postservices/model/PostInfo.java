@@ -29,7 +29,6 @@ public class PostInfo {
     @CollectionTable(name="Post_Videos", joinColumns=@JoinColumn(name="PostInfo_ID"))
     @Column(name="video")
     private List<Integer> videoIds;
-    //@OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private String location;
     @ElementCollection
     @CollectionTable(name="PostInfo_Tagged", joinColumns=@JoinColumn(name="Post_ID"))

@@ -131,7 +131,16 @@
 			<nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="user.avatar"></nz-avatar>
 			<nz-comment-content>
 			  <nz-form-item>
-				<textarea [(ngModel)]="inputValue" nz-input rows="4"></textarea>
+				<nz-mention [nzSuggestions]="suggestions">
+					<textarea
+					  nz-input
+					  [nzAutosize]="{ minRows: 4, maxRows: 4 }"
+					  [(ngModel)]="inputValue"
+					  (ngModelChange)="checkInput()"
+					  nzMentionTrigger
+					>
+					</textarea>
+				  </nz-mention>
 			  </nz-form-item>
 			  <nz-form-item>
 				<button nz-button nzType="primary" [nzLoading]="submitting" [disabled]="!inputValue" (click)="handleSubmit()">
