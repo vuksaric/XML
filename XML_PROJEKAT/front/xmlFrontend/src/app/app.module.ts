@@ -31,6 +31,7 @@ import { ViewLikedComponent } from './pages/homepage/view-liked/view-liked.compo
 import { NewAlbumComponent } from './pages/homepage/new-album/new-album.component';
 import { SearchFilterPipe } from './pipes/search-filter.pipe';
 import { ViewFavouritesComponent } from './pages/homepage/view-favourites/view-favourites.component';
+import { ViewReportRequestComponent } from './pages/admin-homepage/view-report-request/view-report-request.component';
 
 registerLocaleData(en);
 
@@ -54,7 +55,8 @@ registerLocaleData(en);
     ViewLikedComponent,
     NewAlbumComponent,
     SearchFilterPipe,
-    ViewFavouritesComponent
+    ViewFavouritesComponent,
+    ViewReportRequestComponent
   ],
   imports: [
     BrowserModule,

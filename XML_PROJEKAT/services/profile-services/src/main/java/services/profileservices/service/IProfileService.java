@@ -40,5 +40,7 @@ public interface IProfileService {
     void addFavourite(FavouriteRequest request);
     FavouriteResponse getFavourites(int userInfoId);
     boolean checkCloseFriends(int loggedIn, int current);
+    void shutDownProfile(String username);
+    void removePost(int postId, String username);
 
 }

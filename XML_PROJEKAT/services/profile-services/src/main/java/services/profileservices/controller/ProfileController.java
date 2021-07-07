@@ -149,4 +149,14 @@ public class ProfileController {
     public FavouriteResponse getFavourites(@PathVariable int profileId){
         return profileService.getFavourites(profileId);
     }
+
+    @PutMapping("/shutDown/{username}")
+    public void shutDown(@PathVariable String username){
+        profileService.shutDownProfile(username);
+    }
+
+    @PutMapping("/removePost/{postId}/{username}")
+    public void removePost(@PathVariable int postId, @PathVariable String username){
+        profileService.removePost(postId,username);
+    }
 }

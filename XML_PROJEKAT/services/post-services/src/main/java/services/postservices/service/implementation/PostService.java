@@ -3,6 +3,7 @@ package services.postservices.service.implementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import services.postservices.client.NotificationClient;
 import services.postservices.client.PictureVideoClient;
 import services.postservices.client.ProfileClient;
 import services.postservices.dto.CommentRequest;
@@ -15,7 +16,6 @@ import services.postservices.model.PostInfo;
 import services.postservices.repository.PostRepository;
 import services.postservices.service.IPostService;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,11 +28,14 @@ public class PostService implements IPostService {
     private final PostRepository postRepository;
     private final PictureVideoClient pictureVideoClient;
     private final ProfileClient profileClient;
+    private final NotificationClient notificationClient;
 
     @Autowired
-    public PostService(PostRepository postRepository, PictureVideoClient pictureVideoClient, ProfileClient profileClient){this.postRepository = postRepository;
+    public PostService(PostRepository postRepository, PictureVideoClient pictureVideoClient, ProfileClient profileClient, NotificationClient notificationClient){
+        this.postRepository = postRepository;
         this.pictureVideoClient = pictureVideoClient;
         this.profileClient = profileClient;
+        this.notificationClient = notificationClient;
     }
 
     @Override
@@ -144,10 +147,11 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public void report(int userId, int postId) {
+    public void report(int userId, int postId,String username) {
         Post post = postRepository.getById(postId);
         post.getReportIds().add(userId);
         postRepository.save(post);
+        notificationClient.save(postId,username);
     }
 
     @Override
@@ -228,5 +232,12 @@ public class PostService implements IPostService {
 
         Collections.sort(result, Collections.reverseOrder());
         return result;
+    }
+
+    @Override
+    public void removePost(int id, String username) {
+        Post post = postRepository.getById(id);
+        profileClient.removePost(id,username);
+        postRepository.delete(post);
     }
 }

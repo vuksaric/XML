@@ -1,0 +1,22 @@
+<div class="center">
+    <nz-table #basicTable nzBordered nzTitle="List of report requests" [nzData]="listOfData">
+        <thead>
+          <tr>
+            <th>Post id</th>
+            <th>Profile username</th>
+            <th>Remove post</th>
+            <th>Shut down profile</th>
+            <th>Process request</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data">
+            <td>{{data.postId}}</td>
+            <td>{{data.username}}</td>
+            <td><button nz-button (click)="remove(data.postId,data.id,data.username)" [disabled]="data.processed" nzType="primary">Remove post</button></td>
+            <td><button nz-button (click)="shutDown(data.username,data.id)" [disabled]="data.processed" nzType="primary">Shut down profile</button></td>
+            <td><button nz-button (click)="process(data.id)" [disabled]="data.processed" nzType="primary">Process request</button></td>
+          </tr>
+        </tbody>
+    </nz-table>
+</div>

@@ -70,7 +70,7 @@ public class Profile {
     @CollectionTable(name="Profile_Muted", joinColumns=@JoinColumn(name="Profile_ID"))
     @Column(name="Muted_ID")
     private List<Integer> muted;
-
+    private boolean shutDown;
 
 
 }

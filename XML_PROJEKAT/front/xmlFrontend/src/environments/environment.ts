@@ -14,6 +14,7 @@ export const environment = {
   story_url: 'http://localhost:8130/story',
   verificationRequest_url: 'http://localhost:8140/verificationRequest',
   followRequest_url: 'http://localhost:8110/followRequest',
+  reportRequest_url: 'http://localhost:8110/reportRequest',
 };
 
 /*

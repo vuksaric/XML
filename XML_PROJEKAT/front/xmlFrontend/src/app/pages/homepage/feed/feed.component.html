@@ -16,7 +16,9 @@
     <i *ngIf = "!data.liked" class="fa fa-thumbs-up fa-2x"  (click)="like(data.post)"></i> {{data.likes}} &nbsp; &nbsp;
     <i *ngIf = "data.disliked" class="fa fa-thumbs-down fa-2x" style ="color: lightblue" aria-hidden="true"></i>
     <i *ngIf = "!data.disliked" class="fa fa-thumbs-down fa-2x"  (click)="dislike(data.post)"></i>  {{data.dislikes}} &nbsp; &nbsp;
-    <i class="fa fa-comment fa-2x" aria-hidden="true"></i> {{data.comments}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+    <i class="fa fa-comment fa-2x" aria-hidden="true"></i> {{data.comments}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <i *ngIf = "!data.favourite" class="fa fa-bookmark fa-2x" (click)="favouriteClick(data)"></i> 
+		<i *ngIf = "data.favourite" class="fa fa-bookmark fa-2x" style ="color: lightblue"></i> &nbsp; &nbsp; 
     <i *ngIf = "!data.reported"  class="fa fa-flag fa-2x" (click)="report(data.post)"></i>
     <i *ngIf = "data.reported" class="fa fa-flag fa-2x" style ="color: lightblue"></i>
   </div>
@@ -53,4 +55,5 @@
   </nz-comment-content>
   </nz-comment>
 </div>
+
  

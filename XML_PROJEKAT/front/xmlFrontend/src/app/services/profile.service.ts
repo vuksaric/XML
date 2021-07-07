@@ -97,4 +97,8 @@ export class ProfileService {
   public getFavourites(userInfoId:number): Observable<any>{
     return this.http.get(profile_url+`/getFavourites/${userInfoId}`);
   }
+
+  public shutDown(username : any): Observable<any>{
+    return this.http.put(profile_url+`/shutDown/${username}`,null);
+  }
 }

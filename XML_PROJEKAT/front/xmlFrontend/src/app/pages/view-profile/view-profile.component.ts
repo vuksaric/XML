@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { FollowRequestService } from 'src/app/services/follow-request.service';
 import { ImageService } from 'src/app/services/image.service';
@@ -71,12 +72,17 @@ export class ViewProfileComponent implements OnInit {
 
   constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private imageService: ImageService, 
     private sanitizer: DomSanitizer, private authService : AuthService,private activatedRoute: ActivatedRoute,
-     private followRequestService : FollowRequestService) { }
+     private followRequestService : FollowRequestService, private toastr : ToastrService,private router: Router) { }
 
 
 
   ngOnInit(): void {
     this.profileService.getProfile(this.activatedRoute.snapshot.paramMap.get('username')).subscribe(data => {
+      if(data == null)
+      {
+        this.toastr.error("This profile is currently shut down");
+        this.router.navigate(['homepage']);
+      }
       this.profile = data;
       this.profileService.checkFollowing(1,3).subscribe(data =>{
         this.checkFollowing = data;
@@ -402,7 +408,7 @@ export class ViewProfileComponent implements OnInit {
 
   report() : void
   {
-    this.postStoryService.report(1,this.currentPostId).subscribe(data =>{
+    this.postStoryService.report(1,this.currentPostId,this.profile.username).subscribe(data =>{
       this.reported = true;
     });
     

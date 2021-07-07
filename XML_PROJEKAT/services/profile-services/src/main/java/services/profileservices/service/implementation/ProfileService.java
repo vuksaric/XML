@@ -184,6 +184,10 @@ public class ProfileService implements IProfileService {
     public ViewProfileDTO getProfileByUsername(String username) {
         ViewProfileDTO profileDTO = authClient.getUserInfoByUsername(username);
         Profile profile = profileRepository.findOneByUserInfoId(profileDTO.getId());
+        if(profile.isShutDown())
+        {
+            return null;
+        }
         profileDTO.setBiography(profile.getBiography());
         profileDTO.setWebsite(profile.getWebsite());
         profileDTO.setIsPrivate(profile.getIsPrivate());
@@ -446,6 +450,32 @@ public class ProfileService implements IProfileService {
                 return true;
         }
        return false;
+    }
+
+    @Override
+    public void shutDownProfile(String username) {
+        ViewProfileDTO profileDTO = authClient.getUserInfoByUsername(username);
+        Profile profile = profileRepository.findOneByUserInfoId(profileDTO.getId());
+        profile.setShutDown(true);
+        profileRepository.save(profile);
+    }
+
+    @Override
+    public void removePost(int postId, String username) {
+        ViewProfileDTO profileDTO = authClient.getUserInfoByUsername(username);
+        Profile profile = profileRepository.findOneByUserInfoId(profileDTO.getId());
+        for(int i= 0; i < profile.getPostIds().size(); i++)
+        {
+            if(profile.getPostIds().get(i) == postId)
+            {
+                profile.getPostIds().remove(i);
+                break;
+            }
+        }
+
+        profileRepository.removeFromFavourites(postId);
+        profileRepository.removeFromCollection(postId);
+        profileRepository.save(profile);
     }
 
 
