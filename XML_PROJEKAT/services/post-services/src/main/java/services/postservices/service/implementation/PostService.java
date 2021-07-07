@@ -15,7 +15,6 @@ import services.postservices.model.PostInfo;
 import services.postservices.repository.PostRepository;
 import services.postservices.service.IPostService;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,6 +26,8 @@ public class PostService implements IPostService {
     private final PostRepository postRepository;
     private final PictureVideoClient pictureVideoClient;
     private final ProfileClient profileClient;
+
+
 
     @Autowired
     public PostService(PostRepository postRepository, PictureVideoClient pictureVideoClient, ProfileClient profileClient){this.postRepository = postRepository;
@@ -150,7 +151,8 @@ public class PostService implements IPostService {
     @Override
     public PostResponse addComment(CommentRequest commentRequest) {
         Post post = postRepository.getById(commentRequest.getPostId());
-        post.getComments().add(new Comment(commentRequest.getUsername(),commentRequest.getContent()));
+        List<Integer> taggedIds = profileClient.findByUsername(commentRequest.getTaggedUsernames());
+        post.getComments().add(new Comment(commentRequest.getUsername(),commentRequest.getContent(), taggedIds));
         return new PostResponse(postRepository.save(post));
     }
 
@@ -200,5 +202,74 @@ public class PostService implements IPostService {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<PostResponse> getTagsPost(String username) {
+        List<Post> posts = postRepository.findAll();
+        List<PostResponse> result = new ArrayList<>();
+
+        List<String> usernames = new ArrayList<>();
+        usernames.add(username);
+        List<Integer> ids = profileClient.findByUsername(usernames);
+
+        for(Post post : posts){
+            if(post.getPostInfo().getTaggedIds().contains(ids.get(0))) {
+                PostResponse postResponse = new PostResponse(post);
+                for (Integer idPicture : post.getPostInfo().getPictureIds()) {
+                    String src = pictureVideoClient.getLocationById(idPicture);
+                    postResponse.getContentSrcs().add(src);
+                }
+                result.add(postResponse);
+            }
+            if(getTagsComment(post, ids.get(0))){
+                PostResponse postResponse = new PostResponse(post);
+                for (Integer idPicture : post.getPostInfo().getPictureIds()) {
+                    String src = pictureVideoClient.getLocationById(idPicture);
+                    postResponse.getContentSrcs().add(src);
+                }
+                if(!result.contains(postResponse))
+                    result.add(postResponse);
+            }
+
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getLocations(int userInfoId) {
+        List<String> locations = new ArrayList<>();
+        List<Integer> postIds = profileClient.getAccessiblePostIds(userInfoId);
+        for(Integer id : postIds){
+            if(!locations.contains(postRepository.findOneById(id).getPostInfo().getLocation()))
+                locations.add(postRepository.findOneById(id).getPostInfo().getLocation());
+        }
+        return locations;
+    }
+
+    @Override
+    public List<PostResponse> getPostsByLocation(int userInfoId,String location) {
+        List<PostResponse> result = new ArrayList<>();
+        List<Integer> postIds = profileClient.getAccessiblePostIds(userInfoId);
+        for(Integer id : postIds){
+            Post post = postRepository.findOneById(id);
+            if(post.getPostInfo().getLocation().equals(location)){
+                PostResponse postResponse = new PostResponse(post);
+                for (Integer idPicture : post.getPostInfo().getPictureIds()) {
+                    String src = pictureVideoClient.getLocationById(idPicture);
+                    postResponse.getContentSrcs().add(src);
+                }
+                result.add(postResponse);
+            }
+        }
+        return result;
+    }
+
+    private boolean getTagsComment(Post post, int id){
+        for(Comment comment : post.getComments()){
+            if(comment.getTaggedIds().contains(id))
+                return true;
+        }
+        return false;
     }
 }

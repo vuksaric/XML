@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -19,10 +20,15 @@ public class Comment {
     private int id;
     private String username;
     private String content;
+    @ElementCollection
+    @CollectionTable(name="Comment_Tagged", joinColumns=@JoinColumn(name="Comment_ID"))
+    @Column(name="tag")
+    private List<Integer> taggedIds;
 
-    public Comment(String username, String content)
+    public Comment(String username, String content, List<Integer> taggedIds)
     {
         this.username = username;
         this.content = content;
+        this.taggedIds = taggedIds;
     }
 }

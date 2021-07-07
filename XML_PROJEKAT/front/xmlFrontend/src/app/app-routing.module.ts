@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminHomepageComponent } from './pages/admin-homepage/admin-homepage.component';
 import { ViewVerificationReqComponent } from './pages/admin-homepage/view-verification-req/view-verification-req.component';
+import { CloseFriendsComponent } from './pages/homepage/close-friends/close-friends.component';
 import { FeedComponent } from './pages/homepage/feed/feed.component';
 import { FollowRequestsComponent } from './pages/homepage/follow-requests/follow-requests.component';
 import { HomepageComponent } from './pages/homepage/homepage.component';
@@ -9,6 +10,7 @@ import { NewAlbumComponent } from './pages/homepage/new-album/new-album.componen
 import { NewPostComponent } from './pages/homepage/new-post/new-post.component';
 import { NewStoryComponent } from './pages/homepage/new-story/new-story.component';
 import { NewVerificationRequestComponent } from './pages/homepage/new-verification-request/new-verification-request.component';
+import { NotificationSettingsComponent } from './pages/homepage/notification-settings/notification-settings.component';
 import { ProfileComponent } from './pages/homepage/profile/profile.component';
 import { SearchComponent } from './pages/homepage/search/search.component';
 import { ViewLikedComponent } from './pages/homepage/view-liked/view-liked.component';
@@ -29,7 +31,9 @@ const routes: Routes = [
     { path: 'new-album',component:NewAlbumComponent},
     { path: 'new-verification-request',component:NewVerificationRequestComponent},
     { path: 'follow-requests',component:FollowRequestsComponent},
-    { path: 'view-liked',component:ViewLikedComponent}
+    { path: 'view-liked',component:ViewLikedComponent},
+    { path: 'close-friends',component:CloseFriendsComponent},
+    { path: 'notification-settings',component:NotificationSettingsComponent}
   ]}, 
   { path: 'admin', component:AdminHomepageComponent, children:[
     { path: 'viewVerifReq', component:ViewVerificationReqComponent}

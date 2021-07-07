@@ -75,4 +75,58 @@ export class ProfileService {
     return this.http.get<any[]>(profile_url+`/getPublicProfiles`);
   }
 
+  public getCloseFriends(userInfoId : number) : Observable<any[]>{
+    return this.http.get<any[]>(profile_url+`/getCloseFriends/${userInfoId}`);
+  }
+  public getProfilesForCloseFriends(userInfoId : number) : Observable<any[]>{
+    return this.http.get<any[]>(profile_url+`/getProfilesForCloseFriends/${userInfoId}`);
+  }
+  public addCloseFriend(loggedInId : number, closeFriend: string) : Observable<any[]>{
+    return this.http.put<any[]>(profile_url+`/addCloseFriend/${loggedInId}/${closeFriend}`, null);
+  }
+
+  public removeCloseFriend(loggedInId : number, closeFriend: string) : Observable<any[]>{
+    return this.http.put<any[]>(profile_url+`/removeCloseFriend/${loggedInId}/${closeFriend}`, null);
+  }
+
+  public getFollowingProfiles(userInfoId : number) : Observable<any[]>{
+    return this.http.get<any[]>(profile_url+`/getFollowingProfiles/${userInfoId}`);
+  }
+
+  public getProfilesForSettings(userInfoId : number) : Observable<any[]>{
+    return this.http.get<any[]>(profile_url+`/getProfilesForSettings/${userInfoId}`);
+  }
+  public checkMutedPosts(loggendIn : number, current : string): Observable<any>{
+    return this.http.get(profile_url+`/checkMutedPosts/${loggendIn}/${current}`);
+  }
+
+  public mutePost(loggendIn : number, current : string): Observable<any>{
+    return this.http.put(profile_url+`/mutePost/${loggendIn}/${current}`,null);
+  }
+
+  public unmutePost(loggendIn : number, current : string): Observable<any>{
+    return this.http.put(profile_url+`/unmutePost/${loggendIn}/${current}`,null);
+  }
+  public muteStory(loggendIn : number, current : string): Observable<any>{
+    return this.http.put(profile_url+`/muteStory/${loggendIn}/${current}`,null);
+  }
+
+  public unmuteStory(loggendIn : number, current : string): Observable<any>{
+    return this.http.put(profile_url+`/unmuteStory/${loggendIn}/${current}`,null);
+  }
+  public muteComment(loggendIn : number, current : string): Observable<any>{
+    return this.http.put(profile_url+`/muteComment/${loggendIn}/${current}`,null);
+  }
+
+  public unmuteComment(loggendIn : number, current : string): Observable<any>{
+    return this.http.put(profile_url+`/unmuteComment/${loggendIn}/${current}`,null);
+  }
+  public muteMessage(loggendIn : number, current : string): Observable<any>{
+    return this.http.put(profile_url+`/muteMessage/${loggendIn}/${current}`,null);
+  }
+
+  public unmuteMessage(loggendIn : number, current : string): Observable<any>{
+    return this.http.put(profile_url+`/unmuteMessage/${loggendIn}/${current}`,null);
+  }
+  
 }

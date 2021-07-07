@@ -18,4 +18,7 @@ public interface ProfileClient {
 
     @GetMapping("/profile/findByUsername")
     List<Integer> findByUsername(@RequestBody List<String> usernames);
+
+    @GetMapping("profile/getAccessiblePostIds/{userInfoId}")
+   List<Integer> getAccessiblePostIds(@PathVariable int userInfoId );
 }

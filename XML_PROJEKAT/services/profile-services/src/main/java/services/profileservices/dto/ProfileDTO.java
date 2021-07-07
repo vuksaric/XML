@@ -25,10 +25,6 @@ public class ProfileDTO {
     private Boolean canBeTagged;
     private Boolean canBeMessaged;
     private Boolean notifyProfileActivity;
-    private Boolean canBeMessagedPrivate;
-    private Boolean notifyPost;
-    private Boolean notifyStory;
-    private Boolean notifyComment;
     private int id;
     private Boolean usernameChanged;
 }

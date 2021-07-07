@@ -30,6 +30,8 @@ import { FollowRequestsComponent } from './pages/homepage/follow-requests/follow
 import { ViewLikedComponent } from './pages/homepage/view-liked/view-liked.component';
 import { NewAlbumComponent } from './pages/homepage/new-album/new-album.component';
 import { SearchFilterPipe } from './pipes/search-filter.pipe';
+import { CloseFriendsComponent } from './pages/homepage/close-friends/close-friends.component';
+import { NotificationSettingsComponent } from './pages/homepage/notification-settings/notification-settings.component';
 
 registerLocaleData(en);
 
@@ -52,7 +54,9 @@ registerLocaleData(en);
     FollowRequestsComponent,
     ViewLikedComponent,
     NewAlbumComponent,
-    SearchFilterPipe
+    SearchFilterPipe,
+    CloseFriendsComponent,
+    NotificationSettingsComponent
   ],
   imports: [
     BrowserModule,

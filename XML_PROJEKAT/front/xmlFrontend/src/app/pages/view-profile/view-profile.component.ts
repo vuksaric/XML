@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { FollowRequestService } from 'src/app/services/follow-request.service';
@@ -65,6 +65,10 @@ export class ViewProfileComponent implements OnInit {
   location : any;
   slideIndex = 1;
 
+  
+  suggestions : string[]= [];
+  tags: string[]=[];
+
   constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private imageService: ImageService, 
     private sanitizer: DomSanitizer, private authService : AuthService,private activatedRoute: ActivatedRoute,
      private followRequestService : FollowRequestService) { }
@@ -121,6 +125,9 @@ export class ViewProfileComponent implements OnInit {
 
     });
 
+    this.profileService.getProfilesForTagging(1).subscribe(data=>{console.log(data);
+      this.suggestions=data;
+    });
 
       
   }
@@ -300,13 +307,21 @@ export class ViewProfileComponent implements OnInit {
     const body = {
       postId : this.currentPostId,
       username : "vuk",
-      content : content
+      content : content,
+      taggedUsernames : this.tags
     }
 
-    this.postStoryService.addComment(body).subscribe(data => {
+    
+   this.postStoryService.addComment(body).subscribe(data => {
       this.comments = data.comments;
       this.commentsCount = this.countComments(data);
+      this.tags = [];
+      this.profileService.getProfilesForTagging(1).subscribe(data=>{console.log(data);
+        this.suggestions=data;
+      });
     });
+
+  
     
   }
 
@@ -341,6 +356,32 @@ export class ViewProfileComponent implements OnInit {
  currentSlide(n : any) {
   this.showSlides(this.slideIndex = n);
   }
+
+  getRegExp(prefix: string | string[]): RegExp {
+    const prefixArray = Array.isArray(prefix) ? prefix : [prefix];
+    let prefixToken = prefixArray.join('').replace(/(\$|\^)/g, '\\$1');
+
+    if (prefixArray.length > 1) {
+      prefixToken = `[${prefixToken}]`;
+    }
+
+    return new RegExp(`(\\s|^)(${prefixToken})[^\\s]*`, 'g');
+  }
+
+
+  checkInput(): void{
+    console.log(this.inputValue);
+    const regex = this.getRegExp('@');
+    const found = this.inputValue.match(regex);
+    console.log(found);
+    if(found!=null){
+      this.suggestions = this.suggestions.filter(suggestion => suggestion!=found[found.length-1]?.slice(2));
+      if(!this.tags.includes(found[found.length-1]?.slice(2)) && found[found.length-1]?.slice(2)!="")
+        this.tags.push(found[found.length-1]?.slice(2));
+    }
+     
+  }
+  
 
 }
 

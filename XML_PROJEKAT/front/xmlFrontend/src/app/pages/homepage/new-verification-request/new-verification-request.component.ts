@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ProfileService } from 'src/app/services/profile.service';
 import { VerificationRequestServiceService } from 'src/app/services/verification-request-service.service';
 
 @Component({
@@ -8,7 +9,12 @@ import { VerificationRequestServiceService } from 'src/app/services/verification
   styleUrls: ['./new-verification-request.component.css']
 })
 export class NewVerificationRequestComponent implements OnInit {
-  validateForm!: FormGroup; 
+  validateForm = new FormGroup({
+    surname: new FormControl({disabled: true}),
+    name: new FormControl({disabled: true}),
+    file : new FormControl(),
+    category: new FormControl()
+  }); 
   image: any;
   file!: File;
   surname!: string;
@@ -17,15 +23,19 @@ export class NewVerificationRequestComponent implements OnInit {
   profileId: string = "1";
 
 
-  constructor(private fb: FormBuilder, private verificationRequestService : VerificationRequestServiceService) { }
+  constructor(private fb: FormBuilder, private verificationRequestService : VerificationRequestServiceService,
+    private profileService : ProfileService) { }
 
   ngOnInit(): void {
-    this.validateForm = this.fb.group({
-      surname: [null,[Validators.required]],
-      name: [null,[Validators.required]],
-      file: [null,[Validators.required]],
-      category: [null,[Validators.required]]
+    this.profileService.getProfile2(1).subscribe(data=>{
+      this.validateForm = this.fb.group({
+        surname: [{disabled: true, value: data.surname},[Validators.required]],
+        name: [{disabled: true, value: data.name},[Validators.required]],
+        file: [null,[Validators.required]],
+        category: [null,[Validators.required]]
+      });
     });
+    
   }
 
   fileChange(event: any) {
