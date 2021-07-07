@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminHomepageComponent } from './pages/admin-homepage/admin-homepage.component';
+import { ViewReportRequestComponent } from './pages/admin-homepage/view-report-request/view-report-request.component';
 import { ViewVerificationReqComponent } from './pages/admin-homepage/view-verification-req/view-verification-req.component';
 import { CloseFriendsComponent } from './pages/homepage/close-friends/close-friends.component';
 import { FeedComponent } from './pages/homepage/feed/feed.component';
@@ -38,7 +39,8 @@ const routes: Routes = [
     { path: 'notification-settings',component:NotificationSettingsComponent}
   ]}, 
   { path: 'admin', component:AdminHomepageComponent, children:[
-    { path: 'viewVerifReq', component:ViewVerificationReqComponent}
+    { path: 'viewVerifReq', component:ViewVerificationReqComponent},
+    { path: 'view-report-request', component:ViewReportRequestComponent},
   ]},
   { path: 'view-profile/:username', component: ViewProfileComponent},
 

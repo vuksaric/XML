@@ -20,7 +20,7 @@ public interface IPostService {
     boolean isItReported(int userId, int postId);
     void like(int userId, int postId);
     void dislike(int userId, int postId);
-    void report(int userId, int postId);
+    void report(int userId, int postId,String username);
     PostResponse addComment(CommentRequest commentRequest);
     List<PostResponse> getLikedByProfile(int userId);
     List<PostResponse> getDislikedByProfile(int userId);
@@ -28,5 +28,5 @@ public interface IPostService {
     List<PostResponse> getTagsPost(String username);
     List<String> getLocations(int userInfoId);
     List<PostResponse> getPostsByLocation(int userInfoId,String location);
-
+    void removePost(int id, String username);
 }

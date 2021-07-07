@@ -13,4 +13,6 @@ public interface PictureVideoClient {
     Integer uploadImage(@RequestBody ImageDTO imageDTO);
     @PostMapping("image/getById")
     String getLocationById(@RequestBody int id);
+    @PostMapping("image/getImageById")
+    boolean getImageById(@RequestBody int id);
 }

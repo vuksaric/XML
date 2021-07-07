@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import services.postservices.client.PictureVideoClient;
 import services.postservices.client.ProfileClient;
 import services.postservices.dto.ImageDTO;
+import services.postservices.dto.PictureDTO;
 import services.postservices.dto.PostResponse;
 import services.postservices.dto.StoryResponse;
 import services.postservices.model.PostInfo;
@@ -74,8 +75,10 @@ public class StoryService implements IStoryService {
                 StoryResponse storyResponse = new StoryResponse(story);
                 for(Integer idPicture : story.getPostInfo().getPictureIds())
                 {
+                    boolean image = pictureVideoClient.getImageById(idPicture);
                     String src = pictureVideoClient.getLocationById(idPicture);
-                    storyResponse.getContentSrcs().add(src);
+                    PictureDTO pictureDTO = new PictureDTO(src,image);
+                    storyResponse.getContent().add(pictureDTO);
                 }
                 result.add(storyResponse);
             }
@@ -95,13 +98,10 @@ public class StoryService implements IStoryService {
                 StoryResponse storyResponse = new StoryResponse(story);
                 for(Integer idPicture : story.getPostInfo().getPictureIds())
                 {
+                    boolean image = pictureVideoClient.getImageById(idPicture);
                     String src = pictureVideoClient.getLocationById(idPicture);
-                    storyResponse.getContentSrcs().add(src);
-                }
-                for(Integer idPicture : story.getPostInfo().getVideoIds())
-                {
-                    String src = pictureVideoClient.getLocationById(idPicture);
-                    storyResponse.getContentSrcs().add(src);
+                    PictureDTO pictureDTO = new PictureDTO(src,image);
+                    storyResponse.getContent().add(pictureDTO);
                 }
                 result.add(storyResponse);
             }

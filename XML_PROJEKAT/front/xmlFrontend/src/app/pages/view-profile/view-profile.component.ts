@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { DomSanitizer, SafeHtml, SafeUrl } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { FollowRequestService } from 'src/app/services/follow-request.service';
 import { ImageService } from 'src/app/services/image.service';
@@ -17,6 +18,7 @@ export interface Profile{
 export interface Location{
   location: string;
   display : string
+  image : boolean
 }
 
 @Component({
@@ -68,6 +70,7 @@ export class ViewProfileComponent implements OnInit {
   location : any;
   slideIndex = 1;
   friends = false;
+  image : any;
 
   
   suggestions : string[]= [];
@@ -75,15 +78,81 @@ export class ViewProfileComponent implements OnInit {
 
   constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private imageService: ImageService, 
     private sanitizer: DomSanitizer, private authService : AuthService,private activatedRoute: ActivatedRoute,
-     private followRequestService : FollowRequestService) { }
+     private followRequestService : FollowRequestService, private toastr : ToastrService,private router: Router) { }
 
 
 
   ngOnInit(): void {
     this.profileService.getProfile(this.activatedRoute.snapshot.paramMap.get('username')).subscribe(data => {
+      if(data == null)
+      {
+        this.toastr.error("This profile is currently shut down");
+        this.router.navigate(['homepage']);
+      }
       this.profile = data;
       this.profileService.checkFollowing(1,3).subscribe(data =>{
         this.checkFollowing = data;
+        console.log("Privatnost " + this.profile.isPrivate + " Pracenje" + this.checkFollowing);
+        if(!this.profile.isPrivate || this.checkFollowing)
+        {
+          
+          this.postStoryService.getStoriesFeed(storyBody).subscribe(data => {
+            data.forEach((element: any) => {
+              if(element.closeFriends)
+              {
+                if(this.friends)
+                {
+                  const newStory = {
+                    story : element,
+                    display : "none"
+                  }
+        
+                  this.listOfStories.push(newStory);
+                }
+              }
+              else
+              {
+                const newStory = {
+                  story : element,
+                  display : "none"
+                }
+      
+                this.listOfStories.push(newStory);
+              }
+              
+              
+            });
+            
+          });
+  
+          this.postStoryService.getHighlightFeed(storyBody).subscribe(data =>{
+            data.forEach((element: any) => {
+  
+              if(element.closeFriends)
+              {
+                if(this.friends)
+                {
+                  const newStory = {
+                    story : element,
+                    display : "none"
+                  }
+        
+                  this.listOfHighlights.push(newStory);
+                }
+              }
+              else
+              {
+                const newStory = {
+                  story : element,
+                  display : "none"
+                }
+      
+                this.listOfHighlights.push(newStory);
+              }
+              
+            });
+          });
+        }
       });
 
       this.profileService.checkMuted(1,3).subscribe(data =>{
@@ -107,63 +176,7 @@ export class ViewProfileComponent implements OnInit {
         this.friends = data;
       })
      
-
-      this.postStoryService.getStoriesFeed(storyBody).subscribe(data => {
-        data.forEach((element: any) => {
-          if(element.closeFriends)
-          {
-            if(this.friends)
-            {
-              const newStory = {
-                story : element,
-                display : "none"
-              }
-    
-              this.listOfStories.push(newStory);
-            }
-          }
-          else
-          {
-            const newStory = {
-              story : element,
-              display : "none"
-            }
-  
-            this.listOfStories.push(newStory);
-          }
-          
-          
-        });
-        
-      });
-
-      this.postStoryService.getHighlightFeed(storyBody).subscribe(data =>{
-        data.forEach((element: any) => {
-
-          if(element.closeFriends)
-          {
-            if(this.friends)
-            {
-              const newStory = {
-                story : element,
-                display : "none"
-              }
-    
-              this.listOfHighlights.push(newStory);
-            }
-          }
-          else
-          {
-            const newStory = {
-              story : element,
-              display : "none"
-            }
-  
-            this.listOfHighlights.push(newStory);
-          }
-          
-        });
-      });
+     
 
       this.profileService.getCollections(1).subscribe(data=>{
           this.collections = data;
@@ -191,6 +204,12 @@ export class ViewProfileComponent implements OnInit {
     });
 
       
+  }
+
+  @ViewChild('videoPlayer') 
+  videoplayer!: ElementRef;
+  toggleVideo() {
+      this.videoplayer.nativeElement.play();
   }
 
   countFollowers() : number
@@ -276,14 +295,16 @@ export class ViewProfileComponent implements OnInit {
 
   showPost(data : any) : void
   {
-      if(data.contentSrcs.length > 1)
+      if(data.content.length > 1)
       {
         this.isVisibleAlbum = true;
 
-        data.contentSrcs.forEach((element: any) => {
+        data.content.forEach((element: any) => {
           const newLocation = {
-            location : element,
-            display : "none"
+            location : element.src,
+            display : "none",
+            image : element.image
+
           }
           this.locations.push(newLocation);
         });
@@ -294,7 +315,8 @@ export class ViewProfileComponent implements OnInit {
       else
       {
         this.isVisible = true;
-        this.location = data.contentSrcs[0];
+        this.location = data.content[0].src;
+        this.image = data.content[0].image;
       }
       this.caption = data.caption;
       this.postLocation = data.location;
@@ -417,7 +439,7 @@ export class ViewProfileComponent implements OnInit {
 
   report() : void
   {
-    this.postStoryService.report(1,this.currentPostId).subscribe(data =>{
+    this.postStoryService.report(1,this.currentPostId,this.profile.username).subscribe(data =>{
       this.reported = true;
     });
     
@@ -454,7 +476,7 @@ export class ViewProfileComponent implements OnInit {
     {
       setTimeout(()=>{                          
         this.showSlidesStory(this.slideIndex += 1);
-      }, 4000);
+      }, 5000);
     }
     
   }
@@ -472,7 +494,7 @@ export class ViewProfileComponent implements OnInit {
     {
       setTimeout(()=>{                          
         this.showSlidesHighlight(this.slideIndex += 1);
-      }, 4000);
+      }, 5000);
     }
   }
 

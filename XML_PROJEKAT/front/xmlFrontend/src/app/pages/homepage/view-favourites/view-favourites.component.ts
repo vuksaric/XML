@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PostStoryService } from 'src/app/services/post-story.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
@@ -73,6 +73,11 @@ export class ViewFavouritesComponent implements OnInit {
   countComments(data : any) : number
   {
     return data.comments.length;
+  }
+  @ViewChild('videoPlayer') 
+  videoplayer!: ElementRef;
+  toggleVideo() {
+      this.videoplayer.nativeElement.play();
   }
 
 }

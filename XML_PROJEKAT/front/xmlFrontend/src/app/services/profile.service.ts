@@ -151,4 +151,8 @@ export class ProfileService {
     return this.http.put(profile_url+`/unmuteMessage/${loggendIn}/${current}`,null);
   }
   
+
+  public shutDown(username : any): Observable<any>{
+    return this.http.put(profile_url+`/shutDown/${username}`,null);
+  }
 }

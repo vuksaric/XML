@@ -216,7 +216,18 @@ public class ProfileController {
     }
 
     @GetMapping("/getAccessiblePostIds/{userInfoId}")
-    public List<Integer> getAccessiblePostIds(@PathVariable int userInfoId ){
+    public List<Integer> getAccessiblePostIds(@PathVariable int userInfoId ) {
         return profileService.getAccessiblePostIds(userInfoId);
+    }
+
+    @PutMapping("/shutDown/{username}")
+    public void shutDown(@PathVariable String username){
+        profileService.shutDownProfile(username);
+    }
+
+    @PutMapping("/removePost/{postId}/{username}")
+    public void removePost(@PathVariable int postId, @PathVariable String username){
+        profileService.removePost(postId,username);
+
     }
 }

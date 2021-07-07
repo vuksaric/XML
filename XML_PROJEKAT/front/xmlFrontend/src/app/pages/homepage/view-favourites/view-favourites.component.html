@@ -13,7 +13,13 @@
 
         <div class="gallery-item" tabindex="0">
 
-            <img src={{data.contentSrcs[0]}} class="gallery-image"  alt="">
+            <img *ngIf = "data.content[0].image" src={{data.content[0].src}} class="gallery-image"  alt="">
+            <div *ngIf = "!data.content[0].image" class="video">
+                <video controls (click)="toggleVideo()" #videoPlayer>
+                    <source src="{{data.content[0].src}}" type="video/mp4"/>
+                    Browser not supported
+                </video>
+            </div>
 
             <div class="gallery-item-info">
 

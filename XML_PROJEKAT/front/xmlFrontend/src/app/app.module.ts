@@ -33,6 +33,7 @@ import { SearchFilterPipe } from './pipes/search-filter.pipe';
 import { ViewFavouritesComponent } from './pages/homepage/view-favourites/view-favourites.component';
 import { CloseFriendsComponent } from './pages/homepage/close-friends/close-friends.component';
 import { NotificationSettingsComponent } from './pages/homepage/notification-settings/notification-settings.component';
+import { ViewReportRequestComponent } from './pages/admin-homepage/view-report-request/view-report-request.component';
 
 registerLocaleData(en);
 
@@ -58,7 +59,8 @@ registerLocaleData(en);
     SearchFilterPipe,
     ViewFavouritesComponent,
     CloseFriendsComponent,
-    NotificationSettingsComponent
+    NotificationSettingsComponent,
+    ViewReportRequestComponent
   ],
   imports: [
     BrowserModule,

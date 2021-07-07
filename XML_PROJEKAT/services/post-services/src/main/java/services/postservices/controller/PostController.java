@@ -58,9 +58,9 @@ public class PostController {
         postService.dislike(userId,postId);
     }
 
-    @PutMapping("/report/{userId}/{postId}")
-    public void report(@PathVariable int userId, @PathVariable int postId){
-        postService.report(userId,postId);
+    @PutMapping("/report/{userId}/{postId}/{username}")
+    public void report(@PathVariable int userId, @PathVariable int postId, @PathVariable String username){
+        postService.report(userId,postId,username);
     }
 
     @PutMapping("/addComment")
@@ -99,4 +99,9 @@ public class PostController {
         return postService.getPostsByLocation(userInfoId, location);
 
     }
+    @PutMapping("/remove/{id}/{username}")
+    public void remove(@PathVariable int id, @PathVariable String username){
+         postService.removePost(id,username);
+    }
+
 }

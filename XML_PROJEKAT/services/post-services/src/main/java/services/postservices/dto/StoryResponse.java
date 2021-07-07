@@ -20,7 +20,8 @@ public class StoryResponse {
     private Boolean closeFriends;
     private Boolean highlight;
     private LocalDateTime timeStamp;
-    private List<String> contentSrcs;
+    private List<PictureDTO> content;
+    private boolean picture;
 
     public StoryResponse(Story story)
     {
@@ -31,6 +32,6 @@ public class StoryResponse {
         this.closeFriends = story.getCloseFriends();
         this.highlight = story.getHighlight();
         this.timeStamp = story.getTimeStamp();
-        this.contentSrcs = new ArrayList<>();
+        this.content = new ArrayList<>();
     }
 }

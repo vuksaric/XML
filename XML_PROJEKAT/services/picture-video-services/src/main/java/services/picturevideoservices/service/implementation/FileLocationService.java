@@ -28,4 +28,10 @@ public class FileLocationService {
             Image image = imageDbRepository.findOneById(id);
         return image.getLocation();
     }
+
+    public boolean getImageById(int id)
+    {
+        Image image = imageDbRepository.findOneById(id);
+        return image.isImage();
+    }
 }

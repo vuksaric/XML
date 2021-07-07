@@ -53,8 +53,8 @@ export class PostStoryService {
     return this.http.put(post_url+`/isItReported/${userId}/${postId}`,null);
   }
 
-  public report(userId : number, postId : number): Observable<any>{
-    return this.http.put(post_url+`/report/${userId}/${postId}`,null);
+  public report(userId : number, postId : number, profileId : number): Observable<any>{
+    return this.http.put(post_url+`/report/${userId}/${postId}/${profileId}`,null);
   }
 
   public likedByProfile(userId : number): Observable<any>{
@@ -87,4 +87,8 @@ export class PostStoryService {
   public getPostsByLocation(userInfoId : number, location: string): Observable<any>{
     return this.http.get(post_url+`/getPostByLocation/${userInfoId}/${location}`);
   }
+  public remove(postId : number, username : any): Observable<any>{
+    return this.http.put(post_url+`/remove/${postId}/${username}`,null);
+  }
+
 }

@@ -26,5 +26,9 @@ export class AdminHomepageComponent implements OnInit {
     this.router.navigate(['admin/viewVerifReq']);
   }
 
+  ViewReportRequest(){
+    this.router.navigate(['admin/view-report-request']);
+  }
+
 
 }

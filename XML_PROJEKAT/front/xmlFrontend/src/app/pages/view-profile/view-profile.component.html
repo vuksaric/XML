@@ -58,7 +58,13 @@
 
 				<div class="gallery-item" tabindex="0" (click) = "showPost(data)">
 
-					<img  src={{data.contentSrcs[0]}} class="gallery-image"  alt="">
+					<img *ngIf = "data.content[0].image" src={{data.content[0].src}} class="gallery-image"  alt="">
+					<div *ngIf = "!data.content[0].image" class="video">
+						<video controls (click)="toggleVideo()" #videoPlayer>
+							<source src="{{data.content[0].src}}" type="video/mp4"/>
+							Browser not supported
+						</video>
+					</div>
 
 					<div class="gallery-item-info">
 
@@ -92,7 +98,13 @@
 
       <ng-template #modalContent>
 		<p>{{postLocation}}</p>
-		<img src = {{location}} class="gallery-image">
+		<img *ngIf = "image" src = {{location}} class="gallery-image">
+		<div *ngIf = "!image" class="video">
+			<video controls (click)="toggleVideo()" #videoPlayer>
+				<source src="{{location}}" type="video/mp4"/>
+				Browser not supported
+			</video>
+		</div>
 		<br>
 		<div style="font-size: 20px;">
 			<!--<i nz-tooltip nzTitle="Like" nz-icon nzType="like" ></i>{{likesCount}} &nbsp; &nbsp;-->
@@ -170,7 +182,13 @@
 			<div class="slideshow-container">
 				<div *ngFor = "let location of locations">
 					<div style.display = {{location.display}}>
-						<img src={{location.location}} style="width:100%">
+						<img *ngIf = "location.image" src={{location.location}} style="width:100%">
+						<div *ngIf = "!location.image" class="video">
+							<video controls (click)="toggleVideo()" #videoPlayer>
+								<source src="{{location.location}}" type="video/mp4"/>
+								Browser not supported
+							</video>
+						</div>
 					</div>
 				</div>
 			
@@ -250,8 +268,14 @@
 				<div *ngFor = "let data of listOfStories">
 					<div style.display = {{data.display}}>
 						<div class="numbertext">{{data.story.location}}</div>
-						<div *ngFor = "let location of data.story.contentSrcs">
-							<img src={{location}} style="width:100%">
+						<div *ngFor = "let location of data.story.content">
+							<img *ngIf = "location.image" src={{location.src}} style="width:100%">
+							<div *ngIf = "!location.image" class="video">
+								<video controls (click)="toggleVideo()" #videoPlayer>
+									<source src="{{location.src}}" type="video/mp4"/>
+									Browser not supported
+								</video>
+							</div>
 						</div>
 						<div class="text">{{data.story.caption}}</div>
 					</div>
@@ -277,8 +301,14 @@
 				<div *ngFor = "let data of listOfHighlights">
 					<div style.display = {{data.display}}>
 						<div class="numbertext">{{data.story.location}}</div>
-						<div *ngFor = "let location of data.story.contentSrcs">
-							<img src={{location}} style="width:100%">
+						<div *ngFor = "let location of data.story.content">
+							<img *ngIf = "location.image" src={{location.src}} style="width:100%">
+							<div *ngIf = "!location.image" class="video">
+								<video controls (click)="toggleVideo()" #videoPlayer>
+									<source src="{{location.src}}" type="video/mp4"/>
+									Browser not supported
+								</video>
+							</div>
 						</div>
 						<div class="text">{{data.story.caption}}</div>
 					</div>
