@@ -15,6 +15,7 @@ export const environment = {
   verificationRequest_url: 'http://localhost:8140/verificationRequest',
   followRequest_url: 'http://localhost:8110/followRequest',
   reportRequest_url: 'http://localhost:8110/reportRequest',
+  registrationRequest_url: 'http://localhost:8090/registrationRequest',
 };
 
 /*

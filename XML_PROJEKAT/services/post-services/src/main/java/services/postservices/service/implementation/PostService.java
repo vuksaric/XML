@@ -220,12 +220,13 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<PostResponse> getForFeed(List<Integer> postIds) {
+    public List<PostResponse> getForFeed(List<FeedPostRequest> requests) {
         List<PostResponse> result = new ArrayList<>();
-        for(Integer id : postIds)
+        for(FeedPostRequest request : requests)
         {
-            Post post = postRepository.findOneById(id);
+            Post post = postRepository.findOneById(request.getPostId());
             PostResponse postResponse = new PostResponse(post);
+            postResponse.setUsername(request.getUsername());
             for(Integer idPicture : post.getPostInfo().getPictureIds())
             {
                 boolean image = pictureVideoClient.getImageById(idPicture);

@@ -1,13 +1,49 @@
 <head>
   <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
+
+<div class="profile-image" >
+	
+  <img src="https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces" (click) = showStories() alt="">
+
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <div *ngFor = "let data of listOfData" class="card"> 
+  <p>{{data.post.username}}</p>
   <p>{{data.post.location}}</p>
-  <div *ngIf = "data.post.contentSrcs.length == 1">
-    <img src = {{data.post.contentSrcs[0]}} class="gallery-image">
-  </div>
-  <div *ngIf = "data.post.contentSrcs.length > 1">
+  <div *ngIf = "checkAlbum(data)">
+    <div class="slideshow-container">
+      <div *ngFor = "let location of data.contentAlbum">
+        <div style.display = {{location.display}}>
+          <img *ngIf = "location.image" src={{location.src}} style="width:100%">
+          <div *ngIf = "!location.image" class="video">
+            <video controls (click)="toggleVideo()" #videoPlayer>
+              <source src="{{location.src}}" type="video/mp4"/>
+              Browser not supported
+            </video>
+          </div>
+        </div>
+      </div>
     
+      <a class="prev" (click)="plusSlides(data,-1)">&#10094;</a>
+      <a class="next" (click)="plusSlides(data,1)">&#10095;</a>
+    </div>
+  </div>
+  <div *ngIf = "data.post.content.length == 1">
+    <img *ngIf = "data.post.content[0].image" src = {{data.post.content[0].src}} class="gallery-image">
+		<div *ngIf = "!data.post.content[0].image" class="video">
+    <video controls (click)="toggleVideo()" #videoPlayer>
+      <source src="{{data.post.content[0].src}}" type="video/mp4"/>
+      Browser not supported
+    </video>
+    </div>
   </div>
   <br>
   <div style="font-size: 20px;">
@@ -55,5 +91,39 @@
   </nz-comment-content>
   </nz-comment>
 </div>
+
+<nz-modal
+      [(nzVisible)]="isVisibleStory"
+      [nzTitle]="modalTitle2"
+      [nzContent]="modalContent2"
+      [nzFooter]="modalFooter2"
+      (nzOnCancel)="handleCancel()"
+    > 
+		<ng-template #modalTitle2></ng-template>
+		<ng-template #modalContent2>
+			<div class="slideshow-container">
+				<div *ngFor = "let data of stories">
+					<div style.display = {{data.display}}>
+            <p>{{data.story.username}}</p>
+						<div class="numbertext">{{data.story.location}}</div>
+						<div *ngFor = "let location of data.story.content">
+							<img *ngIf = "location.image" src={{location.src}} style="width:100%">
+							<div *ngIf = "!location.image" class="video">
+								<video controls (click)="toggleVideo()" #videoPlayer>
+									<source src="{{location.src}}" type="video/mp4"/>
+									Browser not supported
+								</video>
+							</div>
+						</div>
+						<div class="text">{{data.story.caption}}</div>
+					</div>
+				</div>
+			</div>
+			<br>
+		</ng-template>
+			
+		<ng-template #modalFooter2>
+		</ng-template>
+	</nz-modal> 
 
  

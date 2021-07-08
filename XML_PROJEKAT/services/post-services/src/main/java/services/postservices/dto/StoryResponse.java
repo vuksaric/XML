@@ -22,6 +22,7 @@ public class StoryResponse {
     private LocalDateTime timeStamp;
     private List<PictureDTO> content;
     private boolean picture;
+    private String username;
 
     public StoryResponse(Story story)
     {

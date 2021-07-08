@@ -71,6 +71,7 @@ export class ViewProfileComponent implements OnInit {
   slideIndex = 1;
   friends = false;
   image : any;
+  decoded_token : any;
 
   
   suggestions : string[]= [];
@@ -78,11 +79,25 @@ export class ViewProfileComponent implements OnInit {
 
   constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private imageService: ImageService, 
     private sanitizer: DomSanitizer, private authService : AuthService,private activatedRoute: ActivatedRoute,
-     private followRequestService : FollowRequestService, private toastr : ToastrService,private router: Router) { }
+     private followRequestService : FollowRequestService, private toastr : ToastrService,private router: Router,private toastrService : ToastrService) { }
 
 
 
   ngOnInit(): void {
+
+    this.decoded_token = this.authService.getDataFromToken();
+
+    if(this.decoded_token== null)
+    {
+        this.toastrService.error("Restricted access");
+        this.router.navigate(['login']);
+    }
+    if(this.decoded_token.username == "admin")
+    {
+        this.toastrService.error("Restricted access");
+        this.router.navigate(['admin']);
+    }
+
     this.profileService.getProfile(this.activatedRoute.snapshot.paramMap.get('username')).subscribe(data => {
       if(data == null)
       {
@@ -90,13 +105,12 @@ export class ViewProfileComponent implements OnInit {
         this.router.navigate(['homepage']);
       }
       this.profile = data;
-      this.profileService.checkFollowing(1,3).subscribe(data =>{
+      this.profileService.checkFollowing(this.decoded_token.id,this.profile.id).subscribe(data =>{
         this.checkFollowing = data;
-        console.log("Privatnost " + this.profile.isPrivate + " Pracenje" + this.checkFollowing);
         if(!this.profile.isPrivate || this.checkFollowing)
         {
           
-          this.postStoryService.getStoriesFeed(storyBody).subscribe(data => {
+          this.postStoryService.getStories(storyBody).subscribe(data => {
             data.forEach((element: any) => {
               if(element.closeFriends)
               {
@@ -155,16 +169,16 @@ export class ViewProfileComponent implements OnInit {
         }
       });
 
-      this.profileService.checkMuted(1,3).subscribe(data =>{
+      this.profileService.checkMuted(this.decoded_token.id,this.profile.id).subscribe(data =>{
         this.checkMuted = data;
       });
 
-      this.profileService.checkBlocked(1,3).subscribe(data =>{
+      this.profileService.checkBlocked(this.decoded_token.id,this.profile.id).subscribe(data =>{
         this.checkBlocked = data;
       });
 
 
-      this.followRequestService.checkRequest(1,3).subscribe(data=>{
+      this.followRequestService.checkRequest(this.decoded_token.id,this.profile.id).subscribe(data=>{
         this.checkRequest = data;
       });
 
@@ -172,13 +186,13 @@ export class ViewProfileComponent implements OnInit {
         postIds: this.profile.storyIds
       }
 
-      this.profileService.checkCloseFriends(1,3).subscribe(data=>{
+      this.profileService.checkCloseFriends(this.decoded_token.id,this.profile.id).subscribe(data=>{
         this.friends = data;
       })
      
      
 
-      this.profileService.getCollections(1).subscribe(data=>{
+      this.profileService.getCollections(this.decoded_token.id).subscribe(data=>{
           this.collections = data;
       });
 
@@ -199,7 +213,7 @@ export class ViewProfileComponent implements OnInit {
 
     });
 
-    this.profileService.getProfilesForTagging(1).subscribe(data=>{console.log(data);
+    this.profileService.getProfilesForTagging(this.decoded_token.id).subscribe(data=>{console.log(data);
       this.suggestions=data;
     });
 
@@ -244,36 +258,36 @@ export class ViewProfileComponent implements OnInit {
 
   follow() : void
   {
-    this.profileService.followProfile(1,3).subscribe(data =>{
+    this.profileService.followProfile(this.decoded_token.id,this.profile.id).subscribe(data =>{
         location.reload();
     });
   }
 
   unfollow() : void
   {
-    this.profileService.unfollowProfile(1,3).subscribe(data =>{
+    this.profileService.unfollowProfile(this.decoded_token.id,this.profile.id).subscribe(data =>{
       location.reload();
     });
   }
 
   mute() : void
   {
-    this.profileService.muteProfile(1,3).subscribe(data =>{
+    this.profileService.muteProfile(this.decoded_token.id,this.profile.id).subscribe(data =>{
       location.reload();
     });
   }
 
   unmute() : void
   {
-    this.profileService.unmuteProfile(1,3).subscribe(data =>{
+    this.profileService.unmuteProfile(this.decoded_token.id,this.profile.id).subscribe(data =>{
       location.reload();
     });
   }
 
   block() : void
   {
-    this.profileService.blockProfile(1,3).subscribe(data =>{
-      this.profileService.checkFollowing(1,3).subscribe(data =>{
+    this.profileService.blockProfile(this.decoded_token.id,this.profile.id).subscribe(data =>{
+      this.profileService.checkFollowing(this.decoded_token.id,this.profile.id).subscribe(data =>{
         this.checkFollowing = data;
       });
       location.reload();
@@ -285,8 +299,8 @@ export class ViewProfileComponent implements OnInit {
   {
     const body = {
       accepted : false,
-      fromProfileId : 1,
-      toProfileId : 3
+      fromProfileId : this.decoded_token.id,
+      toProfileId : this.profile.id
     }
     this.followRequestService.newRequest(body).subscribe(data =>{
       location.reload();
@@ -327,17 +341,17 @@ export class ViewProfileComponent implements OnInit {
       this.currentPostId = data.id;
       this.taggedIds = data.tagged;
 
-      this.postStoryService.isItLiked(1,data.id).subscribe(data =>{
+      this.postStoryService.isItLiked(this.decoded_token.id,data.id).subscribe(data =>{
         this.liked = data;
       });
-      this.postStoryService.isItDisliked(1,data.id).subscribe(data=>{
+      this.postStoryService.isItDisliked(this.decoded_token.id,data.id).subscribe(data=>{
         this.disliked = data;
       });
-      this.postStoryService.isItReported(1,data.id).subscribe(data =>{
+      this.postStoryService.isItReported(this.decoded_token.id,data.id).subscribe(data =>{
         this.reported = data;
       })
 
-      this.profileService.checkFavourite(1, data.id).subscribe(data =>{
+      this.profileService.checkFavourite(this.decoded_token.id, data.id).subscribe(data =>{
         this.favourite = data;
       })
   }
@@ -382,7 +396,7 @@ export class ViewProfileComponent implements OnInit {
   
   like(): void {
     
-    this.postStoryService.like(1,this.currentPostId).subscribe(data=>{
+    this.postStoryService.like(this.decoded_token.id,this.currentPostId).subscribe(data=>{
       this.liked = true;
       this.likesCount = this.likesCount + 1;
       if(this.disliked)
@@ -397,7 +411,7 @@ export class ViewProfileComponent implements OnInit {
 
   dislike(): void {
     
-    this.postStoryService.dislike(1,this.currentPostId).subscribe(data=>{
+    this.postStoryService.dislike(this.decoded_token.id,this.currentPostId).subscribe(data=>{
       this.disliked = true;
       this.dislikesCount = this.dislikesCount + 1;
       if(this.liked)
@@ -418,7 +432,7 @@ export class ViewProfileComponent implements OnInit {
 
     const body = {
       postId : this.currentPostId,
-      username : "vuk",
+      username : this.decoded_token.username,
       content : content,
       taggedUsernames : this.tags
     }
@@ -428,7 +442,7 @@ export class ViewProfileComponent implements OnInit {
       this.comments = data.comments;
       this.commentsCount = this.countComments(data);
       this.tags = [];
-      this.profileService.getProfilesForTagging(1).subscribe(data=>{console.log(data);
+      this.profileService.getProfilesForTagging(this.decoded_token.id).subscribe(data=>{console.log(data);
         this.suggestions=data;
       });
     });
@@ -439,7 +453,7 @@ export class ViewProfileComponent implements OnInit {
 
   report() : void
   {
-    this.postStoryService.report(1,this.currentPostId,this.profile.username).subscribe(data =>{
+    this.postStoryService.report(this.decoded_token.id,this.currentPostId,this.profile.username).subscribe(data =>{
       this.reported = true;
     });
     
@@ -506,7 +520,7 @@ export class ViewProfileComponent implements OnInit {
   addFavourite(collectionName : any, collection : boolean)
   {
     const body = {
-      profileId : 1,
+      profileId : this.decoded_token.id,
       postId : this.currentPostId,
       collectionName : collectionName,
       collection : collection

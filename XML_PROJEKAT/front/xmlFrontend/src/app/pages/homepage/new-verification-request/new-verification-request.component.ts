@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { VerificationRequestServiceService } from 'src/app/services/verification-request-service.service';
 
@@ -21,13 +22,16 @@ export class NewVerificationRequestComponent implements OnInit {
   name!: string;
   category!: string;
   profileId: string = "1";
+  decoded_token : any;
 
 
   constructor(private fb: FormBuilder, private verificationRequestService : VerificationRequestServiceService,
-    private profileService : ProfileService) { }
+    private profileService : ProfileService, private authService : AuthService) { }
 
   ngOnInit(): void {
-    this.profileService.getProfile2(1).subscribe(data=>{
+    this.decoded_token = this.authService.getDataFromToken();
+    this.profileId = this.decoded_token.id;
+    this.profileService.getProfile2(this.decoded_token.id).subscribe(data=>{
       this.validateForm = this.fb.group({
         surname: [{disabled: true, value: data.surname},[Validators.required]],
         name: [{disabled: true, value: data.name},[Validators.required]],

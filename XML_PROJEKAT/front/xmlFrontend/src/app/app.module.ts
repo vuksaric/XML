@@ -34,6 +34,9 @@ import { ViewFavouritesComponent } from './pages/homepage/view-favourites/view-f
 import { CloseFriendsComponent } from './pages/homepage/close-friends/close-friends.component';
 import { NotificationSettingsComponent } from './pages/homepage/notification-settings/notification-settings.component';
 import { ViewReportRequestComponent } from './pages/admin-homepage/view-report-request/view-report-request.component';
+import { AgentRegistrationComponent } from './pages/agent-registration/agent-registration.component';
+import { ViewRegistrationRequestsComponent } from './pages/admin-homepage/view-registration-requests/view-registration-requests.component';
+import { AgentHomepageComponent } from './pages/agent-homepage/agent-homepage.component';
 
 registerLocaleData(en);
 
@@ -60,7 +63,10 @@ registerLocaleData(en);
     ViewFavouritesComponent,
     CloseFriendsComponent,
     NotificationSettingsComponent,
-    ViewReportRequestComponent
+    ViewReportRequestComponent,
+    AgentRegistrationComponent,
+    ViewRegistrationRequestsComponent,
+    AgentHomepageComponent
   ],
   imports: [
     BrowserModule,

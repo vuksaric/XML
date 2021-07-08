@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminHomepageComponent } from './pages/admin-homepage/admin-homepage.component';
+import { ViewRegistrationRequestsComponent } from './pages/admin-homepage/view-registration-requests/view-registration-requests.component';
 import { ViewReportRequestComponent } from './pages/admin-homepage/view-report-request/view-report-request.component';
 import { ViewVerificationReqComponent } from './pages/admin-homepage/view-verification-req/view-verification-req.component';
+import { AgentHomepageComponent } from './pages/agent-homepage/agent-homepage.component';
+import { AgentRegistrationComponent } from './pages/agent-registration/agent-registration.component';
 import { CloseFriendsComponent } from './pages/homepage/close-friends/close-friends.component';
 import { FeedComponent } from './pages/homepage/feed/feed.component';
 import { FollowRequestsComponent } from './pages/homepage/follow-requests/follow-requests.component';
@@ -24,7 +27,22 @@ const routes: Routes = [
   { path: '', pathMatch:'full', redirectTo:'login'},
   { path: 'login', component: LoginComponent},
   { path: 'registration', component: RegistrationComponent},
+  { path: 'registrationAgent', component: AgentRegistrationComponent},
   { path: 'homepage', component: HomepageComponent, children:[
+    { path: 'profile',component:ProfileComponent},
+    { path: 'search',component:SearchComponent},
+    { path: 'feed',component:FeedComponent},
+    { path: 'new-story',component:NewStoryComponent},
+    { path: 'new-post',component:NewPostComponent},
+    { path: 'new-album',component:NewAlbumComponent},
+    { path: 'new-verification-request',component:NewVerificationRequestComponent},
+    { path: 'follow-requests',component:FollowRequestsComponent},
+    { path: 'view-liked',component:ViewLikedComponent},
+    { path: 'view-favourites',component:ViewFavouritesComponent},
+    { path: 'close-friends',component:CloseFriendsComponent},
+    { path: 'notification-settings',component:NotificationSettingsComponent}
+  ]}, 
+  { path: 'agent', component: AgentHomepageComponent, children:[
     { path: 'profile',component:ProfileComponent},
     { path: 'search',component:SearchComponent},
     { path: 'feed',component:FeedComponent},
@@ -41,6 +59,8 @@ const routes: Routes = [
   { path: 'admin', component:AdminHomepageComponent, children:[
     { path: 'viewVerifReq', component:ViewVerificationReqComponent},
     { path: 'view-report-request', component:ViewReportRequestComponent},
+    { path: 'register-agent', component: AgentRegistrationComponent},
+    { path: 'view-registration-requests', component: ViewRegistrationRequestsComponent},
   ]},
   { path: 'view-profile/:username', component: ViewProfileComponent},
 

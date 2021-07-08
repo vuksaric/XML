@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth.service';
 import { ImageService } from 'src/app/services/image.service';
 import { PostStoryService } from 'src/app/services/post-story.service';
 import { environment } from 'src/environments/environment';
@@ -20,9 +21,10 @@ export class NewPostComponent implements OnInit {
   file!: File;
   location!: string;
   caption!: string;
+  decoded_token : any;
 
   constructor(private postStory: PostStoryService ,private fb: FormBuilder, private http: HttpClient,
-    private toastr : ToastrService) { }
+    private toastr : ToastrService, private authService : AuthService) { }
 
   fileChange(event: any) {
     // Instantiate an object to read the file content
@@ -50,7 +52,7 @@ export class NewPostComponent implements OnInit {
     console.log(this.file);
     body.append("location", this.location);
     body.append("caption", this.caption);
-    body.append("userInfoId", "1");
+    body.append("userInfoId", this.decoded_token.id);
     // Launch post request
     if(this.validateForm.valid){
       this.postStory.createPost(body)
@@ -67,6 +69,7 @@ export class NewPostComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.decoded_token = this.authService.getDataFromToken();
     this.validateForm = this.fb.group({
       location: [null,[Validators.required]],
       caption: [null,[Validators.required]],

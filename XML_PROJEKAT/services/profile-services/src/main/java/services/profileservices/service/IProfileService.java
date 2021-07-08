@@ -1,10 +1,6 @@
 package services.profileservices.service;
 
-import services.profileservices.dto.FavouriteRequest;
-import services.profileservices.dto.FavouriteResponse;
-import services.profileservices.dto.ProfileDTO;
-import services.profileservices.dto.ProfileSettingsDTO;
-import services.profileservices.dto.ViewProfileDTO;
+import services.profileservices.dto.*;
 import services.profileservices.model.FavouriteCollection;
 import services.profileservices.model.Profile;
 import services.profileservices.model.ProfileCategory;
@@ -34,8 +30,7 @@ public interface IProfileService {
     List<String> getProfilesForTagging(int userInfoId);
     List<String> getPublicProfiles();
     List<Integer> findByUsername(List<String> usernames);
-
-    List<Integer> getPostIdsFeed(int userInfoId);
+    List<FeedPostRequest> getPostIdsFeed(int userInfoId);
     List<String> getTaggedUsernames(List<Integer> taggedIds);
     List<String> getCollections(int profileId);
     boolean checkFavourite(int userInfoId, int postId);
@@ -44,7 +39,6 @@ public interface IProfileService {
     boolean checkCloseFriends(int loggedIn, int current);
     void shutDownProfile(String username);
     void removePost(int postId, String username);
-
     List<String> getCloseFriends(int userInfoId);
     List<String> getProfilesForCloseFriends(int userInfoId);
     void addCloseFriend(int loggedIn, String closeFriend);
@@ -60,5 +54,6 @@ public interface IProfileService {
     void muteMessage(int loggedIn, String current);
     void unmuteMessage(int loggedIn, String current);
     List<Integer> getAccessiblePostIds(int userInfoId);
+    List<FeedStoryRequest> getStoriesFeed(int userInfoId);
 
 }

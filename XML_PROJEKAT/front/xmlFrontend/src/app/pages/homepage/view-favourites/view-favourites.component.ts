@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 import { PostStoryService } from 'src/app/services/post-story.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
@@ -9,17 +10,19 @@ import { ProfileService } from 'src/app/services/profile.service';
 })
 export class ViewFavouritesComponent implements OnInit {
 
-  constructor(private profileService: ProfileService,private postStoryService: PostStoryService) { }
+  constructor(private profileService: ProfileService,private postStoryService: PostStoryService, private authService : AuthService) { }
 
   posts : any;
   collections : any[] = [];
   currentPosts : any;
   collection = "all";
   all : any;
+  decoded_token : any;
 
   ngOnInit(): void {
+    this.decoded_token = this.authService.getDataFromToken();
     this.all = "all";
-    this.profileService.getFavourites(1).subscribe(data=>{
+    this.profileService.getFavourites(this.decoded_token.id).subscribe(data=>{
       const body = 
       {
         postIds : data.postIds

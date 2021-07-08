@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 import { PostStoryService } from 'src/app/services/post-story.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
@@ -20,14 +21,16 @@ export class SearchComponent implements OnInit {
 
   listOfData : any;
   listOfDataLocation : any;
+  decoded_token : any;
  
 
-  constructor(private profileService: ProfileService, private router: Router, private postStory: PostStoryService) { }
+  constructor(private profileService: ProfileService, private router: Router, private postStory: PostStoryService, private authService : AuthService) { }
 
   ngOnInit(): void {
+    this.decoded_token = this.authService.getDataFromToken();
     this.profileService.getPublicProfiles().subscribe(data=>{console.log(data); this.listOfDataProfiles=data;})
-    this.profileService.getProfilesForTagging(1).subscribe(data=>{console.log(data); this.listOfDataTags=data;})
-    this.postStory.getLocations(1).subscribe(data=>{console.log(data); this.listOfDataLocations=data;})
+    this.profileService.getProfilesForTagging(this.decoded_token.id).subscribe(data=>{console.log(data); this.listOfDataTags=data;})
+    this.postStory.getLocations(this.decoded_token.id).subscribe(data=>{console.log(data); this.listOfDataLocations=data;})
 
   }
 
@@ -41,7 +44,7 @@ export class SearchComponent implements OnInit {
   }
   viewLocations(item : string){
     this.listOfDataLocation=[];
-    this.postStory.getPostsByLocation(1,item).subscribe(data=>{console.log(data); this.listOfDataLocation=data});
+    this.postStory.getPostsByLocation(this.decoded_token.id,item).subscribe(data=>{console.log(data); this.listOfDataLocation=data});
   }
 
   countLikes(data : any) : number
@@ -57,6 +60,12 @@ export class SearchComponent implements OnInit {
   countComments(data : any) : number
   {
     return data.comments.length;
+  }
+
+  @ViewChild('videoPlayer') 
+  videoplayer!: ElementRef;
+  toggleVideo() {
+      this.videoplayer.nativeElement.play();
   }
 
 }

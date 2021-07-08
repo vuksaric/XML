@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { differenceInCalendarDays } from 'date-fns';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth.service';
 
 import { ProfileService } from 'src/app/services/profile.service';
 
@@ -31,16 +32,18 @@ export class ProfileComponent implements OnInit {
     
   }); 
   oldUsername!: String;
-  usernameChanged = false
+  usernameChanged = false;
+  decoded_token : any;
   
   
   
   today = new Date();
   constructor(private fb: FormBuilder, private profileService : ProfileService, 
-    private toastr : ToastrService) { }
+    private toastr : ToastrService, private authService : AuthService) { }
 
   ngOnInit(): void {
-    this.profileService.getProfile2(1).subscribe(data=> {
+    this.decoded_token = this.authService.getDataFromToken();
+    this.profileService.getProfile2(this.decoded_token.id).subscribe(data=> {
       console.log(data);this.validateForm = this.fb.group({
         surname: [data.surname,[Validators.required]],
         name: [data.name,[Validators.required]],
@@ -87,7 +90,7 @@ export class ProfileComponent implements OnInit {
         canBeMessaged: this.validateForm.value.messages,
         canBeTagged: this.validateForm.value.tags,
         notifyProfileActivity: this.validateForm.value.activity,
-        id : 1, 
+        id : this.decoded_token.id, 
         usernameChanged: this.usernameChanged
       }
       

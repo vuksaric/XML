@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import services.postservices.dto.CommentRequest;
+import services.postservices.dto.FeedPostRequest;
 import services.postservices.dto.PostResponse;
 import services.postservices.dto.ProfilePostRequest;
 import services.postservices.model.Post;
@@ -80,8 +81,8 @@ public class PostController {
 
 
     @PostMapping("/getForFeed")
-    public List<PostResponse> getForFeed(@RequestBody ProfilePostRequest profilePostRequest) {
-        return postService.getForFeed(profilePostRequest.getPostIds());
+    public List<PostResponse> getForFeed(@RequestBody List<FeedPostRequest> requests) {
+        return postService.getForFeed(requests);
     }
 
     @GetMapping("/getTagsPost/{username}")

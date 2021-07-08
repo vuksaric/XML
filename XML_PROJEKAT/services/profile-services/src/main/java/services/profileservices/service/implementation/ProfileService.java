@@ -2,12 +2,8 @@ package services.profileservices.service.implementation;
 
 import org.springframework.stereotype.Service;
 import services.profileservices.client.AuthClient;
-import services.profileservices.dto.FavouriteRequest;
-import services.profileservices.dto.FavouriteResponse;
-import services.profileservices.dto.ProfileDTO;
+import services.profileservices.dto.*;
 import services.profileservices.client.NotificationClient;
-import services.profileservices.dto.ProfileSettingsDTO;
-import services.profileservices.dto.ViewProfileDTO;
 import services.profileservices.model.FavouriteCollection;
 import services.profileservices.model.Profile;
 import services.profileservices.model.ProfileCategory;
@@ -346,11 +342,18 @@ public class ProfileService implements IProfileService {
     }
 
     @Override
-    public List<Integer> getPostIdsFeed(int userInfoId) {
+    public List<FeedPostRequest> getPostIdsFeed(int userInfoId) {
         Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
-        List<Integer> result = new ArrayList<>();
+        List<FeedPostRequest> result = new ArrayList<>();
         for(Integer id : profile.getFollowing()) {
-            result.addAll(profileRepository.findOneByUserInfoId(id).getPostIds());
+            Profile following = profileRepository.findOneById(id);
+            String username = authClient.getUsername(following.getUserInfoId());
+            for(Integer postId : profileRepository.findOneByUserInfoId(id).getPostIds())
+            {
+                FeedPostRequest request = new FeedPostRequest(postId,username);
+                result.add(request);
+            }
+
         }
         return result;
     }
@@ -663,6 +666,20 @@ public class ProfileService implements IProfileService {
 
         return postIds;
 
+    }
+
+    @Override
+    public List<FeedStoryRequest> getStoriesFeed(int userInfoId) {
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        List<FeedStoryRequest> result = new ArrayList<>();
+        for(Integer id : profile.getFollowing())
+        {
+            Profile following = profileRepository.findOneById(id);
+            ProfileDTO followingDTO = authClient.getUserInfo(following.getUserInfoId());
+            FeedStoryRequest request = new FeedStoryRequest(following.getStoryIds(),followingDTO.getUsername());
+            result.add(request);
+        }
+        return result;
     }
 
     private boolean checkMutedPost(int loggedIn, String current) {

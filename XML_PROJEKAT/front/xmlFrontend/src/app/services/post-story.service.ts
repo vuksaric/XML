@@ -69,7 +69,7 @@ export class PostStoryService {
     return this.http.post(post_url+`/getForFeed`,body);
   }
 
-  public getStoriesFeed(body: any): Observable<any>{
+  public getStories(body: any): Observable<any>{
     return this.http.post(story_url+`/getStories`,body);
   }
 
@@ -89,6 +89,10 @@ export class PostStoryService {
   }
   public remove(postId : number, username : any): Observable<any>{
     return this.http.put(post_url+`/remove/${postId}/${username}`,null);
+  }
+
+  public getStoriesFeed(body: any): Observable<any>{
+    return this.http.post(story_url+`/getStoriesFeed`,body);
   }
 
 }

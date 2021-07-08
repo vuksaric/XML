@@ -155,4 +155,8 @@ export class ProfileService {
   public shutDown(username : any): Observable<any>{
     return this.http.put(profile_url+`/shutDown/${username}`,null);
   }
+
+  public getStoriesFeed(userInfoId:number): Observable<any>{
+    return this.http.get(profile_url+`/getStoriesFeed/${userInfoId}`);
+  }
 }

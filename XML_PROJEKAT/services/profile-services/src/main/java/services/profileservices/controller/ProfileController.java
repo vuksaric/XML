@@ -1,11 +1,7 @@
 package services.profileservices.controller;
 
 import org.springframework.web.bind.annotation.*;
-import services.profileservices.dto.FavouriteRequest;
-import services.profileservices.dto.FavouriteResponse;
-import services.profileservices.dto.ProfileDTO;
-import services.profileservices.dto.ProfileSettingsDTO;
-import services.profileservices.dto.ViewProfileDTO;
+import services.profileservices.dto.*;
 import services.profileservices.model.Profile;
 import services.profileservices.service.IProfileService;
 import services.profileservices.service.implementation.ProfileService;
@@ -177,7 +173,7 @@ public class ProfileController {
     }
 
     @GetMapping("/getPostIdsFeed/{userInfoId}")
-    public List<Integer> getPostIdsFeed(@PathVariable int userInfoId){
+    public List<FeedPostRequest> getPostIdsFeed(@PathVariable int userInfoId){
         return profileService.getPostIdsFeed(userInfoId);
     }
     @PostMapping("/getTaggedUsernames")
@@ -229,5 +225,10 @@ public class ProfileController {
     public void removePost(@PathVariable int postId, @PathVariable String username){
         profileService.removePost(postId,username);
 
+    }
+
+    @GetMapping("/getStoriesFeed/{userInfoId}")
+    public List<FeedStoryRequest> getStoriesFeed(@PathVariable int userInfoId){
+        return profileService.getStoriesFeed(userInfoId);
     }
 }

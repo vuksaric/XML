@@ -2,9 +2,7 @@ package services.postservices.controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import services.postservices.dto.PostResponse;
-import services.postservices.dto.ProfilePostRequest;
-import services.postservices.dto.StoryResponse;
+import services.postservices.dto.*;
 import services.postservices.service.IStoryService;
 
 import java.util.List;
@@ -30,5 +28,10 @@ public class StoryController {
     @PostMapping("/getHighlights")
     public List<StoryResponse> getHighlightByStoryIds(@RequestBody ProfilePostRequest profilePostRequest){
         return storyService.getHighlightForProfile(profilePostRequest.getPostIds());
+    }
+
+    @PostMapping("/getStoriesFeed")
+    public List<StoryResponse> getStoriesFeed(@RequestBody List<FeedStoryRequest> requests) {
+        return storyService.getStoriesFeed(requests);
     }
 }

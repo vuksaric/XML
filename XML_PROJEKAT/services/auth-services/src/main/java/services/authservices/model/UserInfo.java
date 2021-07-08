@@ -35,6 +35,8 @@ public class UserInfo implements UserDetails {
     private String phone;
     private Gender gender;
     private LocalDate dateOfBirth;
+    private boolean agent;
+    private String website;
 
     public UserInfo(RegistrationDTO registrationDTO){
         this.username = registrationDTO.getUsername();
@@ -43,7 +45,7 @@ public class UserInfo implements UserDetails {
         this.surname = registrationDTO.getSurname();
         this.email = registrationDTO.getEmail();
         this.phone = registrationDTO.getPhone();
-        String[] array = registrationDTO.getBirthday().split("T");
+        String[] array = registrationDTO.getDateOfBirth().split("T");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateTime = LocalDate.parse(array[0],formatter);
         this.dateOfBirth = dateTime;
@@ -53,6 +55,8 @@ public class UserInfo implements UserDetails {
             this.gender = Gender.Female;
         else
             this.gender = Gender.NonBinary;
+        this.agent = registrationDTO.isAgent();
+        this.website = registrationDTO.getWebsite();
     }
 
     @Override

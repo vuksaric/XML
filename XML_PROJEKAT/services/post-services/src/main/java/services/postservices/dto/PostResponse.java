@@ -25,6 +25,7 @@ public class PostResponse implements Comparable< PostResponse >{
     private String location;
     private List<String> tagged;
     private List<Comment> comments;
+    private String username;
 
     public PostResponse(Post post)
     {
