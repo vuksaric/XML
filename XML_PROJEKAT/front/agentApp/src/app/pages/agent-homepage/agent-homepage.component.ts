@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-admin-homepage',
-  templateUrl: './admin-homepage.component.html',
-  styleUrls: ['./admin-homepage.component.css']
+  selector: 'app-agent-homepage',
+  templateUrl: './agent-homepage.component.html',
+  styleUrls: ['./agent-homepage.component.css']
 })
-export class AdminHomepageComponent implements OnInit {
+export class AgentHomepageComponent implements OnInit {
 
   isCollapsed = false;
   userID: number = 0;
@@ -22,9 +22,14 @@ export class AdminHomepageComponent implements OnInit {
     this.router.navigate(['login']);
   }
 
-  ViewVerificationRequest(){
+  CreateProduct(){
     this.router.navigate(['agent/createProduct']);
   }
+  
+  ViewProducts(){
+    this.router.navigate(['agent/viewProducts']);
+  }
+  
 
 
 }

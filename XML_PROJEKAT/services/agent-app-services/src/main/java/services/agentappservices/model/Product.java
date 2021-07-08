@@ -17,7 +17,8 @@ public class Product {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String picture;
+    private int pictureId;
     private int price;
     private int count;
+    private int agentId; //kom agentu pripada proizvod!!!
 }
