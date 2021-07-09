@@ -13,7 +13,7 @@ public class FileSystemRepository {
     //String RESOURCES_DIR = FileSystemRepository.class.getResource("/").getPath();
     //String RESOURCES_DIR = "C:/Users/PC/Desktop/nistagram/XML_PROJEKAT/pictures/";
     //String RESOURCES_DIR = "./pictures/";
-    String RESOURCES_DIR = "./front/xmlFrontend/src/assets/pictures/";
+    String RESOURCES_DIR = "/assets/pictures/";
 
     public String save(byte[] content, String imageName) throws Exception {
         Path newFile = Paths.get(RESOURCES_DIR + new Date().getTime() + "-" + imageName);

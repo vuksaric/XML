@@ -9,7 +9,7 @@ import services.profileservices.service.IVerificationRequestService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/verificationRequest")
+@RequestMapping("/profile/verificationRequest")
 public class VerificationRequestController {
     private final IVerificationRequestService verificationRequestService;
 

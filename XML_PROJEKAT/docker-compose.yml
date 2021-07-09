@@ -6,6 +6,8 @@ services:
       - '4200:4200' # Port mapping
     command: >
       bash -c "npm install && ng serve --host 0.0.0.0 --port 4200"
+    volumes:
+      - ./front/xmlFrontend/src/assets/pictures:/assets/pictures
 
   auth-services:
     image: 'auth'
@@ -18,6 +20,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_auth
       - SPRING_DATASOURCE_USERNAME=xml
       - SPRING_DATASOURCE_PASSWORD=0000
+    ports:
+      - 8090:8090
 
   agent-app-services:
     image: 'agent-app'
@@ -30,6 +34,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML
       - SPRING_DATASOURCE_USERNAME=xml
       - SPRING_DATASOURCE_PASSWORD=0000
+    ports:
+      - 8150:8150
 
   campaign-services:
     image: 'campaign'
@@ -42,6 +48,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_campaign
       - SPRING_DATASOURCE_USERNAME=xml
       - SPRING_DATASOURCE_PASSWORD=0000
+    ports:
+      - 8100:8100
 
   notification-services:
     image: 'notification'
@@ -54,6 +62,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_notification
       - SPRING_DATASOURCE_USERNAME=xml
       - SPRING_DATASOURCE_PASSWORD=0000
+    ports:
+      - 8110:8110
 
   picture-video-services:
     image: 'picture-video'
@@ -66,6 +76,10 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_picture_video
       - SPRING_DATASOURCE_USERNAME=xml
       - SPRING_DATASOURCE_PASSWORD=0000
+    ports:
+      - 8120:8120
+    volumes:
+      - ./front/xmlFrontend/src/assets/pictures:/assets/pictures
 
   post-services:
     image: 'post'
@@ -78,6 +92,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_post
       - SPRING_DATASOURCE_USERNAME=xml
       - SPRING_DATASOURCE_PASSWORD=0000
+    ports:
+      - 8130:8130
 
   profile-services:
     image: 'profile'
@@ -90,6 +106,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_profile
       - SPRING_DATASOURCE_USERNAME=xml
       - SPRING_DATASOURCE_PASSWORD=0000
+    ports:
+      - 8140:8140
 
   db:
     image: 'postgres:latest'
@@ -104,3 +122,10 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+  gateway:
+    build: ./services/Gateway
+    container_name: gateway
+    ports:
+      - 80:80
+    depends_on:
+      - profile-services
