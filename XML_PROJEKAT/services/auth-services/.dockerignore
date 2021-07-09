@@ -1,3 +1,7 @@
 Dockerfile
 .dockerignore
 source.txt
+target
+.idea
+*.iml
+.mvn

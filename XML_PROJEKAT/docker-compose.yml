@@ -1,90 +1,58 @@
-version: "3.8"
 services:
-
-  gateway:
-    image: nginx:1.19.8-alpine
-#    build:
-#      context: ./services/Gateway
-#      dockerfile: Dockerfile
+  angular-service: # The name of the service
+    container_name: angularcontainer  # Container name
+    build: ./front/xmlFrontend # Location of our Dockerfile
     ports:
-      - 8080:8080
-    networks:
-      - backend
-    volumes:
-      - ./services/Gateway/nginx.conf:/etc/nginx/nginx.conf
-      - ./services/Gateway/api_gateway.conf:/etc/nginx/api_gateway.conf
-
-  agent-app-services:
-    image: agent-app-services
-    build:
-      context: ./services/agent-app-services
-        dockerfile: Dockerfile
-      ports:
-        - 9000:8080
-      networks:
-        - backend
-
-  campaign-services:
-    image: campaign-services
-    build:
-      context: ./services/campaign-services
-        dockerfile: Dockerfile
-      ports:
-        - 9000:8080
-      networks:
-        - backend
-
-  notification-services:
-    image: notification-services
-    build:
-      context: ./services/notification-services
-        dockerfile: Dockerfile
-      ports:
-        - 9000:8080
-      networks:
-        - backend
-
-  picture-video-services:
-    image: picture-video-services
-    build:
-      context: ./services/picture-video-services
-        dockerfile: Dockerfile
-      ports:
-        - 9000:8080
-      networks:
-        - backend
+      - '4200:4200' # Port mapping
+    command: >
+      bash -c "npm install && ng serve --host 0.0.0.0 --port 4200"
 
   auth-services:
-    image: auth-services
+    image: 'auth'
     build:
       context: ./services/auth-services
-      dockerfile: Dockerfile
-    ports:
-      - 9000:8080
-    networks:
-      - backend
+    container_name: auth
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_auth
+      - SPRING_DATASOURCE_USERNAME=xml
+      - SPRING_DATASOURCE_PASSWORD=0000
 
-  profile-services:
-    image: profile-services
+  campaign-services:
+    image: 'campaign'
     build:
-      context: ./services/profile-services
-      dockerfile: Dockerfile
-    ports:
-      - 9001:8080
-    networks:
-      - backend
+      context: ./services/campaign-services
+    container_name: campaign
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_campaign
+      - SPRING_DATASOURCE_USERNAME=xml
+      - SPRING_DATASOURCE_PASSWORD=0000
 
-  post-services:
-    image: post-services
+  notification-services:
+    image: 'notification'
     build:
-      context: ./services/post-services
-      dockerfile: Dockerfile
-    ports:
-      - 9002:8080
-    networks:
-      - backend
+      context: ./services/notification-services
+    container_name: notification
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_notification
+      - SPRING_DATASOURCE_USERNAME=xml
+      - SPRING_DATASOURCE_PASSWORD=0000
 
-networks:
-  backend:
-    name: networks_name
-    driver: bridge
+  db:
+    image: 'postgres:latest'
+    restart: always
+    container_name: db
+    ports:
+      - 5433:5432
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

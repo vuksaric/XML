@@ -17,9 +17,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="auth-services" target="11" />
-      <module name="campaign-services" target="11" />
-      <module name="notification-services" target="11" />
+      <module name="auth-services" target="1.8" />
+      <module name="campaign-services" target="1.8" />
+      <module name="notification-services" target="1.8" />
       <module name="picture-video-services" target="11" />
       <module name="post-services" target="11" />
       <module name="profile-services" target="11" />
