@@ -6,5 +6,5 @@ RUN mvn package -DskipTests
 FROM openjdk:8-jdk-alpine AS appServerRuntime
 WORKDIR /auth
 COPY --from=appServerBuild /usr/src/server/target/auth-services.jar ./
-EXPOSE 8080
+EXPOSE 8090
 CMD java -jar auth-services.jar

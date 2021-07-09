@@ -19,6 +19,18 @@ services:
       - SPRING_DATASOURCE_USERNAME=xml
       - SPRING_DATASOURCE_PASSWORD=0000
 
+  agent-app-services:
+    image: 'agent-app'
+    build:
+      context: ./services/agent-app-services
+    container_name: agent-app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML
+      - SPRING_DATASOURCE_USERNAME=xml
+      - SPRING_DATASOURCE_PASSWORD=0000
+
   campaign-services:
     image: 'campaign'
     build:
@@ -40,6 +52,42 @@ services:
       - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_notification
+      - SPRING_DATASOURCE_USERNAME=xml
+      - SPRING_DATASOURCE_PASSWORD=0000
+
+  picture-video-services:
+    image: 'picture-video'
+    build:
+      context: ./services/picture-video-services
+    container_name: picture-video
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_picture_video
+      - SPRING_DATASOURCE_USERNAME=xml
+      - SPRING_DATASOURCE_PASSWORD=0000
+
+  post-services:
+    image: 'post'
+    build:
+      context: ./services/post-services
+    container_name: post
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_post
+      - SPRING_DATASOURCE_USERNAME=xml
+      - SPRING_DATASOURCE_PASSWORD=0000
+
+  profile-services:
+    image: 'profile'
+    build:
+      context: ./services/profile-services
+    container_name: profile
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/XML_profile
       - SPRING_DATASOURCE_USERNAME=xml
       - SPRING_DATASOURCE_PASSWORD=0000
 

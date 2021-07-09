@@ -14,7 +14,8 @@
 	<name>post-services</name>
 	<description>XML-project-post-service</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
+		<app.name>post-services</app.name>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -73,6 +74,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>${app.name}</finalName>
 	</build>
 
 </project>

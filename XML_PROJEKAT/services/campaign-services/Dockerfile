@@ -6,5 +6,5 @@ RUN mvn package -DskipTests
 FROM openjdk:8-jdk-alpine AS appServerRuntime
 WORKDIR /campaign
 COPY --from=appServerBuild /usr/src/server/target/campaign-services.jar ./
-EXPOSE 8080
+EXPOSE 8100
 CMD java -jar campaign-services.jar

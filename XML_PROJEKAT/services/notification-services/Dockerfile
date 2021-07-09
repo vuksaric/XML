@@ -6,5 +6,5 @@ RUN mvn package -DskipTests
 FROM openjdk:8-jdk-alpine AS appServerRuntime
 WORKDIR /notification
 COPY --from=appServerBuild /usr/src/server/target/notification-services.jar ./
-EXPOSE 8080
+EXPOSE 8110
 CMD java -jar notification-services.jar
