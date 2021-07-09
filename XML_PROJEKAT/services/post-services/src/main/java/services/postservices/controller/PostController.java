@@ -3,10 +3,7 @@ package services.postservices.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import services.postservices.dto.CommentRequest;
-import services.postservices.dto.FeedPostRequest;
-import services.postservices.dto.PostResponse;
-import services.postservices.dto.ProfilePostRequest;
+import services.postservices.dto.*;
 import services.postservices.model.Post;
 import services.postservices.service.IPostService;
 
@@ -70,7 +67,8 @@ public class PostController {
     }
 
     @GetMapping("/likedByProfile/{userId}")
-    public List<PostResponse> likedByProfile(@PathVariable int userId){
+    public List<PostResponse> likedByProfile(@PathVariable int userId)
+    {
         return postService.getLikedByProfile(userId);
     }
 
@@ -86,12 +84,14 @@ public class PostController {
     }
 
     @GetMapping("/getTagsPost/{username}")
-    public List<PostResponse> getTagsPost(@PathVariable String username){
+    public List<PostResponse> getTagsPost(@PathVariable String username)
+    {
         return postService.getTagsPost(username);
     }
 
     @GetMapping("/getLocations/{userInfoId}")
-    public List<String> getLocations(@PathVariable int userInfoId){
+    public List<String> getLocations(@PathVariable int userInfoId)
+    {
         return postService.getLocations(userInfoId);
     }
 
@@ -101,8 +101,20 @@ public class PostController {
 
     }
     @PutMapping("/remove/{id}/{username}")
-    public void remove(@PathVariable int id, @PathVariable String username){
+    public void remove(@PathVariable int id, @PathVariable String username)
+    {
          postService.removePost(id,username);
+    }
+
+    @PostMapping("/newPostCommercial")
+    public Integer newPostCommercial(@RequestParam("file") MultipartFile[] multipartFile, @RequestParam("caption") String caption, @RequestParam("userInfoId") String userInfoId, @RequestParam("tags") List<String> tags) throws Exception{
+        return postService.newPostCommercial(multipartFile, caption, tags, userInfoId);
+    }
+
+    @PostMapping("/getPostCommercials")
+    public List<PostResponse> getPostCommercials(@RequestBody List<CampaignRequest> requests){
+        return postService.getPostCommercials(requests);
+
     }
 
 }

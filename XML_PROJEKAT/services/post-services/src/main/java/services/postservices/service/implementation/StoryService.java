@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import services.postservices.client.PictureVideoClient;
 import services.postservices.client.ProfileClient;
 import services.postservices.dto.*;
+import services.postservices.model.Post;
 import services.postservices.model.PostInfo;
 import services.postservices.model.Story;
 import services.postservices.repository.StoryRepository;
@@ -126,6 +127,57 @@ public class StoryService implements IStoryService {
                 storyResponse.setUsername(request.getUsername());
                 result.add(storyResponse);
             }
+        }
+
+        return result;
+    }
+
+    @Override
+    public int newStoryCommercial(MultipartFile[] multipartFile, String caption, List<String> tags) throws IOException {
+        Story story = new Story();
+        List<Integer> ids = new ArrayList<>();
+
+        for(MultipartFile file : multipartFile){
+            int contentId;
+            if(file.getContentType().contains("image"))
+                contentId = pictureVideoClient.uploadImage(new ImageDTO(file.getOriginalFilename(),file.getBytes(), true));
+            else
+                contentId = pictureVideoClient.uploadImage(new ImageDTO(file.getOriginalFilename(),file.getBytes(), false));
+            ids.add(contentId);
+        }
+        List<Integer> taggedIds = profileClient.findByUsername(tags);
+        PostInfo postInfo = new PostInfo();
+        postInfo.setPictureIds(ids);
+        postInfo.setCaption(caption);
+        postInfo.setDate(LocalDate.now());
+        postInfo.setTaggedIds(taggedIds);
+        story.setPostInfo(postInfo);
+        story.setHighlight(false);
+        story.setCloseFriends(false);
+        story.setTimeStamp(LocalDateTime.now());
+
+        Story new_story = storyRepository.save(story);
+        return new_story.getId();
+    }
+
+    @Override
+    public List<StoryResponse> getStoryCommercials(List<CampaignRequest> requests) {
+        List<StoryResponse> result = new ArrayList<>();
+        for(CampaignRequest request : requests)
+        {
+            Story story = storyRepository.findOneById(request.getPostId());
+            StoryResponse storyResponse = new StoryResponse(story);
+            storyResponse.setUsername(request.getUsername());
+            for(Integer idPicture : story.getPostInfo().getPictureIds())
+            {
+                boolean image = pictureVideoClient.getImageById(idPicture);
+                String src = pictureVideoClient.getLocationById(idPicture);
+                PictureDTO pictureDTO = new PictureDTO(src,image);
+                storyResponse.getContent().add(pictureDTO);
+            }
+            storyResponse.setCommercial(true);
+            storyResponse.setWebsite(request.getWebsite());
+            result.add(storyResponse);
         }
 
         return result;

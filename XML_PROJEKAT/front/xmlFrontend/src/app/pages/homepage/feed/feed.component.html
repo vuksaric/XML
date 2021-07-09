@@ -60,6 +60,9 @@
   </div>
   <br>
   <p>{{data.post.caption}}</p>
+  <div *ngIf = "data.post.commercial">
+    <a href = "{{data.post.website}}">{{data.post.website}}</a>
+  </div>
   <br>
 		<p>Tagged profiles</p>
 		<div *ngFor = "let tag of data.post.tagged">
@@ -105,7 +108,9 @@
 				<div *ngFor = "let data of stories">
 					<div style.display = {{data.display}}>
             <p>{{data.story.username}}</p>
-						<div class="numbertext">{{data.story.location}}</div>
+            <br>
+            <br>
+						<div>{{data.story.location}}</div>
 						<div *ngFor = "let location of data.story.content">
 							<img *ngIf = "location.image" src={{location.src}} style="width:100%">
 							<div *ngIf = "!location.image" class="video">
@@ -116,6 +121,9 @@
 							</div>
 						</div>
 						<div class="text">{{data.story.caption}}</div>
+            <div *ngIf = "data.story.commercial">
+              <a href = "{{data.story.website}}">{{data.story.website}}</a>
+            </div>
 					</div>
 				</div>
 			</div>

@@ -34,4 +34,16 @@ public class StoryController {
     public List<StoryResponse> getStoriesFeed(@RequestBody List<FeedStoryRequest> requests) {
         return storyService.getStoriesFeed(requests);
     }
+
+    @PostMapping("/newStoryCommercial")
+    public Integer newStoryCommercial(@RequestParam("file") MultipartFile[] multipartFile, @RequestParam("caption") String caption, @RequestParam("tags") List<String> tags) throws Exception{
+        return storyService.newStoryCommercial(multipartFile, caption,tags);
+    }
+
+    @PostMapping("/getStoryCommercials")
+    public List<StoryResponse> getStoryCommercials(@RequestBody List<CampaignRequest> requests){
+        return storyService.getStoryCommercials(requests);
+
+    }
+
 }

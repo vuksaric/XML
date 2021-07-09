@@ -81,4 +81,9 @@ export class HomepageComponent implements OnInit {
     this.router.navigate(['homepage/notification-settings']);
   }
 
+  myProfile()
+  {
+    this.router.navigate(['my-profile']);
+  }
+
 }

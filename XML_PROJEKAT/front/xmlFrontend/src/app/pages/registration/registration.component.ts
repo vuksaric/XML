@@ -93,7 +93,7 @@ export class RegistrationComponent implements OnInit {
                         email : this.email,
                         password : this.password,
                         phone : this.selectedValuePhonePrefix + this.phone,
-                        birthday: this.dateOfBirth,
+                        dateOfBirth: this.dateOfBirth,
                         gender: this.selectedValueGender,   
                         //userType: "User" //moze biti i systemAdmin
                       }

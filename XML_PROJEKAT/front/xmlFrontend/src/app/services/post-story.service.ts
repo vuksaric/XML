@@ -17,6 +17,14 @@ export class PostStoryService {
     return this.http.post(post_url+'/create',body);
   }
 
+  public createPostCommercial(body: FormData): Observable<any>{
+    return this.http.post(post_url+'/newPostCommercial',body);
+  }
+
+  public createStoryCommercial(body: FormData): Observable<any>{
+    return this.http.post(story_url+'/newStoryCommercial',body);
+  }
+
   public creatStory(body: FormData): Observable<any>{
     return this.http.post(story_url+'/create',body);
   }
@@ -93,6 +101,14 @@ export class PostStoryService {
 
   public getStoriesFeed(body: any): Observable<any>{
     return this.http.post(story_url+`/getStoriesFeed`,body);
+  }
+
+  public getPostCommercials(body:any): Observable<any>{
+    return this.http.post(post_url+`/getPostCommercials`,body);
+  }
+
+  public getStoryCommercials(body:any): Observable<any>{
+    return this.http.post(story_url+`/getStoryCommercials`,body);
   }
 
 }

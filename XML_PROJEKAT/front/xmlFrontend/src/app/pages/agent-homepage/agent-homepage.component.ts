@@ -81,4 +81,19 @@ export class AgentHomepageComponent implements OnInit {
     this.router.navigate(['agent/notification-settings']);
   }
 
+  myProfile()
+  {
+    this.router.navigate(['my-profile']);
+  }
+
+  newCampaign()
+  {
+    this.router.navigate(['agent/new-campaign']);
+  }
+
+  viewCampaign()
+  {
+    this.router.navigate(['agent/view-campaign']);
+  }
+
 }

@@ -4,6 +4,10 @@
         <ul nz-menu nzTheme="dark" nzMode="inline">
           <li nz-submenu nzTitle="Profile" nzIcon="user">
             <ul>
+              <li nz-menu-item (click)="myProfile()">
+                <i nz-icon nzType="user"></i>
+                <span>My profile</span>
+              </li>
               <li nz-menu-item (click)="Profile()">
               <i nz-icon nzType="user"></i>
               <span>View profile</span>
@@ -54,6 +58,7 @@
             <i nz-icon nzType="logout"></i>
             <span>Logout</span>
         </li>
+
         </ul>
     </nz-sider>
     <nz-layout>

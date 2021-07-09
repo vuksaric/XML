@@ -2,10 +2,7 @@ package services.postservices.service;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
-import services.postservices.dto.CommentRequest;
-import services.postservices.dto.FeedPostRequest;
-import services.postservices.dto.PostResponse;
-import services.postservices.dto.ProfilePostRequest;
+import services.postservices.dto.*;
 import services.postservices.model.Comment;
 import services.postservices.model.Post;
 
@@ -30,4 +27,6 @@ public interface IPostService {
     List<String> getLocations(int userInfoId);
     List<PostResponse> getPostsByLocation(int userInfoId,String location);
     void removePost(int id, String username);
+    int newPostCommercial(MultipartFile[] multipartFile, String caption, List<String> tags, String userInfoId) throws IOException;
+    List<PostResponse> getPostCommercials(List<CampaignRequest> requests);
 }

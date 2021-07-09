@@ -4,20 +4,24 @@
         <ul nz-menu nzTheme="dark" nzMode="inline">
           <li nz-submenu nzTitle="Profile" nzIcon="user">
             <ul>
+                <li nz-menu-item (click)="myProfile()">
+                    <i nz-icon nzType="user"></i>
+                    <span>My profile</span>
+                </li>
               <li nz-menu-item (click)="Profile()">
               <i nz-icon nzType="user"></i>
               <span>View profile</span>
               </li>
               <li nz-menu-item (click)="NewPost()">
-                <i nz-icon nzType="user"></i>
+                <i nz-icon nzType="file-add"></i>
                 <span>New post</span>
               </li>
               <li nz-menu-item (click)="NewStory()">
-                <i nz-icon nzType="user"></i>
+                <i nz-icon nzType="file-add"></i>
                 <span>New story</span>
               </li>
               <li nz-menu-item (click)="NewAlbum()">
-                <i nz-icon nzType="user"></i>
+                <i nz-icon nzType="file-add"></i>
                 <span>New album</span>
               </li>
               <li nz-menu-item (click)="NewVerificationRequest()">
@@ -50,10 +54,19 @@
             <i nz-icon nzType="search"></i>
             <span>Search</span>
         </li>
+        <li nz-menu-item (click)="newCampaign()">
+          <i nz-icon nzType="file-add"></i>
+          <span>New campaign</span>
+        </li>
+        <li nz-menu-item (click)="viewCampaign()">
+          <i nz-icon nzType="file"></i>
+          <span>View campaign</span>
+        </li>
         <li nz-menu-item (click)="logout()">
             <i nz-icon nzType="logout"></i>
             <span>Logout</span>
         </li>
+
         </ul>
     </nz-sider>
     <nz-layout>

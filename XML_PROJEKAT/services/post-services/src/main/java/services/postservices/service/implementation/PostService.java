@@ -323,4 +323,55 @@ public class PostService implements IPostService {
         profileClient.removePost(id,username);
         postRepository.delete(post);
     }
+
+    @Override
+    public int newPostCommercial(MultipartFile[] multipartFile, String caption, List<String> tags, String userInfoId) throws IOException {
+        Post p = new Post();
+        List<Integer> ids = new ArrayList<>();
+
+        for(MultipartFile file : multipartFile){
+            int contentId;
+            if(file.getContentType().contains("image"))
+                contentId = pictureVideoClient.uploadImage(new ImageDTO(file.getOriginalFilename(),file.getBytes(), true));
+            else
+                contentId = pictureVideoClient.uploadImage(new ImageDTO(file.getOriginalFilename(),file.getBytes(), false));
+            ids.add(contentId);
+        }
+
+        List<Integer> taggedIds = profileClient.findByUsername(tags);
+
+        PostInfo postInfo = new PostInfo();
+        postInfo.setPictureIds(ids);
+        postInfo.setCaption(caption);
+        postInfo.setDate(LocalDate.now());
+        postInfo.setTaggedIds(taggedIds);
+        p.setPostInfo(postInfo);
+        Post new_post = postRepository.save(p);
+        int userId = Integer.parseInt(userInfoId);
+        profileClient.addPost(new_post.getId(), userId);
+        return new_post.getId();
+    }
+
+    @Override
+    public List<PostResponse> getPostCommercials(List<CampaignRequest> requests) {
+        List<PostResponse> result = new ArrayList<>();
+        for(CampaignRequest request : requests)
+        {
+            Post post = postRepository.findOneById(request.getPostId());
+            PostResponse postResponse = new PostResponse(post);
+            postResponse.setUsername(request.getUsername());
+            for(Integer idPicture : post.getPostInfo().getPictureIds())
+            {
+                boolean image = pictureVideoClient.getImageById(idPicture);
+                String src = pictureVideoClient.getLocationById(idPicture);
+                PictureDTO pictureDTO = new PictureDTO(src,image);
+                postResponse.getContent().add(pictureDTO);
+            }
+            postResponse.setCommercial(true);
+            postResponse.setWebsite(request.getWebsite());
+            result.add(postResponse);
+        }
+
+        return result;
+    }
 }

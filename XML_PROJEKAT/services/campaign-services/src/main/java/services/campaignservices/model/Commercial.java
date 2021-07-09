@@ -18,7 +18,6 @@ public class Commercial {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int postId;
-    private Boolean isItPost; // true => post; false => story
     private String link;
     private int clickCount;
 }

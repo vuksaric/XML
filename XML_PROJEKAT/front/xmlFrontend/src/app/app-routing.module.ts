@@ -5,11 +5,14 @@ import { ViewRegistrationRequestsComponent } from './pages/admin-homepage/view-r
 import { ViewReportRequestComponent } from './pages/admin-homepage/view-report-request/view-report-request.component';
 import { ViewVerificationReqComponent } from './pages/admin-homepage/view-verification-req/view-verification-req.component';
 import { AgentHomepageComponent } from './pages/agent-homepage/agent-homepage.component';
+import { NewCampaignComponent } from './pages/agent-homepage/new-campaign/new-campaign.component';
+import { ViewCampaignComponent } from './pages/agent-homepage/view-campaign/view-campaign.component';
 import { AgentRegistrationComponent } from './pages/agent-registration/agent-registration.component';
 import { CloseFriendsComponent } from './pages/homepage/close-friends/close-friends.component';
 import { FeedComponent } from './pages/homepage/feed/feed.component';
 import { FollowRequestsComponent } from './pages/homepage/follow-requests/follow-requests.component';
 import { HomepageComponent } from './pages/homepage/homepage.component';
+import { MyProfileComponent } from './pages/homepage/my-profile/my-profile.component';
 import { NewAlbumComponent } from './pages/homepage/new-album/new-album.component';
 import { NewPostComponent } from './pages/homepage/new-post/new-post.component';
 import { NewStoryComponent } from './pages/homepage/new-story/new-story.component';
@@ -54,7 +57,9 @@ const routes: Routes = [
     { path: 'view-liked',component:ViewLikedComponent},
     { path: 'view-favourites',component:ViewFavouritesComponent},
     { path: 'close-friends',component:CloseFriendsComponent},
-    { path: 'notification-settings',component:NotificationSettingsComponent}
+    { path: 'notification-settings',component:NotificationSettingsComponent},
+    { path: 'new-campaign',component:NewCampaignComponent},
+    { path: 'view-campaign',component:ViewCampaignComponent}
   ]}, 
   { path: 'admin', component:AdminHomepageComponent, children:[
     { path: 'viewVerifReq', component:ViewVerificationReqComponent},
@@ -63,6 +68,7 @@ const routes: Routes = [
     { path: 'view-registration-requests', component: ViewRegistrationRequestsComponent},
   ]},
   { path: 'view-profile/:username', component: ViewProfileComponent},
+  { path: 'my-profile', component: MyProfileComponent},
 
 ];
 
