@@ -5,6 +5,7 @@ import { ViewProductsComponent } from './pages/agent-homepage/view-products/view
 import { CreateProductComponent } from './pages/agent-homepage/create-product/create-product.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
+import { ViewProductComponent } from './pages/view-product/view-product.component';
 
 const routes: Routes = [
   { path: '', pathMatch:'full', redirectTo:'login'},
@@ -14,6 +15,7 @@ const routes: Routes = [
     { path: 'createProduct', component: CreateProductComponent},
     { path: 'viewProducts', component: ViewProductsComponent}
   ]},
+  { path: 'viewProduct/:id', component: ViewProductComponent},
 ];
 
 @NgModule({

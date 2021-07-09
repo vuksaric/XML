@@ -18,6 +18,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { AgentHomepageComponent } from './pages/agent-homepage/agent-homepage.component';
 import { ViewProductsComponent } from './pages/agent-homepage/view-products/view-products.component';
 import { CreateProductComponent } from './pages/agent-homepage/create-product/create-product.component';
+import { ViewProductComponent } from './pages/view-product/view-product.component';
+
 
 registerLocaleData(en);
 
@@ -28,7 +30,9 @@ registerLocaleData(en);
     LoginComponent,
     AgentHomepageComponent,
     ViewProductsComponent,
-    CreateProductComponent
+    CreateProductComponent,
+    ViewProductComponent,
+   
   ],
   imports: [
     BrowserModule,

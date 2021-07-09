@@ -1,0 +1,36 @@
+<div class="center-screen">
+    <nz-card nzHoverable  style="width:400px" [nzCover]="coverTemplate">
+        <nz-card-meta [nzTitle]="name" [nzDescription]="price"></nz-card-meta>
+        <br>
+        
+        <button nz-button class="button" nzType="primary" nzSize="small" nzShape="round" (click)="login()">
+            <i nz-icon nzType="shopping-cart" nzTheme="outline"></i>
+            Buy product
+        </button>
+      </nz-card>
+      <ng-template #coverTemplate>
+        <img alt="example" [src]="imagePath" />
+      </ng-template>
+
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Login" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+        <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="handleOk()">
+            <nz-form-item>
+              <nz-form-control nzErrorTip="Please input your username!">
+                <nz-input-group nzPrefixIcon="user">
+                  <input type="text" nz-input formControlName="username" placeholder="Username" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control nzErrorTip="Please input your Password!">
+                <nz-input-group nzPrefixIcon="lock">
+                  <input type="password" nz-input formControlName="password" placeholder="Password" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </form>        
+    </ng-container>
+  </nz-modal>

@@ -19,4 +19,23 @@ export class ProductService {
   public viewProducts(agentId: any) : Observable<any>{
     return this.http.get(product_url+`/getByAgent/${agentId}`);
   }
+  public editProduct(body: any): Observable<any>{
+    return this.http.put(product_url+`/edit`,body);
+  }
+
+  public editProductPicture(body: any): Observable<any>{
+    return this.http.put(product_url+`/editPicture`,body);
+  }
+
+  public deleteProduct(productId : number): Observable<any>{
+    return this.http.delete(product_url+`/delete/${productId}`);
+  }
+
+  public viewProduct(productId: any) : Observable<any>{
+    return this.http.get(product_url+`/getById/${productId}`);
+  }
+
+  public buyProduct(productId: number): Observable<any>{
+    return this.http.put(product_url+`/buyProduct/${productId}`,null);
+  }
 }

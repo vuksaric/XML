@@ -1,10 +1,18 @@
 <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>
+      <span>Name</span>
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input quantity for product!">
+      <input nz-input formControlName="name" />
+    </nz-form-control>
+  </nz-form-item>
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="price" nzRequired>
         <span>Price</span>
       </nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input price for product!">
-        <nz-input-number [(ngModel)]="price" [nzMin]="1" [nzMax]="1000" [nzStep]="1"></nz-input-number>
+        <nz-input-number formControlName="price" [nzMin]="1" [nzMax]="1000" [nzStep]="1"></nz-input-number>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -12,7 +20,7 @@
         <span>Quantity</span>
       </nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input quantity for product!">
-        <nz-input-number [(ngModel)]="quantity" [nzMin]="1" [nzMax]="1000" [nzStep]="1"></nz-input-number>
+        <nz-input-number formControlName="quantity" [nzMin]="1" [nzMax]="1000" [nzStep]="1"></nz-input-number>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
