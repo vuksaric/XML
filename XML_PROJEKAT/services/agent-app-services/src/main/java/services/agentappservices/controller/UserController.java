@@ -11,7 +11,7 @@ import services.agentappservices.model.dto.RegistrationDTO;
 import services.agentappservices.service.IUserService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/agent-app/auth")
 public class UserController {
 
     private final IUserService userService;

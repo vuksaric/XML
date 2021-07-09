@@ -9,7 +9,7 @@ import services.agentappservices.model.dto.RegistrationDTO;
 import services.agentappservices.service.IProductService;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/agent-app/product")
 public class ProductController {
     private final IProductService productService;
 

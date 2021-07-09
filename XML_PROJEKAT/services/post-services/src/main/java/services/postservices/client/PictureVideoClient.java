@@ -9,10 +9,10 @@ import services.postservices.dto.ImageDTO;
 
 @FeignClient(name="pictureVideo",url="${app.pictureVideo.url}")
 public interface PictureVideoClient {
-    @PostMapping("picture-video/upload")
+    @PostMapping("/picture-video/upload")
     Integer uploadImage(@RequestBody ImageDTO imageDTO);
-    @PostMapping("picture-video/getById")
+    @PostMapping("/picture-video/getById")
     String getLocationById(@RequestBody int id);
-    @PostMapping("image/getImageById")
+    @PostMapping("/picture-video/getImageById")
     boolean getImageById(@RequestBody int id);
 }

@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  auth_url: 'http://localhost:8150/auth',
-  product_url: 'http://localhost:8150/product',
+  auth_url: 'http://localhost/agent-app/auth',
+  product_url: 'http://localhost/agent-app/product',
 };
 
 /*

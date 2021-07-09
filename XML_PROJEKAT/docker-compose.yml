@@ -9,6 +9,16 @@ services:
     volumes:
       - ./front/xmlFrontend/src/assets/pictures:/assets/pictures
 
+  agent-front-service: # The name of the service
+    container_name: agentFront  # Container name
+    build: ./front/agentApp # Location of our Dockerfile
+    ports:
+      - '4300:4300' # Port mapping
+    command: >
+      bash -c "npm install && ng serve --host 0.0.0.0 --port 4300"
+    volumes:
+      - ./front/agentApp/src/assets/pictures:/assets/pictures
+
   auth-services:
     image: 'auth'
     build:

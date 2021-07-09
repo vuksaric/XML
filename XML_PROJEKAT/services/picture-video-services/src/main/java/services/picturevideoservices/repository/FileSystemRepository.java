@@ -20,8 +20,8 @@ public class FileSystemRepository {
         Files.createDirectories(newFile.getParent());
 
         Files.write(newFile, content);
-        String[] relativePath = newFile.toAbsolutePath().toString().split("src");
-        return relativePath[1];
+        String relativePath = newFile.toAbsolutePath().toString();
+        return relativePath;
     }
 
 

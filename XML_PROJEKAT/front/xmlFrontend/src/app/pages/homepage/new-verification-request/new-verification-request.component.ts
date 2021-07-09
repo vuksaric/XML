@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { VerificationRequestServiceService } from 'src/app/services/verification-request-service.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-new-verification-request',
@@ -25,7 +26,7 @@ export class NewVerificationRequestComponent implements OnInit {
   decoded_token : any;
 
 
-  constructor(private fb: FormBuilder, private verificationRequestService : VerificationRequestServiceService,
+  constructor(private fb: FormBuilder, private verificationRequestService : VerificationRequestServiceService, private toastr : ToastrService,
     private profileService : ProfileService, private authService : AuthService) { }
 
   ngOnInit(): void {
@@ -81,7 +82,8 @@ export class NewVerificationRequestComponent implements OnInit {
         // Or errors :-(
         error => console.log(error),
         // tell us if it's finished
-        () => { console.log("completed") }
+        () => { console.log("completed")
+        this.toastr.success("Verification request successfully sent!");}
       );
       
     }
