@@ -37,7 +37,7 @@ export class AdminHomepageComponent implements OnInit {
   }
 
   ViewVerificationRequest(){
-    this.router.navigate(['admin/viewVerifReq']);
+    this.router.navigate(['agent/createProduct']);
   }
 
   ViewReportRequest(){

@@ -1,0 +1,39 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>
+      <span>Name</span>
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input quantity for product!">
+      <input nz-input formControlName="name" />
+    </nz-form-control>
+  </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="price" nzRequired>
+        <span>Price</span>
+      </nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input price for product!">
+        <nz-input-number formControlName="price" [nzMin]="1" [nzMax]="1000" [nzStep]="1"></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="quantity" nzRequired>
+        <span>Quantity</span>
+      </nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input quantity for product!">
+        <nz-input-number formControlName="quantity" [nzMin]="1" [nzMax]="1000" [nzStep]="1"></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="file" nzRequired>
+            <span>Picture</span>
+          </nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input product picture!">
+            <input ng-model="file_upload" name="file" type="file" id="file" (change)="fileChange($event)" #fileInput formControlName="file" />
+          </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nz-row class="register-area">
+      <nz-form-control [nzSpan]="14" [nzOffset]="6">
+        <button nz-button nzType="primary" >Create</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>

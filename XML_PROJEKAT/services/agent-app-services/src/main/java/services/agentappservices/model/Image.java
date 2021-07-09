@@ -6,28 +6,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Product {
+public class Image {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int pictureId;
-    private int price;
-    private int count;
-    private int agentId; //kom agentu pripada proizvod!!!
+    @Transient
+    @Lob
+    private byte[] content;
     private String name;
+    private String location;
 
-    public Product(int pictureId, int price, int quantity, int agentId,String name){
-        this.agentId=agentId;
-        this.count=quantity;
-        this.price=price;
-        this.pictureId=pictureId;
-        this.name = name;
+    public Image(String imageName, String location) {
+        this.name = imageName;
+        this.location = location;
     }
 }

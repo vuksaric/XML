@@ -1,0 +1,77 @@
+<nz-table #basicTable [nzData]="listOfData">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.id }}</td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.price }}</td>
+        <td>{{ data.quantity }}</td>
+        <td>
+          <a (click)="viewPicture(data.image)">View picture</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a (click)="edit(data)">Edit</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a (click)="editPicture(data)">Edit Picture</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a  (click)="showDeleteConfirm(data)">Delete</a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+        <img class="img" id="img" [src]="imagePath" >
+    </ng-container>
+  </nz-modal>
+  <nz-modal [(nzVisible)]="isVisibleEdit" nzTitle="The first Modal" (nzOnCancel)="handleCancelEdit()" (nzOnOk)="handleOkEdit()">
+    <ng-container *nzModalContent>
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="handleOkEdit()">
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>
+              <span>Name</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input quantity for product!">
+              <input nz-input formControlName="name" />
+            </nz-form-control>
+          </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="price" nzRequired>
+                <span>Price</span>
+              </nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input price for product!">
+                <nz-input-number formControlName="price" [nzMin]="1" [nzMax]="1000" [nzStep]="1"></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="quantity" nzRequired>
+                <span>Quantity</span>
+              </nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input quantity for product!">
+                <nz-input-number formControlName="quantity" [nzMin]="1" [nzMax]="1000" [nzStep]="1"></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </form>  
+    </ng-container>
+  </nz-modal>
+  <nz-modal [(nzVisible)]="isVisibleEditPicture" nzTitle="The first Modal" (nzOnCancel)="handleCancelEditPicture()" (nzOnOk)="handleOkEditPicture()">
+    <ng-container *nzModalContent>
+        <form nz-form [formGroup]="validateFormPicture" (ngSubmit)="handleOkEditPicture()">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="file" nzRequired>
+                    <span>Picture</span>
+                  </nz-form-label>
+                  <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input product picture!">
+                    <input ng-model="file_upload" name="file" type="file" id="file" (change)="fileChange($event)" #fileInput formControlName="file" />
+                  </nz-form-control>
+            </nz-form-item>
+          </form>  
+    </ng-container>
+  </nz-modal>
