@@ -2,11 +2,8 @@ package services.profileservices.service.implementation;
 
 import org.springframework.stereotype.Service;
 import services.profileservices.client.AuthClient;
-import services.profileservices.dto.FavouriteRequest;
-import services.profileservices.dto.FavouriteResponse;
-import services.profileservices.dto.ProfileDTO;
+import services.profileservices.dto.*;
 import services.profileservices.client.NotificationClient;
-import services.profileservices.dto.ViewProfileDTO;
 import services.profileservices.model.FavouriteCollection;
 import services.profileservices.model.Profile;
 import services.profileservices.model.ProfileCategory;
@@ -38,11 +35,7 @@ public class ProfileService implements IProfileService {
         profile.setIsPrivate(false);
         profile.setCanBeMessaged(true);
         profile.setCanBeTagged(true);
-        profile.setCanBeMessagedPrivate(true);
         profile.setNotifyProfileActivity(true);
-        profile.setNotifyComment(true);
-        profile.setNotifyPost(true);
-        profile.setNotifyStory(true);
         profile.setPostIds(new ArrayList<>());
         profile.setStoryIds(new ArrayList<>());
         profile.setFollowing(new ArrayList<>());
@@ -172,11 +165,7 @@ public class ProfileService implements IProfileService {
         profileDTO.setCanBeMessaged(profile.getCanBeMessaged());
         profileDTO.setCanBeTagged(profile.getCanBeTagged());
         profileDTO.setIsPrivate(profile.getIsPrivate());
-        profileDTO.setCanBeMessagedPrivate(profile.getCanBeMessagedPrivate());
         profileDTO.setNotifyProfileActivity(profile.getNotifyProfileActivity());
-        profileDTO.setNotifyComment(profile.getNotifyComment());
-        profileDTO.setNotifyPost(profile.getNotifyPost());
-        profileDTO.setNotifyStory(profile.getNotifyStory());
         return profileDTO;
     }
 
@@ -184,6 +173,10 @@ public class ProfileService implements IProfileService {
     public ViewProfileDTO getProfileByUsername(String username) {
         ViewProfileDTO profileDTO = authClient.getUserInfoByUsername(username);
         Profile profile = profileRepository.findOneByUserInfoId(profileDTO.getId());
+        if(profile.isShutDown())
+        {
+            return null;
+        }
         profileDTO.setBiography(profile.getBiography());
         profileDTO.setWebsite(profile.getWebsite());
         profileDTO.setIsPrivate(profile.getIsPrivate());
@@ -207,12 +200,7 @@ public class ProfileService implements IProfileService {
             profile.setCanBeTagged(profileDTO.getCanBeTagged());
             profile.setIsPrivate(profileDTO.getIsPrivate());
             profile.setWebsite(profileDTO.getWebsite());
-            profile.setCanBeMessagedPrivate(profileDTO.getCanBeMessagedPrivate());
             profile.setNotifyProfileActivity(profileDTO.getNotifyProfileActivity());
-            profile.setNotifyComment(profileDTO.getNotifyComment());
-            profile.setNotifyPost(profileDTO.getNotifyPost());
-            profile.setNotifyStory(profileDTO.getNotifyStory());
-
             profileRepository.save(profile);
             return true;
         } else {
@@ -224,11 +212,7 @@ public class ProfileService implements IProfileService {
                 profile.setCanBeTagged(profileDTO.getCanBeTagged());
                 profile.setIsPrivate(profileDTO.getIsPrivate());
                 profile.setWebsite(profileDTO.getWebsite());
-                profile.setCanBeMessagedPrivate(profileDTO.getCanBeMessagedPrivate());
                 profile.setNotifyProfileActivity(profileDTO.getNotifyProfileActivity());
-                profile.setNotifyComment(profileDTO.getNotifyComment());
-                profile.setNotifyPost(profileDTO.getNotifyPost());
-                profile.setNotifyStory(profileDTO.getNotifyStory());
                 profileRepository.save(profile);
                 return true;
             } else {
@@ -358,24 +342,58 @@ public class ProfileService implements IProfileService {
     }
 
     @Override
-    public List<Integer> getPostIdsFeed(int userInfoId) {
+    public List<FeedPostRequest> getPostIdsFeed(int userInfoId) {
         Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
-        List<Integer> result = new ArrayList<>();
-        for(Integer id : profile.getFollowing())
-        {
-            result.addAll(profileRepository.findOneByUserInfoId(id).getPostIds());
+        List<FeedPostRequest> result = new ArrayList<>();
+        for(Integer id : profile.getFollowing()) {
+            Profile following = profileRepository.findOneById(id);
+            String username = authClient.getUsername(following.getUserInfoId());
+            for(Integer postId : profileRepository.findOneByUserInfoId(id).getPostIds())
+            {
+                FeedPostRequest request = new FeedPostRequest(postId,username);
+                result.add(request);
+            }
+
+        }
+        return result;
+    }
+    public List<String> getCloseFriends(int userInfoId) {
+        List<String> result = new ArrayList<>();
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        for(Integer i : profile.getFriends()){
+            int id = profileRepository.findOneById(i).getUserInfoId();
+            result.add(authClient.getUsername(id));
+
         }
         return result;
     }
 
     @Override
     public List<String> getTaggedUsernames(List<Integer> taggedIds) {
+            List<String> result = new ArrayList<>();
+            for (Integer id : taggedIds) {
+                Profile profile = profileRepository.findOneById(id);
+                String username = authClient.getUsername(id);
+                result.add(username);
+            }
+            return result;
+    }
+    public List<String> getProfilesForCloseFriends(int userInfoId) {
         List<String> result = new ArrayList<>();
-        for(Integer id : taggedIds)
-        {
-            Profile profile = profileRepository.findOneById(id);
-            String username = authClient.getUsername(id);
-            result.add(username);
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+
+        for(Integer i : profile.getFollowing()){
+            if(!profile.getFriends().contains(i)){
+                int id = profileRepository.findOneById(i).getUserInfoId();
+                result.add(authClient.getUsername(id));
+            }
+
+        }
+
+        for(Profile p : profileRepository.findAllPublic()){
+            String username = authClient.getUsername(p.getUserInfoId());
+            if(!result.contains(username) && !profile.getFriends().contains(p.getId()))
+                result.add(username);
         }
         return result;
     }
@@ -384,9 +402,51 @@ public class ProfileService implements IProfileService {
     public List<String> getCollections(int profileId) {
         Profile profile = profileRepository.findOneByUserInfoId(profileId);
         List<String> result = new ArrayList<>();
-        for(FavouriteCollection collection : profile.getCollections())
-        {
+        for(FavouriteCollection collection : profile.getCollections()) {
             result.add(collection.getName());
+        }
+        return result;
+    }
+    public void addCloseFriend(int loggedIn, String closeFriend) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(closeFriend);
+        List<Integer> closeFriendId = authClient.getUserInfoIds(usernames);
+        Profile closeFriendProfile = profileRepository.findOneByUserInfoId(closeFriendId.get(0));
+
+        loggedInProfile.getFriends().add(closeFriendProfile.getId());
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public void removeCloseFriend(int loggedIn, String closeFriend) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(closeFriend);
+        List<Integer> closeFriendId = authClient.getUserInfoIds(usernames);
+        Profile closeFriendProfile = profileRepository.findOneByUserInfoId(closeFriendId.get(0));
+        for(int i= 0; i < loggedInProfile.getFriends().size(); i++)
+        {
+            if(loggedInProfile.getFriends().get(i) == closeFriendProfile.getId())
+            {
+                loggedInProfile.getFriends().remove(i);
+                break;
+            }
+        }
+
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public List<String> getFollowingProfiles(int userInfoId) {
+        List<String> result = new ArrayList<>();
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        for(Integer i : profile.getFollowing()){
+            int id = profileRepository.findOneById(i).getUserInfoId();
+            result.add(authClient.getUsername(id));
+
         }
         return result;
     }
@@ -438,14 +498,268 @@ public class ProfileService implements IProfileService {
     }
 
     @Override
-    public boolean checkCloseFriends(int loggedIn, int current) {
+    public boolean checkCloseFriends(int loggedIn, int current){
+            Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+            for (Integer id : loggedInProfile.getFriends()) {
+                if (id == current)
+                    return true;
+            }
+            return false;
+    }
+    public List<ProfileSettingsDTO> getProfilesForSettings(int userInfoId) {
+        List<ProfileSettingsDTO> result = new ArrayList<>();
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        for(Integer i : profile.getFollowing()){
+            int id = profileRepository.findOneById(i).getUserInfoId();
+            boolean checkPost = checkMutedPost(userInfoId,authClient.getUsername(id) );
+            boolean checkStory= checkMutedStory(userInfoId,authClient.getUsername(id) );
+            boolean checkComment = checkMutedComment(userInfoId,authClient.getUsername(id) );
+            boolean checkMessage = checkMutedMessage(userInfoId,authClient.getUsername(id) );
+            result.add(new ProfileSettingsDTO(authClient.getUsername(id), checkPost, checkStory, checkComment, checkMessage ));
+        }
+        return result;
+    }
+
+    @Override
+    public void mutePost(int loggedIn, String current) {
         Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
-        for(Integer id : loggedInProfile.getFriends())
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+
+        loggedInProfile.getMutedPost().add(currentProfile.getId());
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public void unmutePost(int loggedIn, String current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+
+        for(int i= 0; i < loggedInProfile.getMutedPost().size(); i++)
         {
-            if(id == current)
+            if(loggedInProfile.getMutedPost().get(i) == currentProfile.getId())
+            {
+                loggedInProfile.getMutedPost().remove(i);
+                break;
+            }
+        }
+
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public void muteStory(int loggedIn, String current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+
+        loggedInProfile.getMutedStory().add(currentProfile.getId());
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public void unmuteStory(int loggedIn, String current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+
+        for(int i= 0; i < loggedInProfile.getMutedStory().size(); i++)
+        {
+            if(loggedInProfile.getMutedStory().get(i) == currentProfile.getId())
+            {
+                loggedInProfile.getMutedStory().remove(i);
+                break;
+            }
+        }
+
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public void muteComment(int loggedIn, String current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+
+        loggedInProfile.getMutedComment().add(currentProfile.getId());
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public void unmuteComment(int loggedIn, String current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+
+        for(int i= 0; i < loggedInProfile.getMutedComment().size(); i++)
+        {
+            if(loggedInProfile.getMutedComment().get(i) == currentProfile.getId())
+            {
+                loggedInProfile.getMutedComment().remove(i);
+                break;
+            }
+        }
+
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public void muteMessage(int loggedIn, String current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+
+        loggedInProfile.getMutedMessage().add(currentProfile.getId());
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public void unmuteMessage(int loggedIn, String current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+
+        for(int i= 0; i < loggedInProfile.getMutedMessage().size(); i++)
+        {
+            if(loggedInProfile.getMutedMessage().get(i) == currentProfile.getId())
+            {
+                loggedInProfile.getMutedMessage().remove(i);
+                break;
+            }
+        }
+
+        profileRepository.save(loggedInProfile);
+    }
+
+    @Override
+    public List<Integer> getAccessiblePostIds(int userInfoId) {
+        List<Integer> postIds = new ArrayList<>();
+         Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        List<Integer> profiles = profile.getFollowing();
+
+        List<Profile> publicProfiles = profileRepository.findAllPublic();
+        for(Profile p : publicProfiles){
+            if(!profiles.contains(p.getId()))
+                profiles.add(p.getId());
+        }
+
+        for(Integer i : profiles){
+            postIds.addAll(profileRepository.findOneById(i).getPostIds());
+        }
+
+        return postIds;
+
+    }
+
+    @Override
+    public List<FeedStoryRequest> getStoriesFeed(int userInfoId) {
+        Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+        List<FeedStoryRequest> result = new ArrayList<>();
+        for(Integer id : profile.getFollowing())
+        {
+            Profile following = profileRepository.findOneById(id);
+            ProfileDTO followingDTO = authClient.getUserInfo(following.getUserInfoId());
+            FeedStoryRequest request = new FeedStoryRequest(following.getStoryIds(),followingDTO.getUsername());
+            result.add(request);
+        }
+        return result;
+    }
+
+    private boolean checkMutedPost(int loggedIn, String current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+        for(Integer profile : loggedInProfile.getMutedPost())
+        {
+            if(profile == currentProfile.getId())
                 return true;
         }
-       return false;
+        return false;
+    }
+    private boolean checkMutedStory(int loggedIn, String current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+        for(Integer profile : loggedInProfile.getMutedStory())
+        {
+            if(profile == currentProfile.getId())
+                return true;
+        }
+        return false;
+    }
+    private boolean checkMutedComment(int loggedIn, String current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+        for(Integer profile : loggedInProfile.getMutedComment())
+        {
+            if(profile == currentProfile.getId())
+                return true;
+        }
+        return false;
+    }
+    private boolean checkMutedMessage(int loggedIn, String current) {
+        Profile loggedInProfile = profileRepository.findOneByUserInfoId(loggedIn);
+        List<String> usernames =  new ArrayList<>();
+        usernames.add(current);
+        List<Integer> currentId = authClient.getUserInfoIds(usernames);
+        Profile currentProfile = profileRepository.findOneByUserInfoId(currentId.get(0));
+        for(Integer profile : loggedInProfile.getMutedMessage())
+        {
+            if(profile == currentProfile.getId())
+                return true;
+        }
+        return false;
+
+    }
+
+    @Override
+    public void shutDownProfile(String username) {
+        ViewProfileDTO profileDTO = authClient.getUserInfoByUsername(username);
+        Profile profile = profileRepository.findOneByUserInfoId(profileDTO.getId());
+        profile.setShutDown(true);
+        profileRepository.save(profile);
+    }
+
+    @Override
+    public void removePost(int postId, String username) {
+        ViewProfileDTO profileDTO = authClient.getUserInfoByUsername(username);
+        Profile profile = profileRepository.findOneByUserInfoId(profileDTO.getId());
+        for(int i= 0; i < profile.getPostIds().size(); i++)
+        {
+            if(profile.getPostIds().get(i) == postId)
+            {
+                profile.getPostIds().remove(i);
+                break;
+            }
+        }
+
+        profileRepository.removeFromFavourites(postId);
+        profileRepository.removeFromCollection(postId);
+        profileRepository.save(profile);
     }
 
 

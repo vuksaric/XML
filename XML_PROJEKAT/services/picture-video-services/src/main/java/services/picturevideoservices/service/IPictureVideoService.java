@@ -8,4 +8,5 @@ public interface IPictureVideoService {
     PictureVideo save(PictureVideo pictureVideo);
     List<PictureVideo> getAll();
     PictureVideo getById(int id);
+
 }

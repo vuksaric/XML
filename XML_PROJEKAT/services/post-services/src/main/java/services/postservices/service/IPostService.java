@@ -1,7 +1,9 @@
 package services.postservices.service;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import services.postservices.dto.CommentRequest;
+import services.postservices.dto.FeedPostRequest;
 import services.postservices.dto.PostResponse;
 import services.postservices.dto.ProfilePostRequest;
 import services.postservices.model.Comment;
@@ -19,9 +21,13 @@ public interface IPostService {
     boolean isItReported(int userId, int postId);
     void like(int userId, int postId);
     void dislike(int userId, int postId);
-    void report(int userId, int postId);
+    void report(int userId, int postId,String username);
     PostResponse addComment(CommentRequest commentRequest);
     List<PostResponse> getLikedByProfile(int userId);
     List<PostResponse> getDislikedByProfile(int userId);
-    List<PostResponse> getForFeed(List<Integer> postIds);
+    List<PostResponse> getForFeed(List<FeedPostRequest> requests);
+    List<PostResponse> getTagsPost(String username);
+    List<String> getLocations(int userInfoId);
+    List<PostResponse> getPostsByLocation(int userInfoId,String location);
+    void removePost(int id, String username);
 }

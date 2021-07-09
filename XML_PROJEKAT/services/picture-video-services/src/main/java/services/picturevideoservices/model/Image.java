@@ -22,6 +22,7 @@ public class Image {
     private byte[] content;
     private String name;
     private String location;
+    @Column(nullable = true)
     private boolean image;
 
     public Image(String imageName, String location, boolean image) {

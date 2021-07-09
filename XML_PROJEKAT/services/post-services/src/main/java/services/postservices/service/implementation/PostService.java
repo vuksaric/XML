@@ -3,19 +3,16 @@ package services.postservices.service.implementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import services.postservices.client.NotificationClient;
 import services.postservices.client.PictureVideoClient;
 import services.postservices.client.ProfileClient;
-import services.postservices.dto.CommentRequest;
-import services.postservices.dto.ImageDTO;
-import services.postservices.dto.PostResponse;
-import services.postservices.dto.ProfilePostRequest;
+import services.postservices.dto.*;
 import services.postservices.model.Comment;
 import services.postservices.model.Post;
 import services.postservices.model.PostInfo;
 import services.postservices.repository.PostRepository;
 import services.postservices.service.IPostService;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,11 +25,16 @@ public class PostService implements IPostService {
     private final PostRepository postRepository;
     private final PictureVideoClient pictureVideoClient;
     private final ProfileClient profileClient;
+    private final NotificationClient notificationClient;
+
+
 
     @Autowired
-    public PostService(PostRepository postRepository, PictureVideoClient pictureVideoClient, ProfileClient profileClient){this.postRepository = postRepository;
+    public PostService(PostRepository postRepository, PictureVideoClient pictureVideoClient, ProfileClient profileClient, NotificationClient notificationClient){
+        this.postRepository = postRepository;
         this.pictureVideoClient = pictureVideoClient;
         this.profileClient = profileClient;
+        this.notificationClient = notificationClient;
     }
 
     @Override
@@ -72,8 +74,10 @@ public class PostService implements IPostService {
             PostResponse postResponse = new  PostResponse(post);
             for(Integer idPicture : post.getPostInfo().getPictureIds())
             {
+                boolean image = pictureVideoClient.getImageById(idPicture);
                 String src = pictureVideoClient.getLocationById(idPicture);
-                postResponse.getContentSrcs().add(src);
+                PictureDTO pictureDTO = new PictureDTO(src,image);
+                postResponse.getContent().add(pictureDTO);
                 List<String> taggedUsernames = profileClient.getTaggedUsernames(post.getPostInfo().getTaggedIds());
                 postResponse.setTagged(taggedUsernames);
             }
@@ -144,16 +148,18 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public void report(int userId, int postId) {
+    public void report(int userId, int postId,String username) {
         Post post = postRepository.getById(postId);
         post.getReportIds().add(userId);
         postRepository.save(post);
+        notificationClient.save(postId,username);
     }
 
     @Override
     public PostResponse addComment(CommentRequest commentRequest) {
         Post post = postRepository.getById(commentRequest.getPostId());
-        post.getComments().add(new Comment(commentRequest.getUsername(),commentRequest.getContent()));
+        List<Integer> taggedIds = profileClient.findByUsername(commentRequest.getTaggedUsernames());
+        post.getComments().add(new Comment(commentRequest.getUsername(),commentRequest.getContent(), taggedIds));
         return new PostResponse(postRepository.save(post));
     }
 
@@ -170,8 +176,10 @@ public class PostService implements IPostService {
                     PostResponse postResponse = new PostResponse(post);
                     for(Integer idPicture : post.getPostInfo().getPictureIds())
                     {
+                        boolean image = pictureVideoClient.getImageById(idPicture);
                         String src = pictureVideoClient.getLocationById(idPicture);
-                        postResponse.getContentSrcs().add(src);
+                        PictureDTO pictureDTO = new PictureDTO(src,image);
+                        postResponse.getContent().add(pictureDTO);
                         List<String> taggedUsernames = profileClient.getTaggedUsernames(post.getPostInfo().getTaggedIds());
                         postResponse.setTagged(taggedUsernames);
                     }
@@ -196,8 +204,10 @@ public class PostService implements IPostService {
                     PostResponse postResponse = new PostResponse(post);
                     for(Integer idPicture : post.getPostInfo().getPictureIds())
                     {
+                        boolean image = pictureVideoClient.getImageById(idPicture);
                         String src = pictureVideoClient.getLocationById(idPicture);
-                        postResponse.getContentSrcs().add(src);
+                        PictureDTO pictureDTO = new PictureDTO(src,image);
+                        postResponse.getContent().add(pictureDTO);
                         List<String> taggedUsernames = profileClient.getTaggedUsernames(post.getPostInfo().getTaggedIds());
                         postResponse.setTagged(taggedUsernames);
                     }
@@ -210,16 +220,19 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<PostResponse> getForFeed(List<Integer> postIds) {
+    public List<PostResponse> getForFeed(List<FeedPostRequest> requests) {
         List<PostResponse> result = new ArrayList<>();
-        for(Integer id : postIds)
+        for(FeedPostRequest request : requests)
         {
-            Post post = postRepository.findOneById(id);
+            Post post = postRepository.findOneById(request.getPostId());
             PostResponse postResponse = new PostResponse(post);
+            postResponse.setUsername(request.getUsername());
             for(Integer idPicture : post.getPostInfo().getPictureIds())
             {
+                boolean image = pictureVideoClient.getImageById(idPicture);
                 String src = pictureVideoClient.getLocationById(idPicture);
-                postResponse.getContentSrcs().add(src);
+                PictureDTO pictureDTO = new PictureDTO(src,image);
+                postResponse.getContent().add(pictureDTO);
             }
             List<String> taggedUsernames = profileClient.getTaggedUsernames(post.getPostInfo().getTaggedIds());
             postResponse.setTagged(taggedUsernames);
@@ -228,5 +241,86 @@ public class PostService implements IPostService {
 
         Collections.sort(result, Collections.reverseOrder());
         return result;
+    }
+
+    public List<PostResponse> getTagsPost(String username) {
+        List<Post> posts = postRepository.findAll();
+        List<PostResponse> result = new ArrayList<>();
+
+        List<String> usernames = new ArrayList<>();
+        usernames.add(username);
+        List<Integer> ids = profileClient.findByUsername(usernames);
+
+        for(Post post : posts){
+            if(post.getPostInfo().getTaggedIds().contains(ids.get(0))) {
+                PostResponse postResponse = new PostResponse(post);
+                for (Integer idPicture : post.getPostInfo().getPictureIds()) {
+                    boolean image = pictureVideoClient.getImageById(idPicture);
+                    String src = pictureVideoClient.getLocationById(idPicture);
+                    PictureDTO pictureDTO = new PictureDTO(src,image);
+                    postResponse.getContent().add(pictureDTO);
+                }
+                result.add(postResponse);
+            }
+            if(getTagsComment(post, ids.get(0))){
+                PostResponse postResponse = new PostResponse(post);
+                for (Integer idPicture : post.getPostInfo().getPictureIds()) {
+                    boolean image = pictureVideoClient.getImageById(idPicture);
+                    String src = pictureVideoClient.getLocationById(idPicture);
+                    PictureDTO pictureDTO = new PictureDTO(src,image);
+                    postResponse.getContent().add(pictureDTO);
+                }
+                if(!result.contains(postResponse))
+                    result.add(postResponse);
+            }
+
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getLocations(int userInfoId) {
+        List<String> locations = new ArrayList<>();
+        List<Integer> postIds = profileClient.getAccessiblePostIds(userInfoId);
+        for(Integer id : postIds){
+            if(!locations.contains(postRepository.findOneById(id).getPostInfo().getLocation()))
+                locations.add(postRepository.findOneById(id).getPostInfo().getLocation());
+        }
+        return locations;
+    }
+
+    @Override
+    public List<PostResponse> getPostsByLocation(int userInfoId,String location) {
+        List<PostResponse> result = new ArrayList<>();
+        List<Integer> postIds = profileClient.getAccessiblePostIds(userInfoId);
+        for(Integer id : postIds){
+            Post post = postRepository.findOneById(id);
+            if(post.getPostInfo().getLocation().equals(location)){
+                PostResponse postResponse = new PostResponse(post);
+                for (Integer idPicture : post.getPostInfo().getPictureIds()) {
+                    boolean image = pictureVideoClient.getImageById(idPicture);
+                    String src = pictureVideoClient.getLocationById(idPicture);
+                    PictureDTO pictureDTO = new PictureDTO(src,image);
+                    postResponse.getContent().add(pictureDTO);
+                }
+                result.add(postResponse);
+            }
+        }
+        return result;
+    }
+
+    private boolean getTagsComment(Post post, int id) {
+        for (Comment comment : post.getComments()) {
+            if (comment.getTaggedIds().contains(id))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void removePost(int id, String username) {
+        Post post = postRepository.getById(id);
+        profileClient.removePost(id,username);
+        postRepository.delete(post);
     }
 }

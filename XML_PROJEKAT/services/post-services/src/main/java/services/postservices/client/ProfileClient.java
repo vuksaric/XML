@@ -18,4 +18,13 @@ public interface ProfileClient {
 
     @PostMapping("/profile/getTaggedUsernames")
     List<String> getTaggedUsernames(@RequestBody List<Integer> taggedIds);
+
+
+    @GetMapping("profile/getAccessiblePostIds/{userInfoId}")
+   List<Integer> getAccessiblePostIds(@PathVariable int userInfoId );
+
+
+    @PutMapping("/profile/removePost/{postId}/{username}")
+    Boolean removePost(@PathVariable int postId, @PathVariable String username);
+
 }

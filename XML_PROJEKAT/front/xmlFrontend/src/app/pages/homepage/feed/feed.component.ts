@@ -1,111 +1,156 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 import { PostStoryService } from 'src/app/services/post-story.service';
 import { ProfileService } from 'src/app/services/profile.service';
+
+interface Element{
+  post : any,
+  liked : any,
+  disliked : any,
+  reported : any,
+  likes : any,
+  dislikes : any,
+  comments : any,
+  favourite : any
+}
+
+interface FeedPostRequest{
+  postId : number,
+  username : String
+}
 
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.css']
 })
+
+
 export class FeedComponent implements OnInit {
 
-  constructor(private profileService: ProfileService, private postStoryService: PostStoryService) { }
-  postIds!: any;
+  constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private authService : AuthService) { }
+  postIds: FeedPostRequest[] = [];
   listOfData : any[] = [];
-  return = false;
   inputValue = '';
   submitting = false;
+  isVisibleFavourites = false;
+  currentPostId : any;
+  collections : any;
+  collectionName : any;
+  stories : any[] = [];
+  isVisibleStory = false;
+  slideIndex = 1;
+  decoded_token : any;
 
   ngOnInit(): void {
-
-    this.profileService.getPostIdsFeed(1).subscribe(data => {
+    this.decoded_token = this.authService.getDataFromToken();
+    this.profileService.getPostIdsFeed(this.decoded_token.id).subscribe(data => {
+      console.log(data);
       this.postIds = data;
-      const body = {
-        postIds : this.postIds
-      }
-      this.postStoryService.getPostsFeed(body).subscribe(data =>{
+
+      this.profileService.getCollections(this.decoded_token.id).subscribe(data=>{
+        this.collections = data;
+     });
+
+      this.postStoryService.getPostsFeed(this.postIds).subscribe(data =>{
+       
+        var liked : boolean;
+        var disliked : boolean;
+        var reported : boolean;
+        var favourite : boolean;
         data.forEach((element: any) => {
-          var liked = this.liked(element);
-          var disliked = this.disliked(element);
-          var reported = this.reported(element);
+         
           var likes = element.likeIds.length;
           console.log(element);
           var dislikes = element.dislikeIds.length;
           var comments = element.comments.length;
-          const data = {
+          var contentAlbum: { src: any; image: any; display: string; }[] = [];
+          element.content.forEach((element: any) => {
+
+            const newContent =
+            {
+              src : element.src,
+              image : element.image,
+              display : "none"
+            }
+            contentAlbum.push(newContent);
+          });
+          const data1 = {
             post : element,
+            slideIndex : 1,
+            contentAlbum : contentAlbum,
             liked : liked,
             disliked : disliked,
             reported : reported,
             likes : likes,
             dislikes : dislikes,
-            comments : comments
+            comments : comments,
+            favourite : favourite
           }
-          this.listOfData.push(data);
-          
+          this.listOfData.push(data1);
         });
-      })
+      });
+    
     });
-  }
 
-  liked(post : any) : boolean
-  {
-    this.postStoryService.isItLiked(1,post.id).subscribe(data =>{
-      this.return = data;
-    });
-    return this.return
-  }
+    this.profileService.getStoriesFeed(this.decoded_token.id).subscribe(data=>{
+        this.postStoryService.getStoriesFeed(data).subscribe(data=>{
+          data.forEach((element: any) => {
 
-  disliked(post : any) : boolean
-  {
-    this.postStoryService.isItDisliked(1,post.id).subscribe(data=>{
-      this.return = data;
+            const newStory = {
+              story : element,
+              display : "none"
+            }
+  
+            this.stories.push(newStory);
+          });
+        });
     });
-    return this.return
   }
+  
 
-  reported(post : any) : boolean
-  {
-    this.postStoryService.isItReported(1,post.id).subscribe(data=>{
-      this.return = data;
-    });
-    return this.return
-  }
 
   like(post : any): void {
-    
-    this.postStoryService.like(1,post.id).subscribe(data=>{
-      /*this.liked = true;
-      this.likesCount = this.likesCount + 1;
-      if(this.disliked)
-        this.dislikesCount = this.dislikesCount - 1;
-      this.disliked = false;*/
+    var liked : boolean;
+    this.postStoryService.isItLiked(this.decoded_token.id,post.id).subscribe(data =>{
+      liked = data;
+      if(!liked)
+    this.postStoryService.like(this.decoded_token.id,post.id).subscribe(data=>{
       window.location.reload();
-            
-     
     });
+    });
+    
+    
 
 
   }
 
   dislike(post : any): void {
+    var disliked : boolean;
+    this.postStoryService.isItDisliked(this.decoded_token.id,post.id).subscribe(data=>{
+      disliked = data;
+      if(!disliked)
+      {
+        this.postStoryService.dislike(this.decoded_token.id,post.id).subscribe(data=>{
+          window.location.reload();
+        })
+      }
+    });
     
-    this.postStoryService.dislike(1,post.id).subscribe(data=>{
-      /*this.disliked = true;
-      this.dislikesCount = this.dislikesCount + 1;
-      if(this.liked)
-        this.likesCount = this.likesCount - 1;
-      this.liked = false;*/
-      window.location.reload();
-    })
 
   }
 
   report(post : any) : void
   {
-    this.postStoryService.report(1,this.postIds.id).subscribe(data =>{
-      window.location.reload();
-    });
+    this.postStoryService.isItReported(this.decoded_token.id,post.id).subscribe(data=>{
+      if(!data)
+      {
+        this.postStoryService.report(this.decoded_token.id,post.id,post.username).subscribe(data =>{
+          window.location.reload();
+        });
+      }
+    })
+    
     
   }
 
@@ -120,7 +165,7 @@ export class FeedComponent implements OnInit {
 
     const body = {
       postId : post.id,
-      username : "vuk",
+      username : this.decoded_token.username,
       content : content
     }
 
@@ -130,6 +175,100 @@ export class FeedComponent implements OnInit {
     
   }
 
+  favouriteClick(data : any)
+  {
+    this.profileService.checkFavourite(this.decoded_token.id, data.post.id).subscribe(data =>{
+      if(!data)
+      {
+        this.isVisibleFavourites = true;
+        this.currentPostId = data.post.id;
+      }
+    });
+     
+  }
+
+  addFavourite(collectionName : any, collection : boolean)
+  {
+    const body = {
+      profileId : this.decoded_token.id,
+      postId : this.currentPostId,
+      collectionName : collectionName,
+      collection : collection
+    }
+
+    this.profileService.addFavourite(body).subscribe(data =>{
+      this.isVisibleFavourites = false;
+      window.location.reload();
+    })
+    
+  }
+
+  handleCancelFavourites() : void
+  {
+    this.isVisibleFavourites = false;
+  }
+
+  @ViewChild('videoPlayer') 
+  videoplayer!: ElementRef;
+  toggleVideo() {
+      this.videoplayer.nativeElement.play();
+  }
+
+  showStories()
+  {
+    this.isVisibleStory = true;
+    this.slideIndex = 1;
+    this.showSlidesStory(this.slideIndex);
+  }
+
+  handleCancel()
+  {
+    this.isVisibleStory = false;
+  }
+
+  showSlidesStory(n : any) {
+    var i; 
+    if (n > this.stories.length) {this.isVisibleStory = false}
+    if (n < 1) {this.slideIndex = this.stories.length}
+    for (i = 0; i < this.stories.length; i++) {
+        this.stories[i].display = "none";
+    }
+    this.stories[this.slideIndex-1].display = "block";
+    if(this.isVisibleStory)
+    {
+      setTimeout(()=>{                          
+        this.showSlidesStory(this.slideIndex += 1);
+      }, 5000);
+    }
+    
+  }
+
+  showSlidesAlbum(data : any, n : any) {
+    var i; 
+    if (n > data.contentAlbum.length) {data.slideIndex = 1}
+    if (n < 1) {data.slideIndex = data.contentAlbum.length}
+    for (i = 0; i < data.contentAlbum.length; i++) {
+        data.contentAlbum[i].display = "none";
+    }
+    data.contentAlbum[data.slideIndex-1].display = "block";
+  }
+
+  plusSlides(data : any, n : any) {
+    this.showSlidesAlbum(data, data.slideIndex += n);
+  }
+
+  checkAlbum(data : any) : boolean
+  {
+    if(data.post.content.length > 1)
+    {
+      this.showSlidesAlbum(data,1);
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
   
 
 }

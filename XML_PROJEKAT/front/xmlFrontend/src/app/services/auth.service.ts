@@ -35,25 +35,20 @@ export class AuthService {
   
   public getDataFromToken() : any
   {
-    /*let token : any;
+    let token : any;
     let decoded_token : any;
     let result : any;
     token = localStorage.getItem("token");
     decoded_token = this.getDecodedAccessToken(token);
-    result = {
-      email : decoded_token.email,
-      id : decoded_token.user_id, 
-      type : decoded_token.user_type
-    }
-    return result*/
+    return decoded_token;
   }
 
   getDecodedAccessToken(token: string): any {
-    /*try {
+    try {
       return jwt_decode(token);
     }
     catch (Error) {
       return null;
-    }*/
+    }
   }
 }

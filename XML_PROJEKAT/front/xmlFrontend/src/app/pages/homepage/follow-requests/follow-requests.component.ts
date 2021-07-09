@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 import { FollowRequestService } from 'src/app/services/follow-request.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
@@ -10,25 +11,27 @@ import { ProfileService } from 'src/app/services/profile.service';
 export class FollowRequestsComponent implements OnInit {
 
   listOfData : any;
+  decoded_token : any;
 
-  constructor(private followRequestService : FollowRequestService,private profileService: ProfileService) { }
+  constructor(private followRequestService : FollowRequestService,private profileService: ProfileService, private authService : AuthService) { }
 
   ngOnInit(): void {
-    this.followRequestService.getAllForProfile(3).subscribe(data =>{
+    this.decoded_token = this.authService.getDataFromToken();
+    this.followRequestService.getAllForProfile(this.decoded_token.id).subscribe(data =>{
       this.listOfData = data
     })
   }
 
   accept(id : number) : void
   {
-    this.profileService.acceptFollowRequest(3,id).subscribe(data =>{
+    this.profileService.acceptFollowRequest(this.decoded_token.id,id).subscribe(data =>{
       this.listOfData = data
     })
   }
 
   deny(id : number) : void
   {
-    this.profileService.denyFollowRequest(3,id).subscribe(data =>{
+    this.profileService.denyFollowRequest(this.decoded_token.id,id).subscribe(data =>{
       this.listOfData = data
     })
   }

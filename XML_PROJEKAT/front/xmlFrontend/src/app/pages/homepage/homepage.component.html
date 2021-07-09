@@ -32,6 +32,14 @@
                 <i nz-icon nzType="user" nzTheme="outline"></i>
                 <span>View favourites</span>
               </li>
+              <li nz-menu-item (click)="closeFriends()">
+                <i nz-icon nzType="user" nzTheme="outline"></i>
+                <span>Close friends</span>
+              </li>
+              <li nz-menu-item (click)="notificationSetings()">
+                <i nz-icon nzType="setting" nzTheme="outline"></i>
+                <span>Notification settings</span>
+              </li>
             </ul>
           </li>
           <li nz-menu-item (click)="Feed()">

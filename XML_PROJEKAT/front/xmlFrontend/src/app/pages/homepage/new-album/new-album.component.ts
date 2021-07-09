@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth.service';
 import { PostStoryService } from 'src/app/services/post-story.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
@@ -17,11 +18,13 @@ export class NewAlbumComponent implements OnInit {
   validateForm!: FormGroup; 
   file :  File[] = [];
   listOfControl: Array<{ id: number; controlInstance: string }> = [];
+  decoded_token : any;
 
   constructor(private fb: FormBuilder, private postStory : PostStoryService,  
-    private toastr : ToastrService, private profileService: ProfileService) { }
+    private toastr : ToastrService, private profileService: ProfileService, private authService : AuthService) { }
 
   ngOnInit(): void {
+    this.decoded_token = this.authService.getDataFromToken();
     /* Initiate the form structure */
     this.validateForm = this.fb.group({
       location: [null,[Validators.required]],
@@ -30,7 +33,7 @@ export class NewAlbumComponent implements OnInit {
    
     })
     this.addField();
-    this.profileService.getProfilesForTagging(1).subscribe(data=>{console.log(data);
+    this.profileService.getProfilesForTagging(this.decoded_token.id).subscribe(data=>{console.log(data);
       this.usernames=data;
     });
   }
@@ -89,7 +92,7 @@ export class NewAlbumComponent implements OnInit {
     this.file.forEach(file => body.append("file", file));  
      body.append("location", this.validateForm.value.location);
      body.append("caption",  this.validateForm.value.caption);
-     body.append("userInfoId", "1");
+     body.append("userInfoId", this.decoded_token.id);
      if(this.tags.length==0)
       body.append("tags", "");
      else

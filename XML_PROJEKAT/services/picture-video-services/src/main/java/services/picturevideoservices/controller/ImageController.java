@@ -28,4 +28,9 @@ public class ImageController {
     public String getLocationById(@RequestBody int id){
         return fileLocationService.getLocationById(id);
     }
+
+    @PostMapping("/getImageById")
+    public Boolean getImageById(@RequestBody int id){
+        return fileLocationService.getImageById(id);
+    }
 }

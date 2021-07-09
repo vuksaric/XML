@@ -4,9 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import services.postservices.client.PictureVideoClient;
 import services.postservices.client.ProfileClient;
-import services.postservices.dto.ImageDTO;
-import services.postservices.dto.PostResponse;
-import services.postservices.dto.StoryResponse;
+import services.postservices.dto.*;
 import services.postservices.model.PostInfo;
 import services.postservices.model.Story;
 import services.postservices.repository.StoryRepository;
@@ -74,8 +72,10 @@ public class StoryService implements IStoryService {
                 StoryResponse storyResponse = new StoryResponse(story);
                 for(Integer idPicture : story.getPostInfo().getPictureIds())
                 {
+                    boolean image = pictureVideoClient.getImageById(idPicture);
                     String src = pictureVideoClient.getLocationById(idPicture);
-                    storyResponse.getContentSrcs().add(src);
+                    PictureDTO pictureDTO = new PictureDTO(src,image);
+                    storyResponse.getContent().add(pictureDTO);
                 }
                 result.add(storyResponse);
             }
@@ -95,14 +95,35 @@ public class StoryService implements IStoryService {
                 StoryResponse storyResponse = new StoryResponse(story);
                 for(Integer idPicture : story.getPostInfo().getPictureIds())
                 {
+                    boolean image = pictureVideoClient.getImageById(idPicture);
                     String src = pictureVideoClient.getLocationById(idPicture);
-                    storyResponse.getContentSrcs().add(src);
+                    PictureDTO pictureDTO = new PictureDTO(src,image);
+                    storyResponse.getContent().add(pictureDTO);
                 }
-                for(Integer idPicture : story.getPostInfo().getVideoIds())
+                result.add(storyResponse);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<StoryResponse> getStoriesFeed(List<FeedStoryRequest> requests) {
+        List<StoryResponse> result = new ArrayList<>();
+        for(FeedStoryRequest request : requests)
+        {
+            for(Integer storyId : request.getStoryIds())
+            {
+                Story story = storyRepository.findOneById(storyId);
+                StoryResponse storyResponse = new StoryResponse(story);
+                for(Integer idPicture : story.getPostInfo().getPictureIds())
                 {
+                    boolean image = pictureVideoClient.getImageById(idPicture);
                     String src = pictureVideoClient.getLocationById(idPicture);
-                    storyResponse.getContentSrcs().add(src);
+                    PictureDTO pictureDTO = new PictureDTO(src,image);
+                    storyResponse.getContent().add(pictureDTO);
                 }
+                storyResponse.setUsername(request.getUsername());
                 result.add(storyResponse);
             }
         }

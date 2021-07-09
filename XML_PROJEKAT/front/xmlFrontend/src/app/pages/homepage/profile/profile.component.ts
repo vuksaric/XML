@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { differenceInCalendarDays } from 'date-fns';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth.service';
 
 import { ProfileService } from 'src/app/services/profile.service';
 
@@ -28,22 +29,21 @@ export class ProfileComponent implements OnInit {
     phone : new FormControl(),
     phoneNumberPrefix : new FormControl(),
     activity: new FormControl(),
-    story: new FormControl(),
-    post: new FormControl(),
-    comment : new FormControl(),
-    messages_private : new FormControl()
+    
   }); 
   oldUsername!: String;
-  usernameChanged = false
+  usernameChanged = false;
+  decoded_token : any;
   
   
   
   today = new Date();
   constructor(private fb: FormBuilder, private profileService : ProfileService, 
-    private toastr : ToastrService) { }
+    private toastr : ToastrService, private authService : AuthService) { }
 
   ngOnInit(): void {
-    this.profileService.getProfile2(1).subscribe(data=> {
+    this.decoded_token = this.authService.getDataFromToken();
+    this.profileService.getProfile2(this.decoded_token.id).subscribe(data=> {
       console.log(data);this.validateForm = this.fb.group({
         surname: [data.surname,[Validators.required]],
         name: [data.name,[Validators.required]],
@@ -59,10 +59,6 @@ export class ProfileComponent implements OnInit {
         phone : [data.phone.substring(4),[Validators.required]],
         phoneNumberPrefix : [data.phone.substring(0,4),[Validators.required]],
         activity: [data.notifyProfileActivity,[Validators.required]],
-        story:  [data.notifyStory,[Validators.required]],
-        post:  [data.notifyPost,[Validators.required]],
-        comment :  [data.notifyComment,[Validators.required]],
-        messages_private : [data.canBeMessagedPrivate,[Validators.required]],
       });
       this.oldUsername = data.username;
     });
@@ -93,12 +89,8 @@ export class ProfileComponent implements OnInit {
         isPrivate: this.validateForm.value.privacy,
         canBeMessaged: this.validateForm.value.messages,
         canBeTagged: this.validateForm.value.tags,
-        canBeMessagedPrivate: this.validateForm.value.messages_private,
-        notifyComment: this.validateForm.value.comment,
-        notifyPost: this.validateForm.value.post,
-        notifyStory: this.validateForm.value.story,
         notifyProfileActivity: this.validateForm.value.activity,
-        id : 1, 
+        id : this.decoded_token.id, 
         usernameChanged: this.usernameChanged
       }
       
@@ -110,9 +102,6 @@ export class ProfileComponent implements OnInit {
           this.toastr.error("Username already!");
       });
     }
-    
-    
-
   }
 
   disabledDate = (current: Date): boolean => {

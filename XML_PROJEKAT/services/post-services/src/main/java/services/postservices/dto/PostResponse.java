@@ -21,10 +21,11 @@ public class PostResponse implements Comparable< PostResponse >{
     private List<Integer> dislikeIds;
     private LocalDate date;
     private String caption;
-    private List<String> contentSrcs;
+    private List<PictureDTO> content;
     private String location;
     private List<String> tagged;
     private List<Comment> comments;
+    private String username;
 
     public PostResponse(Post post)
     {
@@ -36,7 +37,7 @@ public class PostResponse implements Comparable< PostResponse >{
         this.location = post.getPostInfo().getLocation();
         this.tagged = new ArrayList<>();
         this.comments = post.getComments();
-        this.contentSrcs = new ArrayList<>();
+        this.content = new ArrayList<>();
     }
 
     @Override

@@ -1,10 +1,7 @@
 package services.profileservices.controller;
 
 import org.springframework.web.bind.annotation.*;
-import services.profileservices.dto.FavouriteRequest;
-import services.profileservices.dto.FavouriteResponse;
-import services.profileservices.dto.ProfileDTO;
-import services.profileservices.dto.ViewProfileDTO;
+import services.profileservices.dto.*;
 import services.profileservices.model.Profile;
 import services.profileservices.service.IProfileService;
 import services.profileservices.service.implementation.ProfileService;
@@ -116,12 +113,67 @@ public class ProfileController {
         return profileService.getPublicProfiles();
     }
 
+    @GetMapping("/getCloseFriends/{userInfoId}")
+    public List<String> getCloseFriends(@PathVariable int userInfoId ){
+        return profileService.getCloseFriends(userInfoId);
+    }
+    @GetMapping("/getProfilesForCloseFriends/{userInfoId}")
+    public List<String> getProfilesForCloseFriends(@PathVariable int userInfoId ){
+        return profileService.getProfilesForCloseFriends(userInfoId);
+    }
+
+    @GetMapping("/getFollowingProfiles/{userInfoId}")
+    public List<String> getFollowingProfiles(@PathVariable int userInfoId ){
+        return profileService.getFollowingProfiles(userInfoId);
+    }
+    @GetMapping("/getProfilesForSettings/{userInfoId}")
+    public List<ProfileSettingsDTO> getProfilesForSettings(@PathVariable int userInfoId ){
+        return profileService.getProfilesForSettings(userInfoId);
+    }
+    @PutMapping("/mutePost/{loggedInId}/{currentId}")
+    public void mutePost(@PathVariable int loggedInId, @PathVariable String currentId){
+        profileService.mutePost(loggedInId, currentId);
+    }
+
+    @PutMapping("/unmutePost/{loggedInId}/{currentId}")
+    public void unmutePost(@PathVariable int loggedInId, @PathVariable String currentId){
+        profileService.unmutePost(loggedInId, currentId);
+    }
+    @PutMapping("/muteStory/{loggedInId}/{currentId}")
+    public void muteStory(@PathVariable int loggedInId, @PathVariable String currentId){
+        profileService.muteStory(loggedInId, currentId);
+    }
+
+    @PutMapping("/unmuteStory/{loggedInId}/{currentId}")
+    public void unmuteStory(@PathVariable int loggedInId, @PathVariable String currentId){
+        profileService.unmuteStory(loggedInId, currentId);
+    }
+    @PutMapping("/muteComment/{loggedInId}/{currentId}")
+    public void muteComment(@PathVariable int loggedInId, @PathVariable String currentId){
+        profileService.muteComment(loggedInId, currentId);
+    }
+
+    @PutMapping("/unmuteComment/{loggedInId}/{currentId}")
+    public void unmuteComment(@PathVariable int loggedInId, @PathVariable String currentId){
+        profileService.unmuteComment(loggedInId, currentId);
+    }
+    @PutMapping("/muteMessage/{loggedInId}/{currentId}")
+    public void muteMessage(@PathVariable int loggedInId, @PathVariable String currentId){
+        profileService.muteMessage(loggedInId, currentId);
+    }
+
+    @PutMapping("/unmuteMessage/{loggedInId}/{currentId}")
+    public void unmuteMessage(@PathVariable int loggedInId, @PathVariable String currentId){
+        profileService.unmuteMessage(loggedInId, currentId);
+    }
+
     @PostMapping("/findByUsername")
     public List<Integer> findByUsername(@RequestBody List<String> usernames){
         return profileService.findByUsername(usernames);
     }
+
     @GetMapping("/getPostIdsFeed/{userInfoId}")
-    public List<Integer> getPostIdsFeed(@PathVariable int userInfoId){
+    public List<FeedPostRequest> getPostIdsFeed(@PathVariable int userInfoId){
         return profileService.getPostIdsFeed(userInfoId);
     }
     @PostMapping("/getTaggedUsernames")
@@ -146,7 +198,37 @@ public class ProfileController {
     }
 
     @GetMapping("/getFavourites/{profileId}")
-    public FavouriteResponse getFavourites(@PathVariable int profileId){
+    public FavouriteResponse getFavourites(@PathVariable int profileId) {
         return profileService.getFavourites(profileId);
+    }
+
+    @PutMapping("/addCloseFriend/{loggedInId}/{closeFriend}")
+    public void addCloseFriend(@PathVariable int loggedInId, @PathVariable String closeFriend){
+        profileService.addCloseFriend(loggedInId, closeFriend);
+    }
+    @PutMapping("/removeCloseFriend/{loggedInId}/{closeFriend}")
+    public void removeCloseFriend(@PathVariable int loggedInId, @PathVariable String closeFriend){
+        profileService.removeCloseFriend(loggedInId, closeFriend);
+    }
+
+    @GetMapping("/getAccessiblePostIds/{userInfoId}")
+    public List<Integer> getAccessiblePostIds(@PathVariable int userInfoId ) {
+        return profileService.getAccessiblePostIds(userInfoId);
+    }
+
+    @PutMapping("/shutDown/{username}")
+    public void shutDown(@PathVariable String username){
+        profileService.shutDownProfile(username);
+    }
+
+    @PutMapping("/removePost/{postId}/{username}")
+    public void removePost(@PathVariable int postId, @PathVariable String username){
+        profileService.removePost(postId,username);
+
+    }
+
+    @GetMapping("/getStoriesFeed/{userInfoId}")
+    public List<FeedStoryRequest> getStoriesFeed(@PathVariable int userInfoId){
+        return profileService.getStoriesFeed(userInfoId);
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import services.postservices.dto.CommentRequest;
+import services.postservices.dto.FeedPostRequest;
 import services.postservices.dto.PostResponse;
 import services.postservices.dto.ProfilePostRequest;
 import services.postservices.model.Post;
@@ -58,9 +59,9 @@ public class PostController {
         postService.dislike(userId,postId);
     }
 
-    @PutMapping("/report/{userId}/{postId}")
-    public void report(@PathVariable int userId, @PathVariable int postId){
-        postService.report(userId,postId);
+    @PutMapping("/report/{userId}/{postId}/{username}")
+    public void report(@PathVariable int userId, @PathVariable int postId, @PathVariable String username){
+        postService.report(userId,postId,username);
     }
 
     @PutMapping("/addComment")
@@ -78,8 +79,30 @@ public class PostController {
         return postService.getDislikedByProfile(userId);
     }
 
+
     @PostMapping("/getForFeed")
-    public List<PostResponse> getForFeed(@RequestBody ProfilePostRequest profilePostRequest){
-        return postService.getForFeed(profilePostRequest.getPostIds());
+    public List<PostResponse> getForFeed(@RequestBody List<FeedPostRequest> requests) {
+        return postService.getForFeed(requests);
     }
+
+    @GetMapping("/getTagsPost/{username}")
+    public List<PostResponse> getTagsPost(@PathVariable String username){
+        return postService.getTagsPost(username);
+    }
+
+    @GetMapping("/getLocations/{userInfoId}")
+    public List<String> getLocations(@PathVariable int userInfoId){
+        return postService.getLocations(userInfoId);
+    }
+
+    @GetMapping("/getPostByLocation/{userInfoId}/{location}")
+    public List<PostResponse> getPostByLocation(@PathVariable int userInfoId, @PathVariable String location){
+        return postService.getPostsByLocation(userInfoId, location);
+
+    }
+    @PutMapping("/remove/{id}/{username}")
+    public void remove(@PathVariable int id, @PathVariable String username){
+         postService.removePost(id,username);
+    }
+
 }
