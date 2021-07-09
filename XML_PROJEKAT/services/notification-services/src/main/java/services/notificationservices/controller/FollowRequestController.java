@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/followRequest")
+@RequestMapping("notification/followRequest")
 public class FollowRequestController {
 
     private final IFollowRequestService followRequestService;

@@ -6,14 +6,13 @@ export const environment = {
   production: false,
   base_url: 'http://localhost',
   auth_url: 'http://localhost/auth',
-  login_url: 'http://localhost/login',
-  attack_url: 'http://localhost/attack',
+  attack_url: 'http://localhost/auth/attack',//nepotrebno
   profile_url: 'http://localhost/profile',
-  image_url: 'http://localhost/image',
+  image_url: 'http://localhost/picture-video',
   post_url: 'http://localhost/post',
-  story_url: 'http://localhost/story',
+  story_url: 'http://localhost/post/story',
   verificationRequest_url: 'http://localhost/profile/verificationRequest',
-  followRequest_url: 'http://localhost/followRequest',
+  followRequest_url: 'http://localhost/notification/followRequest',
 };
 
 /*

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @FeignClient(name="notification",url="${app.notification.url}")
 public interface NotificationClient {
-    @PutMapping("followRequest/delete/{to}/{from}")
+    @PutMapping("/notification/followRequest/delete/{to}/{from}")
     void delete(@PathVariable int to, @PathVariable int from);
 
 }

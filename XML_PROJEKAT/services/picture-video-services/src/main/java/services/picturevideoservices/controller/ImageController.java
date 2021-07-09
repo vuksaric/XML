@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.List;
 
 @RestController
-@RequestMapping("/image")
+@RequestMapping("/picture-video")
 public class ImageController {
 
     private final FileLocationService fileLocationService;

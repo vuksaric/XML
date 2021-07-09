@@ -7,6 +7,6 @@ import services.profileservices.dto.ImageDTO;
 
 @FeignClient(name="pictureVideo",url="${app.pictureVideo.url}")
 public interface PictureVideoClient {
-    @PostMapping("image/upload")
+    @PostMapping("/picture-video/upload")
     Integer uploadImage(@RequestBody ImageDTO imageDTO);
 }

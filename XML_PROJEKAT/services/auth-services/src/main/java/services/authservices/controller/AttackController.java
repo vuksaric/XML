@@ -11,7 +11,7 @@ import services.authservices.service.IAttackService;
 import services.authservices.service.implementation.AttackService;
 
 @RestController
-@RequestMapping(value = "/attack")
+@RequestMapping(value = "auth/attack")
 public class AttackController {
 
     @Autowired

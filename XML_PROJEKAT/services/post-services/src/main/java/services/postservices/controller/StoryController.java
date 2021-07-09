@@ -10,7 +10,7 @@ import services.postservices.service.IStoryService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/story")
+@RequestMapping("/post/story")
 public class StoryController {
     private final IStoryService storyService;
     public StoryController(IStoryService storyService){this.storyService = storyService;}
