@@ -1,5 +1,6 @@
 package services.campaignservices.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,13 @@ public class Campaign {
     private int countDone; // koliko puta je plasirana
     //private List<Integer> postIds;
     //private List<Integer> storyIds;
+    private Boolean isItPost;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "Campaign_ID")
     private List<Commercial> commercials;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    private TargetGroup targetGroup;
+    private String username;
+
 }

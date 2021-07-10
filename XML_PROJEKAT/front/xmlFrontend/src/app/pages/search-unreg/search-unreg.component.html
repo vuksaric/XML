@@ -1,0 +1,137 @@
+<head>
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<nz-tabset>
+  <nz-tab [nzTitle]="titleTemplate">
+    <ng-template #titleTemplate>
+      <i nz-icon nzType="team" nzTheme="outline"></i>
+      Profiles
+    </ng-template>
+    <div class="search">
+      <nz-input-group [nzSuffix]="suffixIconSearch" >
+        <input type="text" nz-input placeholder="input profile name" [(ngModel)]="searchValue"/>
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+    </div>
+    <ul nz-list [nzDataSource]="listOfDataProfiles" nzBordered nzSize="large">
+      <li nz-list-item *ngFor="let item of listOfDataProfiles | searchFilter : searchValue" nzNoFlex>
+        <ul nz-list-item-actions>
+          <nz-list-item-action>
+            <a (click)="view(item)">View Profile</a>
+          </nz-list-item-action>
+        </ul>
+        {{ item }}
+      </li>
+    </ul>
+  </nz-tab>
+  <nz-tab [nzTitle]="titleTemplate2">
+    <ng-template #titleTemplate2>
+      <i nz-icon nzType="tags" nzTheme="outline"></i>
+      Tags
+    </ng-template>
+    <nz-input-group [nzSuffix]="suffixIconSearchTag" >
+      <input type="text" nz-input placeholder="input profile name to searh tags" [(ngModel)]="searchValueTags"/>
+    </nz-input-group>
+    <ng-template #suffixIconSearchTag>
+      <i nz-icon nzType="search"></i>
+    </ng-template>
+    <ul nz-list [nzDataSource]="listOfDataTags" nzBordered nzSize="large">
+      <li nz-list-item *ngFor="let item of listOfDataTags | searchFilter : searchValueTags" nzNoFlex>
+        <ul nz-list-item-actions>
+          <nz-list-item-action>
+            <a (click)="viewTags(item)">View Tags</a>
+          </nz-list-item-action>
+        </ul>
+        {{ item }}
+      </li>
+    </ul><br> 
+    <div class="gallery">
+
+			
+      <div *ngFor = "let data of listOfData">
+  
+          <div class="gallery-item" tabindex="0">
+  
+            <img *ngIf = "data.content[0].image" src={{data.content[0].src}} class="gallery-image"  alt="">
+            <div *ngIf = "!data.content[0].image" class="video">
+              <video controls (click)="toggleVideo()" #videoPlayer>
+                <source src="{{data.content[0].src}}" type="video/mp4"/>
+                Browser not supported
+              </video>
+            </div>
+  
+              <div class="gallery-item-info">
+  
+                  <ul>
+                      <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{countLikes(data)}}</li>
+                      <li class="gallery-item-dislikes"><span class="visually-hidden">Dislikes:</span><i class="fa fa-thumbs-down" aria-hidden="true"></i> {{countDislikes(data)}}</li>
+                      <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fa fa-comment" aria-hidden="true"></i> {{countComments(data)}}</li>
+                  </ul>
+  
+              </div>
+  
+          </div>
+  
+      </div>
+  
+  </div>
+  </nz-tab>
+  <nz-tab [nzTitle]="titleTemplate3">
+    <ng-template #titleTemplate3>
+      <i nz-icon nzType="car" nzTheme="outline"></i>
+      Locations
+    </ng-template>
+    <nz-input-group [nzSuffix]="suffixIconSearchLocation" >
+      <input type="text" nz-input placeholder="input location" [(ngModel)]="searchValueLocations"/>
+    </nz-input-group>
+    <ng-template #suffixIconSearchLocation>
+      <i nz-icon nzType="search"></i>
+    </ng-template>
+    <ul nz-list [nzDataSource]="listOfDataLocations" nzBordered nzSize="large">
+      <li nz-list-item *ngFor="let item of listOfDataLocations | searchFilter : searchValueLocations" nzNoFlex>
+        <ul nz-list-item-actions>
+          <nz-list-item-action>
+            <a (click)="viewLocations(item)">View Posts</a>
+          </nz-list-item-action>
+        </ul>
+        {{ item }}
+      </li>
+    </ul>
+    <br> 
+    <div class="gallery">
+
+			
+      <div *ngFor = "let data of listOfDataLocation">
+  
+          <div class="gallery-item" tabindex="0">
+  
+            <img *ngIf = "data.content[0].image" src={{data.content[0].src}} class="gallery-image"  alt="">
+            <div *ngIf = "!data.content[0].image" class="video">
+              <video controls (click)="toggleVideo()" #videoPlayer>
+                <source src="{{data.content[0].src}}" type="video/mp4"/>
+                Browser not supported
+              </video>
+            </div>
+  
+              <div class="gallery-item-info">
+  
+                  <ul>
+                      <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{countLikes(data)}}</li>
+                      <li class="gallery-item-dislikes"><span class="visually-hidden">Dislikes:</span><i class="fa fa-thumbs-down" aria-hidden="true"></i> {{countDislikes(data)}}</li>
+                      <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fa fa-comment" aria-hidden="true"></i> {{countComments(data)}}</li>
+                  </ul>
+  
+              </div>
+  
+          </div>
+  
+      </div>
+  
+  </div>
+
+  </nz-tab>
+</nz-tabset>
+
+

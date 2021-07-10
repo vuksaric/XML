@@ -32,7 +32,7 @@ export class AdminHomepageComponent implements OnInit {
 
   logout(){
     //ovde obrisati sve sto se tice tokena
-    //localStorage.clear();
+    localStorage.clear();
     this.router.navigate(['login']);
   }
 

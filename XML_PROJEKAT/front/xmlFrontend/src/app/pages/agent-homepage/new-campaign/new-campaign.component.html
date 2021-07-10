@@ -1,0 +1,134 @@
+<div class="center">
+    <label>Type of campaign:&nbsp;</label>
+    <nz-switch [(ngModel)]="typeCampaign"  nzCheckedChildren="Single" nzUnCheckedChildren="Multiple"></nz-switch>
+    <br>
+    <label>Start date:&nbsp;</label>
+    <nz-date-picker [nzDisabledDate]="disabledDateStart"  [(ngModel)]="startDate" ></nz-date-picker>
+    <br>
+    <label>End date:&nbsp;</label>
+    <nz-date-picker [nzDisabledDate]="disabledDateEnd" [(ngModel)]="endDate" disabled = "{{typeCampaign}}" ></nz-date-picker>
+    <br>
+    <label>Repeat count:&nbsp;</label>
+    <nz-input-number [(ngModel)]="repeatCount" disabled = "{{typeCampaign}}" [nzMin]="1" [nzStep]="1"></nz-input-number>
+    <br>
+    <label>Type of commercial:&nbsp;</label>
+    <nz-switch [(ngModel)]="typeCommercial" nzCheckedChildren="Story" nzUnCheckedChildren="Post"></nz-switch>
+    <br>
+    <button nz-button nzType="default" (click)="addContent()">Add content</button>
+    <br>
+    <br>
+    <br>
+    <h3>Target group</h3>
+    <label>Gender:&nbsp;</label>
+    <nz-select nzPlaceHolder="Select a user type" [(ngModel)]="gender" [ngModelOptions]="{standalone: true}">
+        <nz-option nzLabel="Male" nzValue="Male"></nz-option>
+        <nz-option nzLabel="Female" nzValue="Female"></nz-option>
+        <nz-option nzLabel="Non-Binary" nzValue="NonBinary"></nz-option>
+    </nz-select>
+    <br>
+    <label>Minimum age:&nbsp;</label>
+    <nz-input-number [(ngModel)]="minAge" [nzMin]="1" [nzStep]="1"></nz-input-number>
+    <br>
+    <label>Maximum age:&nbsp;</label>
+    <nz-input-number [(ngModel)]="maxAge" [nzMin]="1" [nzStep]="1"></nz-input-number>
+    <br>
+    <label>Type of user:&nbsp;</label>
+    <nz-select nzPlaceHolder="Select a user type" [(ngModel)]="typeUser" [ngModelOptions]="{standalone: true}">
+        <nz-option nzLabel="Business" nzValue="Business"></nz-option>
+        <nz-option nzLabel="Influencer" nzValue="Influencer"></nz-option>
+        <nz-option nzLabel="Sports" nzValue="Sports"></nz-option>
+        <nz-option nzLabel="New Media" nzValue="NewMedia"></nz-option>
+        <nz-option nzLabel="Brand" nzValue="Brand"></nz-option>
+        <nz-option nzLabel="Organization" nzValue="Organization"></nz-option>
+    </nz-select>
+    <br>
+    <br>
+    <button nz-button nzType="default" (click)="newCampaign()">Create campaign</button>
+
+</div>
+
+<nz-modal
+      [(nzVisible)]="isVisiblePost"
+      [nzTitle]="modalTitle4"
+      [nzContent]="modalContent4"
+      [nzFooter]="modalFooter4"
+      (nzOnCancel)="handleCancelPost()"
+    > 
+	<ng-template #modalTitle4></ng-template>
+	<ng-template #modalContent4>
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="caption" nzRequired>
+            <span>Caption</span>
+          </nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input caption!">
+            <input nz-input id="caption" formControlName="caption"/>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="website">
+            <span>Website</span>
+          </nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your location!">
+            <input nz-input id="website" formControlName="website"/>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="file" nzRequired>
+                <span>Content</span>
+              </nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your content!">
+                <input ng-model="file_upload" name="file" type="file" id="file" (change)="fileChange($event)" #fileInput formControlName="file" />
+              </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="caption" >
+            <span>Tagged</span>
+          </nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24"  >
+            <nz-tag *ngFor="let tag of tags;"  nzMode="closeable" (nzOnClose)="handleClose(tag)"  >
+              {{ sliceTagName(tag) }}
+            </nz-tag>
+            
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 20, offset: 6 }">
+            <button nz-button nzType="dashed" type="button"  class="add-button" (click)="showModal()">
+              <i nz-icon nzType="plus"></i>
+                Tag user
+            </button>
+          </nz-form-control>
+        </nz-form-item>
+    
+        <nz-form-item nz-row class="submit-area">
+          <nz-form-control [nzSpan]="14" [nzOffset]="6">
+            <button nz-button nzType="primary" >Publish</button>
+          </nz-form-control>
+        </nz-form-item>
+        </form>
+    
+      <nz-modal [(nzVisible)]="isVisible" nzTitle="Tag user" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+        <ng-container *nzModalContent>
+          <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input type="text" nz-input placeholder="input search text"  [(ngModel)]="searchValue"/>
+          </nz-input-group>
+          <ng-template #suffixIconSearch>
+            <i nz-icon nzType="search"></i>
+          </ng-template>
+          <ul nz-list [nzDataSource]="usernames" nzBordered nzSize="small">
+            <li nz-list-item *ngFor="let item of usernames | searchFilter: searchValue" nzNoFlex>
+              <ul nz-list-item-actions>
+                <nz-list-item-action>
+                  <a (click)="tag(item)">tag</a>
+                </nz-list-item-action>
+              </ul>
+              {{ item }}
+            </li>
+          </ul>
+        </ng-container>
+      </nz-modal>    
+	</ng-template>
+	<ng-template #modalFooter4>
+	</ng-template>
+	</nz-modal>

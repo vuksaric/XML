@@ -37,6 +37,11 @@ import { ViewReportRequestComponent } from './pages/admin-homepage/view-report-r
 import { AgentRegistrationComponent } from './pages/agent-registration/agent-registration.component';
 import { ViewRegistrationRequestsComponent } from './pages/admin-homepage/view-registration-requests/view-registration-requests.component';
 import { AgentHomepageComponent } from './pages/agent-homepage/agent-homepage.component';
+import { MyProfileComponent } from './pages/homepage/my-profile/my-profile.component';
+import { NewCampaignComponent } from './pages/agent-homepage/new-campaign/new-campaign.component';
+import { ViewCampaignComponent } from './pages/agent-homepage/view-campaign/view-campaign.component';
+import { SearchUnregComponent } from './pages/search-unreg/search-unreg.component';
+import { ViewProfileUnregisteredComponent } from './pages/view-profile-unregistered/view-profile-unregistered.component';
 
 registerLocaleData(en);
 
@@ -66,7 +71,12 @@ registerLocaleData(en);
     ViewReportRequestComponent,
     AgentRegistrationComponent,
     ViewRegistrationRequestsComponent,
-    AgentHomepageComponent
+    AgentHomepageComponent,
+    MyProfileComponent,
+    NewCampaignComponent,
+    ViewCampaignComponent,
+    SearchUnregComponent,
+    ViewProfileUnregisteredComponent
   ],
   imports: [
     BrowserModule,

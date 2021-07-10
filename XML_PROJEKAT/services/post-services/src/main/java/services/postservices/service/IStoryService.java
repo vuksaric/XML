@@ -1,6 +1,7 @@
 package services.postservices.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import services.postservices.dto.CampaignRequest;
 import services.postservices.dto.FeedStoryRequest;
 import services.postservices.dto.PostResponse;
 import services.postservices.dto.StoryResponse;
@@ -13,4 +14,6 @@ public interface IStoryService {
     List<StoryResponse> getForProfile(List<Integer> storyIds);
     List<StoryResponse> getHighlightForProfile(List<Integer> storyIds);
     List<StoryResponse> getStoriesFeed(List<FeedStoryRequest> requests);
+    int newStoryCommercial(MultipartFile[] multipartFile, String caption, List<String> tags) throws IOException;
+    List<StoryResponse> getStoryCommercials(List<CampaignRequest> requests);
 }

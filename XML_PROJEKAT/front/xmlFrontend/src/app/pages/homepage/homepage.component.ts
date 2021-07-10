@@ -50,7 +50,7 @@ export class HomepageComponent implements OnInit {
 
   logout(){
     //ovde obrisati sve sto se tice tokena
-    //localStorage.clear();
+    localStorage.clear();
     this.router.navigate(['login']);
   }
 
@@ -79,6 +79,11 @@ export class HomepageComponent implements OnInit {
 
   notificationSetings(){
     this.router.navigate(['homepage/notification-settings']);
+  }
+
+  myProfile()
+  {
+    this.router.navigate(['my-profile']);
   }
 
 }

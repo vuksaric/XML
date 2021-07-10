@@ -17,7 +17,7 @@ public class FileLocationService {
     public Integer save(byte[] bytes, String imageName) throws Exception {
         String location = fileSystemRepository.save(bytes, imageName);
 
-        return imageRepository.save(new Image(new Date().getTime() + "-" + imageName, location)).getId();
+        return imageRepository.save(new Image(new Date().getTime() + "-" + imageName,location )).getId();
     }
 
     public String getLocationById(int id){

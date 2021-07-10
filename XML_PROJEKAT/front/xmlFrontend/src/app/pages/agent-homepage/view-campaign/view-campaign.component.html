@@ -1,0 +1,82 @@
+<div>
+    <nz-table #basicTable nzBordered nzTitle="List of report requests" [nzData]="listOfData">
+        <thead>
+          <tr>
+            <th>Campaign id</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data">
+            <td>{{data.id}}</td>
+            <td>{{data.startDate}}</td>
+            <td>{{data.endDate}}</td>
+            <td><button nz-button (click)="edit(data)" disabled = "{{canBeEdited(data)}}"  nzType="primary">Edit</button></td>
+            <td><button nz-button (click)="delete(data)"  nzType="primary">Delete</button></td>
+          </tr>
+        </tbody>
+    </nz-table>
+</div>
+
+<nz-modal
+      [(nzVisible)]="isVisible"
+      [nzTitle]="modalTitle4"
+      [nzContent]="modalContent4"
+      [nzFooter]="modalFooter4"
+      (nzOnCancel)="handleCancel()"
+    > 
+	<ng-template #modalTitle4></ng-template>
+	<ng-template #modalContent4>
+        <div class="center">
+            <label>Type of campaign:&nbsp;</label>
+            <nz-switch [(ngModel)]="typeCampaign"  nzCheckedChildren="Single" nzUnCheckedChildren="Multiple"></nz-switch>
+            <br>
+            <label>Start date:&nbsp;</label>
+            <nz-date-picker [nzDisabledDate]="disabledDateStart"  [(ngModel)]="startDate" ></nz-date-picker>
+            <br>
+            <label>End date:&nbsp;</label>
+            <nz-date-picker [nzDisabledDate]="disabledDateEnd" [(ngModel)]="endDate" disabled = "{{typeCampaign}}" ></nz-date-picker>
+            <br>
+            <label>Repeat count:&nbsp;</label>
+            <nz-input-number [(ngModel)]="repeatCount" disabled = "{{typeCampaign}}" [nzMin]="1" [nzStep]="1"></nz-input-number>
+            <br>
+            <label>Type of commercial:&nbsp;</label>
+            <nz-switch [ngModel]="typeCommercial" nzCheckedChildren="Story" nzUnCheckedChildren="Post"></nz-switch>
+            <br>
+            <br>
+            <h3>Target group</h3>
+            <label>Gender:&nbsp;</label>
+            <nz-select nzPlaceHolder="Select a user type" [(ngModel)]="gender" [ngModelOptions]="{standalone: true}">
+                <nz-option nzLabel="Male" nzValue="Male"></nz-option>
+                <nz-option nzLabel="Female" nzValue="Female"></nz-option>
+                <nz-option nzLabel="Non-Binary" nzValue="NonBinary"></nz-option>
+            </nz-select>
+            <br>
+            <label>Minimum age:&nbsp;</label>
+            <nz-input-number [(ngModel)]="minAge" [nzMin]="1" [nzStep]="1"></nz-input-number>
+            <br>
+            <label>Maximum age:&nbsp;</label>
+            <nz-input-number [(ngModel)]="maxAge" [nzMin]="1" [nzStep]="1"></nz-input-number>
+            <br>
+            <label>Type of user:&nbsp;</label>
+            <nz-select nzPlaceHolder="Select a user type" [(ngModel)]="typeUser" [ngModelOptions]="{standalone: true}">
+                <nz-option nzLabel="Business" nzValue="Business"></nz-option>
+                <nz-option nzLabel="Influencer" nzValue="Influencer"></nz-option>
+                <nz-option nzLabel="Sports" nzValue="Sports"></nz-option>
+                <nz-option nzLabel="New Media" nzValue="NewMedia"></nz-option>
+                <nz-option nzLabel="Brand" nzValue="Brand"></nz-option>
+                <nz-option nzLabel="Organization" nzValue="Organization"></nz-option>
+            </nz-select>
+            <br>
+            <br>
+            <button nz-button nzType="default" (click)="submit()">Edit</button>
+        
+        </div>
+          
+	</ng-template>
+	<ng-template #modalFooter4>
+	</ng-template>
+	</nz-modal>

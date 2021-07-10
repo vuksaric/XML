@@ -23,6 +23,8 @@ public class StoryResponse {
     private List<PictureDTO> content;
     private boolean picture;
     private String username;
+    private boolean commercial;
+    private String website;
 
     public StoryResponse(Story story)
     {

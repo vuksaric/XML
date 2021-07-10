@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { CampaignService } from 'src/app/services/campaign.service';
 import { PostStoryService } from 'src/app/services/post-story.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
@@ -28,7 +29,7 @@ interface FeedPostRequest{
 
 export class FeedComponent implements OnInit {
 
-  constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private authService : AuthService) { }
+  constructor(private profileService: ProfileService, private postStoryService: PostStoryService, private authService : AuthService, private campaignService : CampaignService) { }
   postIds: FeedPostRequest[] = [];
   listOfData : any[] = [];
   inputValue = '';
@@ -41,9 +42,19 @@ export class FeedComponent implements OnInit {
   isVisibleStory = false;
   slideIndex = 1;
   decoded_token : any;
+  profile : any;
+  profileRequest : any;
 
   ngOnInit(): void {
     this.decoded_token = this.authService.getDataFromToken();
+    this.profileService.getProfile(this.decoded_token.username).subscribe(data => {
+      this.profile = data;
+      this.profileRequest = {
+        dateOfBirth : this.profile.dateOfBirth,
+        gender : this.profile.gender,
+        profileCategory : this.profile.profileCategory
+      }
+    
     this.profileService.getPostIdsFeed(this.decoded_token.id).subscribe(data => {
       console.log(data);
       this.postIds = data;
@@ -90,6 +101,49 @@ export class FeedComponent implements OnInit {
           this.listOfData.push(data1);
         });
       });
+
+      this.campaignService.getPostsForProfile(this.profileRequest).subscribe(data=>{
+        this.postStoryService.getPostCommercials(data).subscribe(data=>{
+          var liked : boolean;
+          var disliked : boolean;
+          var reported : boolean;
+          var favourite : boolean;
+          data.forEach((element: any) => {
+         
+            var likes = element.likeIds.length;
+            console.log(element);
+            var dislikes = element.dislikeIds.length;
+            var comments = element.comments.length;
+            var contentAlbum: { src: any; image: any; display: string; }[] = [];
+            element.content.forEach((element: any) => {
+  
+              const newContent =
+              {
+                src : element.src,
+                image : element.image,
+                display : "none"
+              }
+              contentAlbum.push(newContent);
+            });
+            const data1 = {
+              post : element,
+              slideIndex : 1,
+              contentAlbum : contentAlbum,
+              liked : liked,
+              disliked : disliked,
+              reported : reported,
+              likes : likes,
+              dislikes : dislikes,
+              comments : comments,
+              favourite : favourite
+            }
+            this.listOfData.push(data1);
+          });
+          
+        })
+      });
+
+      this.listOfData = this.shuffle(this.listOfData);
     
     });
 
@@ -106,10 +160,25 @@ export class FeedComponent implements OnInit {
           });
         });
     });
+
+    this.campaignService.getStoriesForProfile(this.profileRequest).subscribe(data=>{
+      this.postStoryService.getStoryCommercials(data).subscribe(data=>{
+        data.forEach((element: any) => {
+
+          const newStory = {
+            story : element,
+            display : "none"
+          }
+
+          this.stories.push(newStory);
+        });
+      })
+    })
+
+    this.stories = this.shuffle(this.stories);
+  })
   }
   
-
-
   like(post : any): void {
     var liked : boolean;
     this.postStoryService.isItLiked(this.decoded_token.id,post.id).subscribe(data =>{
@@ -270,5 +339,22 @@ export class FeedComponent implements OnInit {
     }
   }
   
+  shuffle(array : any) {
+  var currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+  }
 
 }

@@ -308,10 +308,11 @@ public class ProfileService implements IProfileService {
     public List<String> getProfilesForTagging(int userInfoId) {
         Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
         List<String> result = new ArrayList<>();
-
-        for(Integer id : profile.getFollowing()){
-            if(profileRepository.findOneById(id).getCanBeTagged())
-                result.add(authClient.getUsername(id));
+        if(userInfoId != 0){
+            for(Integer id : profile.getFollowing()){
+                if(profileRepository.findOneById(id).getCanBeTagged())
+                    result.add(authClient.getUsername(id));
+            }
         }
 
         for(Profile p : profileRepository.findAllPublicAndCanBeTagged()){
@@ -348,7 +349,7 @@ public class ProfileService implements IProfileService {
         for(Integer id : profile.getFollowing()) {
             Profile following = profileRepository.findOneById(id);
             String username = authClient.getUsername(following.getUserInfoId());
-            for(Integer postId : profileRepository.findOneByUserInfoId(id).getPostIds())
+            for(Integer postId : following.getPostIds())
             {
                 FeedPostRequest request = new FeedPostRequest(postId,username);
                 result.add(request);
@@ -651,9 +652,11 @@ public class ProfileService implements IProfileService {
     @Override
     public List<Integer> getAccessiblePostIds(int userInfoId) {
         List<Integer> postIds = new ArrayList<>();
-         Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
-        List<Integer> profiles = profile.getFollowing();
-
+        List<Integer> profiles = new ArrayList<>();
+         if(userInfoId != 0){
+             Profile profile = profileRepository.findOneByUserInfoId(userInfoId);
+             profiles = profile.getFollowing();
+        }
         List<Profile> publicProfiles = profileRepository.findAllPublic();
         for(Profile p : publicProfiles){
             if(!profiles.contains(p.getId()))

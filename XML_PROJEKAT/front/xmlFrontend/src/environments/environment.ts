@@ -15,6 +15,8 @@ export const environment = {
   followRequest_url: 'http://localhost/notification/followRequest',
   reportRequest_url: 'http://localhost/notification/reportRequest',
   registrationRequest_url: 'http://localhost/auth/registrationRequest',
+  campaign_url: 'http://localhost/campaign',
+  commercial_url: 'http://localhost/campaign/commercial',
 };
 
 /*

@@ -87,11 +87,6 @@ export class ViewProfileComponent implements OnInit {
 
     this.decoded_token = this.authService.getDataFromToken();
 
-    if(this.decoded_token== null)
-    {
-        this.toastrService.error("Restricted access");
-        this.router.navigate(['login']);
-    }
     if(this.decoded_token.username == "admin")
     {
         this.toastrService.error("Restricted access");
@@ -551,9 +546,9 @@ export class ViewProfileComponent implements OnInit {
     const found = this.inputValue.match(regex);
     console.log(found);
     if(found!=null){
-      this.suggestions = this.suggestions.filter(suggestion => suggestion!=found[found.length-1]?.slice(2));
-      if(!this.tags.includes(found[found.length-1]?.slice(2)) && found[found.length-1]?.slice(2)!="")
-        this.tags.push(found[found.length-1]?.slice(2));
+      this.suggestions = this.suggestions.filter(suggestion => suggestion!=found[found.length-1]?.slice(1));
+      if(!this.tags.includes(found[found.length-1]?.slice(1)) && found[found.length-1]?.slice(1)!="")
+        this.tags.push(found[found.length-1]?.slice(1));
     }
      
   }
